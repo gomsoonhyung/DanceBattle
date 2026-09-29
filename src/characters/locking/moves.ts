@@ -18,7 +18,17 @@ const sLP: MoveDef = {
       { f: 14, p: STAND },
     ],
   },
-  hits: [{ frames: [5, 7], box: { x: 20, y: 125, w: 78, h: 22 }, damage: 28, hitstun: 14, blockstun: 10, level: 'mid', push: 5 }],
+  hits: [
+    {
+      frames: [5, 7],
+      box: { x: 20, y: 125, w: 78, h: 22 },
+      damage: 28,
+      hitstun: 14,
+      blockstun: 10,
+      level: 'mid',
+      push: 5,
+    },
+  ],
   cancelWindow: [5, 11],
   chainInto: ['sLP', 'cLP', 'sLK'],
 };
@@ -114,7 +124,17 @@ const cLP: MoveDef = {
       { f: 12, p: CROUCH },
     ],
   },
-  hits: [{ frames: [4, 5], box: { x: 20, y: 60, w: 68, h: 24 }, damage: 22, hitstun: 13, blockstun: 9, level: 'mid', push: 5 }],
+  hits: [
+    {
+      frames: [4, 5],
+      box: { x: 20, y: 60, w: 68, h: 24 },
+      damage: 22,
+      hitstun: 13,
+      blockstun: 9,
+      level: 'mid',
+      push: 5,
+    },
+  ],
   cancelWindow: [4, 9],
   chainInto: ['cLP', 'cLK', 'sLP'],
 };
@@ -212,7 +232,9 @@ const jL: MoveDef = {
       { f: 22, p: JUMP_FALL },
     ],
   },
-  hits: [{ frames: [4, 12], box: { x: 15, y: 40, w: 70, h: 40 }, damage: 45, hitstun: 16, blockstun: 11, level: 'overhead' }],
+  hits: [
+    { frames: [4, 12], box: { x: 15, y: 40, w: 70, h: 40 }, damage: 45, hitstun: 16, blockstun: 11, level: 'overhead' },
+  ],
 };
 
 const jH: MoveDef = {
@@ -325,7 +347,16 @@ const scoobyRush: MoveDef = {
   },
   velocity: [{ from: 3, to: 18, vx: 8 }],
   hits: [
-    { frames: [8, 10], box: { x: 15, y: 40, w: 75, h: 90 }, damage: 30, hitstun: 20, blockstun: 12, level: 'mid', push: 2, chip: 4 },
+    {
+      frames: [8, 10],
+      box: { x: 15, y: 40, w: 75, h: 90 },
+      damage: 30,
+      hitstun: 20,
+      blockstun: 12,
+      level: 'mid',
+      push: 2,
+      chip: 4,
+    },
     {
       frames: [15, 19],
       box: { x: 15, y: 40, w: 80, h: 90 },
@@ -457,7 +488,22 @@ const lockAndPoint: MoveDef = {
 };
 
 export const LOCKING_MOVES: Record<string, MoveDef> = Object.fromEntries(
-  [sLP, sHP, sLK, sHK, cLP, cHP, cLK, cHK, jL, jH, unclePoint, jumpLock, scoobyRush, kneeDrop, wristTwirl, lockAndPoint].map(
-    (m) => [m.id, m],
-  ),
+  [
+    sLP,
+    sHP,
+    sLK,
+    sHK,
+    cLP,
+    cHP,
+    cLK,
+    cHK,
+    jL,
+    jH,
+    unclePoint,
+    jumpLock,
+    scoobyRush,
+    kneeDrop,
+    wristTwirl,
+    lockAndPoint,
+  ].map((m) => [m.id, m]),
 );

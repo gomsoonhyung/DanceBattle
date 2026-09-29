@@ -182,7 +182,11 @@ describe('Match', () => {
     const script = (m: Match) => {
       closeIn(m, 120);
       for (let i = 0; i < 600; i++) {
-        const p1 = I({ right: i % 50 < 20, down: i % 90 > 70, buttons: i % 17 === 0 ? BTN.LP : i % 23 === 0 ? BTN.HK : 0 });
+        const p1 = I({
+          right: i % 50 < 20,
+          down: i % 90 > 70,
+          buttons: i % 17 === 0 ? BTN.LP : i % 23 === 0 ? BTN.HK : 0,
+        });
         const p2 = I({ left: i % 40 < 10, buttons: i % 29 === 0 ? BTN.LK : 0 });
         m.update(p1, p2);
       }

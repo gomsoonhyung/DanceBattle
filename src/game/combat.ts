@@ -150,7 +150,12 @@ export function projectileBox(p: Projectile): Rect {
 }
 
 /** 장풍 이동 → 장풍끼리 상쇄 → 상대 적중 처리 */
-export function updateProjectiles(list: Projectile[], fighters: [Fighter, Fighter], canHit: boolean, events: GameEvent[]): void {
+export function updateProjectiles(
+  list: Projectile[],
+  fighters: [Fighter, Fighter],
+  canHit: boolean,
+  events: GameEvent[],
+): void {
   for (const p of list) {
     p.x += p.vx;
     p.age++;

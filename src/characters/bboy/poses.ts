@@ -53,7 +53,14 @@ export const HIT_STAND = pose(STAND, {
 
 export const HIT_CROUCH = pose(CROUCH, { torso: 12, head: -30, aF: [30, 60], aB: [10, 50] });
 
-export const BLOCK_STAND = pose(STAND, { torso: 2, head: 5, aF: [60, 125], aB: [50, 130], lF: [20, -20], lB: [-18, -10] });
+export const BLOCK_STAND = pose(STAND, {
+  torso: 2,
+  head: 5,
+  aF: [60, 125],
+  aB: [50, 130],
+  lF: [20, -20],
+  lB: [-18, -10],
+});
 export const BLOCK_CROUCH = pose(CROUCH, { torso: 25, head: 0, aF: [75, 120], aB: [65, 125] });
 
 /** 체어 프리즈: 한 손으로 바닥을 짚고 몸을 거꾸로 세운 자세 */
@@ -112,12 +119,34 @@ export const crouch: Anim = {
   ],
 };
 
-export const prejump: Anim = { keys: [{ f: 0, p: STAND }, { f: 3, p: PREJUMP }] };
+export const prejump: Anim = {
+  keys: [
+    { f: 0, p: STAND },
+    { f: 3, p: PREJUMP },
+  ],
+};
 
-export const land: Anim = { keys: [{ f: 0, p: PREJUMP }, { f: 4, p: STAND }] };
+export const land: Anim = {
+  keys: [
+    { f: 0, p: PREJUMP },
+    { f: 4, p: STAND },
+  ],
+};
 
-export const hitStand: Anim = { keys: [{ f: 0, p: STAND }, { f: 3, p: HIT_STAND }, { f: 16, p: STAND }] };
-export const hitCrouch: Anim = { keys: [{ f: 0, p: CROUCH }, { f: 3, p: HIT_CROUCH }, { f: 16, p: CROUCH }] };
+export const hitStand: Anim = {
+  keys: [
+    { f: 0, p: STAND },
+    { f: 3, p: HIT_STAND },
+    { f: 16, p: STAND },
+  ],
+};
+export const hitCrouch: Anim = {
+  keys: [
+    { f: 0, p: CROUCH },
+    { f: 3, p: HIT_CROUCH },
+    { f: 16, p: CROUCH },
+  ],
+};
 export const blockStand: Anim = { keys: [{ f: 0, p: BLOCK_STAND }] };
 export const blockCrouch: Anim = { keys: [{ f: 0, p: BLOCK_CROUCH }] };
 

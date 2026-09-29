@@ -92,7 +92,11 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
   if (m.mode === 'training') {
     g.font = `bold 15px ${FONT_KR}`;
     g.fillStyle = 'rgba(255,255,255,0.85)';
-    g.fillText(`트레이닝 · 더미: ${DUMMY_LABEL[m.dummyMode]}  [F2 변경]  [R 위치 초기화]  [F1 판정 보기]  [ESC 메뉴]`, SCREEN_W / 2, 100);
+    g.fillText(
+      `트레이닝 · 더미: ${DUMMY_LABEL[m.dummyMode]}  [F2 변경]  [R 위치 초기화]  [F1 판정 보기]  [ESC 메뉴]`,
+      SCREEN_W / 2,
+      100,
+    );
   }
 
   drawBanner(g, m);
@@ -119,7 +123,12 @@ function drawBanner(g: CanvasRenderingContext2D, m: Match): void {
     case 'ko': {
       const koed = m.fighters.some((x) => x.health <= 0);
       if (f < 90) bigText(g, koed ? 'K.O.' : 'TIME OVER', '#ff4d5e', koed ? 130 : 90);
-      else bigText(g, m.winner === null ? 'DRAW' : `P${m.winner + 1} WIN`, m.winner === null ? '#fff' : fighterPalette(m.fighters[m.winner]).main);
+      else
+        bigText(
+          g,
+          m.winner === null ? 'DRAW' : `P${m.winner + 1} WIN`,
+          m.winner === null ? '#fff' : fighterPalette(m.fighters[m.winner]).main,
+        );
       break;
     }
     case 'roundEnd':

@@ -1,0 +1,28 @@
+# PR과 main 푸시마다 타입 검사 · 포맷 검사 · 테스트 · 빌드를 돌린다.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: 타입 검사
+        run: npm run typecheck
+      - name: 포맷 검사 (실패하면 로컬에서 npm run format)
+        run: npm run format:check
+      - name: 결정론 검사 (게임 로직에 Math.random 등 금지)
+        run: npm run check:determinism
+      - name: 테스트
+        run: npm test
+      - name: 빌드
+        run: npx vite build

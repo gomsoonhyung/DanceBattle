@@ -118,7 +118,14 @@ export function drawStickman(
   g.restore();
 }
 
-function drawHead(g: CanvasRenderingContext2D, hc: Vec2, headAngle: number, facing: 1 | -1, look: Look, pal: Palette): void {
+function drawHead(
+  g: CanvasRenderingContext2D,
+  hc: Vec2,
+  headAngle: number,
+  facing: 1 | -1,
+  look: Look,
+  pal: Palette,
+): void {
   const r = BONE.headR;
   g.fillStyle = pal.skin;
   g.beginPath();

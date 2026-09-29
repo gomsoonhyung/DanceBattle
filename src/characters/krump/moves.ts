@@ -18,7 +18,17 @@ const sLP: MoveDef = {
       { f: 16, p: STAND },
     ],
   },
-  hits: [{ frames: [5, 7], box: { x: 20, y: 115, w: 65, h: 28 }, damage: 35, hitstun: 15, blockstun: 10, level: 'mid', push: 5 }],
+  hits: [
+    {
+      frames: [5, 7],
+      box: { x: 20, y: 115, w: 65, h: 28 },
+      damage: 35,
+      hitstun: 15,
+      blockstun: 10,
+      level: 'mid',
+      push: 5,
+    },
+  ],
   cancelWindow: [5, 11],
   chainInto: ['sLP', 'cLP'],
 };
@@ -113,7 +123,17 @@ const cLP: MoveDef = {
       { f: 14, p: CROUCH },
     ],
   },
-  hits: [{ frames: [5, 6], box: { x: 20, y: 60, w: 60, h: 26 }, damage: 30, hitstun: 14, blockstun: 9, level: 'mid', push: 5 }],
+  hits: [
+    {
+      frames: [5, 6],
+      box: { x: 20, y: 60, w: 60, h: 26 },
+      damage: 30,
+      hitstun: 14,
+      blockstun: 9,
+      level: 'mid',
+      push: 5,
+    },
+  ],
   cancelWindow: [5, 10],
   chainInto: ['cLP', 'cLK'],
 };
@@ -212,7 +232,9 @@ const jL: MoveDef = {
       { f: 24, p: JUMP_FALL },
     ],
   },
-  hits: [{ frames: [5, 14], box: { x: 10, y: 30, w: 60, h: 50 }, damage: 55, hitstun: 16, blockstun: 11, level: 'overhead' }],
+  hits: [
+    { frames: [5, 14], box: { x: 10, y: 30, w: 60, h: 50 }, damage: 55, hitstun: 16, blockstun: 11, level: 'overhead' },
+  ],
 };
 
 const jH: MoveDef = {
@@ -286,11 +308,27 @@ const burstUpper: MoveDef = {
       { f: 4, p: pose(CROUCH, { torso: 60, aF: [20, 30], aB: [10, 30] }) },
       {
         f: 8,
-        p: pose(STAND, { lift: 20, torso: -15, head: 10, aF: [175, -5], aB: [165, -10], lF: [10, -10], lB: [-20, -30] }),
+        p: pose(STAND, {
+          lift: 20,
+          torso: -15,
+          head: 10,
+          aF: [175, -5],
+          aB: [165, -10],
+          lF: [10, -10],
+          lB: [-20, -30],
+        }),
       },
       {
         f: 14,
-        p: pose(STAND, { lift: 25, torso: -15, head: 10, aF: [172, -5], aB: [162, -10], lF: [10, -10], lB: [-20, -30] }),
+        p: pose(STAND, {
+          lift: 25,
+          torso: -15,
+          head: 10,
+          aF: [172, -5],
+          aB: [162, -10],
+          lF: [10, -10],
+          lB: [-20, -30],
+        }),
       },
       { f: 24, p: CROUCH },
       { f: 52, p: STAND },
@@ -443,5 +481,8 @@ const killOff: MoveDef = {
 };
 
 export const KRUMP_MOVES: Record<string, MoveDef> = Object.fromEntries(
-  [sLP, sHP, sLK, sHK, cLP, cHP, cLK, cHK, jL, jH, stompWave, burstUpper, burstRush, chestPop, killOff].map((m) => [m.id, m]),
+  [sLP, sHP, sLK, sHK, cLP, cHP, cLK, cHK, jL, jH, stompWave, burstUpper, burstRush, chestPop, killOff].map((m) => [
+    m.id,
+    m,
+  ]),
 );

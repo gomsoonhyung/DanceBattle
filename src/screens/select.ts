@@ -185,7 +185,15 @@ export class SelectScreen {
     g.translate(px + 75, bottom - 12);
     g.scale(0.82, 0.82);
     g.translate(0, -GROUND_SCREEN_Y);
-    drawStickman(g, evalAnim(anim, this.ready[slot] ? Math.min(this.frame, 40) : this.frame), 0, 0, 1, c.look, c.look.palettes[slot]);
+    drawStickman(
+      g,
+      evalAnim(anim, this.ready[slot] ? Math.min(this.frame, 40) : this.frame),
+      0,
+      0,
+      1,
+      c.look,
+      c.look.palettes[slot],
+    );
     g.restore();
 
     const tx = px + 150;
@@ -203,7 +211,9 @@ export class SelectScreen {
 
     g.font = `13px ${FONT_KR}`;
     g.fillStyle = '#dde';
-    wrapText(g, c.profile.desc, tw).slice(0, 2).forEach((l, i) => g.fillText(l, tx, top + 88 + i * 17));
+    wrapText(g, c.profile.desc, tw)
+      .slice(0, 2)
+      .forEach((l, i) => g.fillText(l, tx, top + 88 + i * 17));
 
     const stats: [string, number][] = [
       ['파워', c.profile.power],

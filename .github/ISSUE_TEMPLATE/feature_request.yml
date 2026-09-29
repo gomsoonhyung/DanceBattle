@@ -1,0 +1,32 @@
+name: ✨ 기능 · 캐릭터 · 기술 제안
+description: 새 캐릭터, 새 기술, 새 화면이나 시스템 아이디어
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 종류
+      options:
+        - 새 캐릭터
+        - 새 기술 (기존 캐릭터)
+        - 시스템 (예: 잡기, CPU, 온라인)
+        - 화면 / 연출
+        - 기타
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: 아이디어
+      description: 캐릭터라면 춤 장르, 성격(파워/스피드/견제 등), 대표 동작을 적어 주세요.
+      placeholder: |
+        예) 팝핑 캐릭터 "POPPER"
+        - 견제형, 웨이브 동작이 팔을 타고 가는 장풍
+        - 로봇 동작은 슈퍼아머
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: 참고 자료
+      description: 동작 참고 영상 링크, 그림 등

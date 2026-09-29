@@ -124,7 +124,18 @@ export function lerpPose(a: Pose, b: Pose, t: number): Pose {
  * 포즈를 만들 때 골반 높이를 일일이 맞추지 않아도 된다.
  */
 export function snapToGround(sk: Skeleton, lift = 0): Skeleton {
-  const pts: (keyof Skeleton)[] = ['hip', 'neck', 'elbowF', 'handF', 'elbowB', 'handB', 'kneeF', 'footF', 'kneeB', 'footB'];
+  const pts: (keyof Skeleton)[] = [
+    'hip',
+    'neck',
+    'elbowF',
+    'handF',
+    'elbowB',
+    'handB',
+    'kneeF',
+    'footF',
+    'kneeB',
+    'footB',
+  ];
   let minY = sk.head.y - BONE.headR;
   for (const k of pts) minY = Math.min(minY, (sk[k] as Vec2).y - 3);
   return offsetSkeleton(sk, 0, lift - minY);

@@ -25,7 +25,8 @@ export class Effects {
   shake = 0;
 
   spark(wx: number, wy: number, kind: 'hit' | 'heavy' | 'block' | 'counter'): void {
-    const color = kind === 'block' ? '#9fd8ff' : kind === 'counter' ? '#ffe14d' : kind === 'heavy' ? '#ffb13b' : '#fff3a0';
+    const color =
+      kind === 'block' ? '#9fd8ff' : kind === 'counter' ? '#ffe14d' : kind === 'heavy' ? '#ffb13b' : '#fff3a0';
     const size = kind === 'heavy' || kind === 'counter' ? 46 : kind === 'block' ? 26 : 30;
     const n = kind === 'block' ? 6 : 10;
     const rays = Array.from({ length: n }, (_, i) => (i / n) * Math.PI * 2 + Math.random() * 0.4);

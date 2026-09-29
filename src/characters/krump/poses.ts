@@ -82,6 +82,9 @@ export const win: Anim = {
   keys: [
     { f: 0, p: STAND },
     { f: 8, p: CHEST_OUT },
-    { f: 16, p: pose(CHEST_OUT, { torso: -8, head: -25, aF: [172, -20], aB: [60, 90], lF: [25, -30], lB: [-25, -20] }) },
+    {
+      f: 16,
+      p: pose(CHEST_OUT, { torso: -8, head: -25, aF: [172, -20], aB: [60, 90], lF: [25, -30], lB: [-25, -20] }),
+    },
   ],
 };

@@ -67,7 +67,17 @@ const sLP: MoveDef = {
       { f: 14, p: STAND },
     ],
   },
-  hits: [{ frames: [5, 7], box: { x: 20, y: 118, w: 62, h: 26 }, damage: 30, hitstun: 14, blockstun: 10, level: 'mid', push: 5 }],
+  hits: [
+    {
+      frames: [5, 7],
+      box: { x: 20, y: 118, w: 62, h: 26 },
+      damage: 30,
+      hitstun: 14,
+      blockstun: 10,
+      level: 'mid',
+      push: 5,
+    },
+  ],
   cancelWindow: [5, 11],
   chainInto: ['sLP', 'cLP'],
 };
@@ -162,7 +172,17 @@ const cLP: MoveDef = {
       { f: 13, p: CROUCH },
     ],
   },
-  hits: [{ frames: [5, 6], box: { x: 20, y: 60, w: 60, h: 26 }, damage: 25, hitstun: 13, blockstun: 9, level: 'mid', push: 5 }],
+  hits: [
+    {
+      frames: [5, 6],
+      box: { x: 20, y: 60, w: 60, h: 26 },
+      damage: 25,
+      hitstun: 13,
+      blockstun: 9,
+      level: 'mid',
+      push: 5,
+    },
+  ],
   cancelWindow: [5, 10],
   chainInto: ['cLP', 'sLP', 'cLK'],
 };
@@ -263,7 +283,9 @@ const jL: MoveDef = {
       { f: 24, p: JUMP_FALL },
     ],
   },
-  hits: [{ frames: [5, 14], box: { x: 10, y: 20, w: 65, h: 45 }, damage: 50, hitstun: 16, blockstun: 11, level: 'overhead' }],
+  hits: [
+    { frames: [5, 14], box: { x: 10, y: 20, w: 65, h: 45 }, damage: 50, hitstun: 16, blockstun: 11, level: 'overhead' },
+  ],
 };
 
 const jH: MoveDef = {
@@ -277,7 +299,10 @@ const jH: MoveDef = {
     keys: [
       { f: 0, p: JUMP_TUCK },
       { f: 6, p: pose(JUMP_TUCK, { torso: -20, head: 10, lF: [55, 0], lB: [-10, -80], aF: [-20, 60], aB: [-40, 40] }) },
-      { f: 16, p: pose(JUMP_TUCK, { torso: -20, head: 10, lF: [52, 0], lB: [-10, -80], aF: [-20, 60], aB: [-40, 40] }) },
+      {
+        f: 16,
+        p: pose(JUMP_TUCK, { torso: -20, head: 10, lF: [52, 0], lB: [-10, -80], aF: [-20, 60], aB: [-40, 40] }),
+      },
       { f: 26, p: JUMP_FALL },
     ],
   },
@@ -435,15 +460,42 @@ const swipe: MoveDef = {
       { f: 7, p: pose(CROUCH_HAND, { torso: 60, lF: [60, -100], lB: [20, -110] }) },
       {
         f: 13,
-        p: pose(STAND, { lift: 55, rot: -10, torso: -25, head: 10, aF: [-30, 60], aB: [-60, 40], lF: [150, -10], lB: [-10, -60] }),
+        p: pose(STAND, {
+          lift: 55,
+          rot: -10,
+          torso: -25,
+          head: 10,
+          aF: [-30, 60],
+          aB: [-60, 40],
+          lF: [150, -10],
+          lB: [-10, -60],
+        }),
       },
       {
         f: 18,
-        p: pose(STAND, { lift: 40, rot: 15, torso: -15, head: 0, aF: [-20, 60], aB: [-50, 40], lF: [135, 0], lB: [-10, -70] }),
+        p: pose(STAND, {
+          lift: 40,
+          rot: 15,
+          torso: -15,
+          head: 0,
+          aF: [-20, 60],
+          aB: [-50, 40],
+          lF: [135, 0],
+          lB: [-10, -70],
+        }),
       },
       {
         f: 22,
-        p: pose(STAND, { lift: 8, rot: 30, torso: 0, head: -10, aF: [20, 80], aB: [-30, 60], lF: [95, 0], lB: [-10, -50] }),
+        p: pose(STAND, {
+          lift: 8,
+          rot: 30,
+          torso: 0,
+          head: -10,
+          aF: [20, 80],
+          aB: [-30, 60],
+          lF: [95, 0],
+          lB: [-10, -50],
+        }),
       },
       { f: 28, p: CROUCH },
       { f: 42, p: STAND },
@@ -571,7 +623,23 @@ const powerCombo: MoveDef = {
 };
 
 export const BBOY_MOVES: Record<string, MoveDef> = Object.fromEntries(
-  [sLP, sHP, sLK, sHK, cLP, cHP, cLK, cHK, jL, jH, windmill, headspin, airflare, swipe, freeze, freezeKick, powerCombo].map(
-    (m) => [m.id, m],
-  ),
+  [
+    sLP,
+    sHP,
+    sLK,
+    sHK,
+    cLP,
+    cHP,
+    cLK,
+    cHK,
+    jL,
+    jH,
+    windmill,
+    headspin,
+    airflare,
+    swipe,
+    freeze,
+    freezeKick,
+    powerCombo,
+  ].map((m) => [m.id, m]),
 );

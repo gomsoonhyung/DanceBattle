@@ -367,7 +367,9 @@ export class Fighter {
   // ── 피격 / 가드 ─────────────────────────────────────────────────
 
   get airborne(): boolean {
-    return this.y > 0 || this.state === 'jump' || this.state === 'airHit' || this.state === 'prejump' || !!this.move?.air;
+    return (
+      this.y > 0 || this.state === 'jump' || this.state === 'airHit' || this.state === 'prejump' || !!this.move?.air
+    );
   }
 
   private inCrouchMove(): boolean {
@@ -438,7 +440,8 @@ export class Fighter {
   }
 
   isInvulnerable(): boolean {
-    if (this.state === 'knockdown' || this.state === 'getup' || this.state === 'ko' || this.state === 'win') return true;
+    if (this.state === 'knockdown' || this.state === 'getup' || this.state === 'ko' || this.state === 'win')
+      return true;
     if (this.state === 'airHit' && this.juggle >= JUGGLE_LIMIT) return true;
     const inv = this.move?.invuln;
     return !!(this.state === 'move' && inv && this.moveFrame >= inv[0] && this.moveFrame <= inv[1]);

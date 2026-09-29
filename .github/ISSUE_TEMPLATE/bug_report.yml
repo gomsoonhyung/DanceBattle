@@ -1,0 +1,36 @@
+name: 🐛 버그 제보
+description: 기술이 안 나가거나, 판정이 이상하거나, 게임이 멈추는 등
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 어떤 문제가 있나요?
+      placeholder: 예) 크럼프 버스트 러시가 벽 앞에서 멈추지 않고 상대를 통과함
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 방법
+      description: 모드, 캐릭터, 입력한 커맨드 순서를 적어 주세요.
+      placeholder: |
+        1. 트레이닝 모드, P1 크럼프 / 상대 락킹
+        2. 상대를 벽에 붙이고 ↓↘→ + K
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 원래 어떻게 되어야 하나요?
+  - type: input
+    id: env
+    attributes:
+      label: 환경
+      placeholder: 예) macOS / Chrome, 키보드 or 게임패드
+  - type: textarea
+    id: media
+    attributes:
+      label: 스크린샷 / 영상
+      description: F1(판정 박스)을 켠 화면이면 더 좋습니다.

@@ -20,9 +20,7 @@ if (params.has('gallery')) {
 }
 
 type Screen =
-  | { kind: 'title' }
-  | { kind: 'select'; select: SelectScreen }
-  | { kind: 'match'; match: Match; renderer: Renderer };
+  { kind: 'title' } | { kind: 'select'; select: SelectScreen } | { kind: 'match'; match: Match; renderer: Renderer };
 
 function startGame(): void {
   initKeyboard();

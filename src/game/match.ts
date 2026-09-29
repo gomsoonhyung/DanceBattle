@@ -154,7 +154,11 @@ export class Match {
       [p2, p1],
     ] as const) {
       const neutral =
-        me.state === 'idle' || me.state === 'walkF' || me.state === 'walkB' || me.state === 'crouch' || me.state === 'land';
+        me.state === 'idle' ||
+        me.state === 'walkF' ||
+        me.state === 'walkB' ||
+        me.state === 'crouch' ||
+        me.state === 'land';
       if (neutral && me.x !== opp.x) me.facing = opp.x > me.x ? 1 : -1;
     }
   }
@@ -176,7 +180,8 @@ export class Match {
   private updateTraining(): void {
     const [p1, p2] = this.fighters;
     // 더미가 콤보에서 풀려나고 잠시 지나면 체력 회복
-    const hurt = p2.state === 'hitstun' || p2.state === 'airHit' || p2.state === 'knockdown' || p2.state === 'blockstun';
+    const hurt =
+      p2.state === 'hitstun' || p2.state === 'airHit' || p2.state === 'knockdown' || p2.state === 'blockstun';
     this.dummyIdle = hurt ? 0 : this.dummyIdle + 1;
     if (this.dummyIdle > 40) p2.health = p2.def.maxHealth;
     if (p2.state === 'ko') {

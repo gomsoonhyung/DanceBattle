@@ -1,17 +1,28 @@
 {
-  "name": "bboy-fighter",
+  "name": "dance-battle",
   "private": true,
   "version": "0.1.0",
+  "description": "춤 동작으로 싸우는 2D 대전 격투 게임",
   "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "shots": "node scripts/shot.mjs"
+    "test:watch": "vitest",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run format:check && npm run check:determinism && npm test",
+    "shots": "node scripts/shot.mjs",
+    "check:determinism": "node scripts/check-determinism.mjs",
+    "smoke": "node scripts/play.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.63.0",
+    "prettier": "^3.9.9",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "vitest": "^4.1.11"

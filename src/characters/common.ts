@@ -66,22 +66,57 @@ export function baseAnims(stand: Pose, crouch: Pose) {
     lB: [-20, -8],
   });
   const hitCrouchPose = pose(crouch, { torso: 12, head: -30, aF: [30, 60], aB: [10, 50] });
-  const blockStandPose = pose(stand, { torso: 2, head: 5, aF: [60, 125], aB: [50, 130], lF: [20, -20], lB: [-18, -10] });
+  const blockStandPose = pose(stand, {
+    torso: 2,
+    head: 5,
+    aF: [60, 125],
+    aB: [50, 130],
+    lF: [20, -20],
+    lB: [-18, -10],
+  });
   const blockCrouchPose = pose(crouch, { torso: 25, head: 0, aF: [75, 120], aB: [65, 125] });
 
   const anims = {
-    prejump: { keys: [{ f: 0, p: stand }, { f: 3, p: prejumpPose }] } as Anim,
+    prejump: {
+      keys: [
+        { f: 0, p: stand },
+        { f: 3, p: prejumpPose },
+      ],
+    } as Anim,
     jump,
-    land: { keys: [{ f: 0, p: prejumpPose }, { f: 4, p: stand }] } as Anim,
-    hitStand: { keys: [{ f: 0, p: stand }, { f: 3, p: hitStandPose }, { f: 16, p: stand }] } as Anim,
-    hitCrouch: { keys: [{ f: 0, p: crouch }, { f: 3, p: hitCrouchPose }, { f: 16, p: crouch }] } as Anim,
+    land: {
+      keys: [
+        { f: 0, p: prejumpPose },
+        { f: 4, p: stand },
+      ],
+    } as Anim,
+    hitStand: {
+      keys: [
+        { f: 0, p: stand },
+        { f: 3, p: hitStandPose },
+        { f: 16, p: stand },
+      ],
+    } as Anim,
+    hitCrouch: {
+      keys: [
+        { f: 0, p: crouch },
+        { f: 3, p: hitCrouchPose },
+        { f: 16, p: crouch },
+      ],
+    } as Anim,
     blockStand: { keys: [{ f: 0, p: blockStandPose }] } as Anim,
     blockCrouch: { keys: [{ f: 0, p: blockCrouchPose }] } as Anim,
     airHit: {
       snap: false,
       keys: [
-        { f: 0, p: pose(hitStandPose, { y: 70, rot: -30, aF: [130, 30], aB: [160, 20], lF: [40, -30], lB: [10, -40] }) },
-        { f: 24, p: pose(hitStandPose, { y: 40, rot: -75, aF: [150, 10], aB: [170, 10], lF: [30, -20], lB: [0, -30] }) },
+        {
+          f: 0,
+          p: pose(hitStandPose, { y: 70, rot: -30, aF: [130, 30], aB: [160, 20], lF: [40, -30], lB: [10, -40] }),
+        },
+        {
+          f: 24,
+          p: pose(hitStandPose, { y: 40, rot: -75, aF: [150, 10], aB: [170, 10], lF: [30, -20], lB: [0, -30] }),
+        },
       ],
     } as Anim,
     knockdown,

@@ -1,0 +1,34 @@
+name: ⚖️ 밸런스 피드백
+description: 어떤 기술이 너무 세거나 약하다고 느껴질 때
+labels: [balance]
+body:
+  - type: input
+    id: target
+    attributes:
+      label: 캐릭터 · 기술
+      placeholder: 예) 락킹 / 엉클 샘 포인트
+    validations:
+      required: true
+  - type: dropdown
+    id: direction
+    attributes:
+      label: 느낌
+      options:
+        - 너무 셈
+        - 너무 약함
+        - 쓰기 어려움 (커맨드, 판정)
+        - 기타
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 이유 / 상황
+      placeholder: 예) 멀리서 계속 쏘면 크럼프가 다가갈 방법이 없음. 쿨다운이 짧음.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 제안하는 수치 (선택)
+      placeholder: 예) 후딜 40 → 48 프레임
