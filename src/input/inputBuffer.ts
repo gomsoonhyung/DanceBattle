@@ -65,6 +65,18 @@ export class InputBuffer {
     return (acc & mask) === mask;
   }
 
+  /** 입력 기록 표시용: 최근 입력을 (방향, 누른 버튼, 유지 프레임) 묶음으로. 최신이 앞 */
+  recent(maxEntries: number): { dir: Dir; held: number; frames: number }[] {
+    const out: { dir: Dir; held: number; frames: number }[] = [];
+    for (let i = this.frames.length - 1; i >= 0 && out.length <= maxEntries; i--) {
+      const f = this.frames[i];
+      const top = out[out.length - 1];
+      if (top && top.dir === f.dir && top.held === f.held) top.frames++;
+      else out.push({ dir: f.dir, held: f.held, frames: 1 });
+    }
+    return out.slice(0, maxEntries);
+  }
+
   consume(): void {
     this.consumedAt = this.frameCount;
   }

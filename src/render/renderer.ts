@@ -1,6 +1,7 @@
 import { sfx } from '../audio/sfx';
 import { GROUND_SCREEN_Y, SCREEN_H, SCREEN_W } from '../core/constants';
 import type { Rect } from '../core/math';
+import type { Skeleton } from '../anim/pose';
 import type { Fighter } from '../fighter/fighter';
 import type { GameEvent } from '../game/events';
 import { projectileBox, type Projectile } from '../game/combat';
@@ -15,6 +16,8 @@ export class Renderer {
   showBoxes = false;
   private superText: { name: string; player: 0 | 1; life: number } | null = null;
   private superColor = '#fff';
+  /** 잔상 연출용: 캐릭터별 최근 모습 */
+  private trails: { x: number; y: number; facing: 1 | -1; sk: Skeleton }[][] = [[], []];
 
   constructor(private readonly g: CanvasRenderingContext2D) {}
 
@@ -34,6 +37,11 @@ export class Renderer {
           this.fx.spark(e.x, e.y, 'counter');
           this.fx.text(e.x, e.y + 40, 'COUNTER!', '#ffe14d');
           sfx.counter();
+          break;
+        case 'taunt':
+          this.fx.spark(e.x, e.y, 'counter');
+          this.fx.text(e.x, e.y + 30, 'STRIKE A POSE!', '#ff9ff3');
+          sfx.announce();
           break;
         case 'armor':
           this.fx.spark(e.x, e.y, 'block');
@@ -85,7 +93,9 @@ export class Renderer {
     const order = [...m.fighters].sort((a, b) => Number(a.state === 'move') - Number(b.state === 'move'));
     for (const f of order) {
       if (freeze && f.index === m.superOwner) this.drawAura(f);
-      drawStickman(g, f.skeleton(), f.x, f.y, f.facing, f.def.look, fighterPalette(f));
+      const sk = f.skeleton();
+      this.drawTrail(f, sk, freeze);
+      drawStickman(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f));
     }
 
     for (const p of m.projectiles) this.drawProjectile(p, fighterPalette(m.fighters[p.owner]).main);
@@ -98,6 +108,25 @@ export class Renderer {
 
     drawHud(g, m);
     if (this.superText) this.drawSuperText();
+  }
+
+  /** 잔상이 있는 기술(trail) 중이면 지나온 모습을 반투명하게 그린다 */
+  private drawTrail(f: Fighter, sk: Skeleton, frozen: boolean): void {
+    const list = this.trails[f.index];
+    if (f.state !== 'move' || !f.move?.trail) {
+      list.length = 0;
+      return;
+    }
+    const pal = fighterPalette(f);
+    list.forEach((t, i) => {
+      this.g.globalAlpha = 0.12 + (i / list.length) * 0.25;
+      drawStickman(this.g, t.sk, t.x, t.y, t.facing, f.def.look, pal);
+    });
+    this.g.globalAlpha = 1;
+    if (!frozen) {
+      list.push({ x: f.x, y: f.y, facing: f.facing, sk });
+      if (list.length > 5) list.shift();
+    }
   }
 
   private drawAura(f: Fighter): void {
@@ -167,6 +196,46 @@ export class Renderer {
         const dy = Math.abs(Math.sin(a * 1.7)) * 34;
         g.fillRect(p.x + dx - 2, GROUND_SCREEN_Y - dy - 2, 4, 4);
       }
+    } else if (p.def.kind === 'wave') {
+      // 팝핑 웨이브: 출렁이며 날아가는 에너지 파동
+      const dir = Math.sign(p.vx) || 1;
+      for (const [w, a, c] of [
+        [10, 0.25, color],
+        [4, 1, '#ffffff'],
+      ] as const) {
+        g.globalAlpha = a;
+        g.strokeStyle = c;
+        g.lineWidth = w;
+        g.lineCap = 'round';
+        g.beginPath();
+        for (let i = 0; i <= 12; i++) {
+          const x = p.x - dir * i * 4;
+          const y = sy + Math.sin(p.age * 0.5 - i * 0.7) * 10 * (1 - i / 16);
+          if (i) g.lineTo(x, y);
+          else g.moveTo(x, y);
+        }
+        g.stroke();
+      }
+    } else if (p.def.kind === 'heart') {
+      // 블로우 키스: 둥실 떠가는 하트
+      const bob = Math.sin(p.age * 0.15) * 6;
+      const glow = g.createRadialGradient(p.x, sy + bob, 2, p.x, sy + bob, 30);
+      glow.addColorStop(0, 'rgba(255,120,200,0.8)');
+      glow.addColorStop(1, 'rgba(255,120,200,0)');
+      g.fillStyle = glow;
+      g.fillRect(p.x - 30, sy + bob - 30, 60, 60);
+      g.translate(p.x, sy + bob);
+      g.scale(1 + Math.sin(p.age * 0.3) * 0.08, 1 + Math.sin(p.age * 0.3) * 0.08);
+      g.fillStyle = '#ff5fb2';
+      g.beginPath();
+      g.moveTo(0, 12);
+      g.bezierCurveTo(-18, -2, -12, -18, 0, -8);
+      g.bezierCurveTo(12, -18, 18, -2, 0, 12);
+      g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.7)';
+      g.beginPath();
+      g.arc(-6, -6, 3, 0, Math.PI * 2);
+      g.fill();
     } else {
       // 포인트 스파크: 빛나는 별 + 꼬리
       g.strokeStyle = 'rgba(255,240,160,0.5)';

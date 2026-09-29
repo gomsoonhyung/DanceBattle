@@ -1,10 +1,15 @@
 import type { CharacterDef } from '../fighter/types';
 import { BBOY } from './bboy';
+import { HIPHOP_GIRL } from './girlshiphop';
+import { HIPHOPPER } from './hiphop';
+import { HOUSE_HEAD } from './house';
 import { KRUMP } from './krump';
 import { LOCKER } from './locking';
+import { POPPER } from './popping';
+import { WAACKER } from './waacking';
 
 /** 캐릭터 선택 화면에 나오는 순서 */
-export const CHARACTERS: CharacterDef[] = [BBOY, KRUMP, LOCKER];
+export const CHARACTERS: CharacterDef[] = [WAACKER, KRUMP, HIPHOPPER, HIPHOP_GIRL, LOCKER, HOUSE_HEAD, POPPER, BBOY];
 
 const MOTION_TEXT = { qcf: '↓↘→', qcb: '↓↙←', dp: '→↓↘' } as const;
 

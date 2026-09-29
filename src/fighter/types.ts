@@ -22,7 +22,7 @@ export interface HitDef {
   unblockable?: boolean; // 가드 불가
 }
 
-export type ProjectileKind = 'shockwave' | 'spark';
+export type ProjectileKind = 'shockwave' | 'spark' | 'wave' | 'heart';
 
 /** 기술에서 발사되는 장풍. 캐릭터 기준 위치에서 생성되어 직진한다. */
 export interface ProjectileDef {
@@ -65,6 +65,12 @@ export interface MoveDef {
   /** 슈퍼아머: 이 구간에서는 한 번 맞아도 경직 없이 기술이 계속된다 */
   armor?: [number, number];
   projectile?: ProjectileDef;
+  /** 게이지 충전 (도발·포즈 기술): frame 프레임에 amount 만큼 */
+  meterGain?: { frame: number; amount: number };
+  /** 잔상 연출 (팝핑 애니메이션 대시 등) */
+  trail?: boolean;
+  /** 연습 모드 가이드에 나오는 한 줄 설명 */
+  desc?: string;
 }
 
 /** 스틱맨 색상 */
@@ -77,10 +83,13 @@ export interface Palette {
   accent: string; // 멜빵, 양말 등 포인트 색
 }
 
+/** 머리 장식: 뒤로 쓴 캡 / 머리띠 / 빅 애플 캡 / 올림머리 / 버킷햇 / 포니테일 / 비니 / 페도라 */
+export type Headwear = 'backcap' | 'headband' | 'applecap' | 'bun' | 'bucket' | 'ponytail' | 'beanie' | 'fedora';
+
 export interface Look {
   /** [P1용, P2용] — 같은 캐릭터끼리 붙어도 구분되도록 */
   palettes: [Palette, Palette];
-  headwear: 'backcap' | 'headband' | 'applecap';
+  headwear: Headwear;
   /** 선 굵기 배율 (체격) */
   build: number;
   /** 팔을 피부색으로 (민소매) */

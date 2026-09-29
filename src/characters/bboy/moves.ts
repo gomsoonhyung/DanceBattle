@@ -338,6 +338,7 @@ const windmillHit = (from: number, to: number, last = false) => ({
 const windmill: MoveDef = {
   id: 'windmill',
   name: '윈드밀',
+  desc: '어깨로 바닥을 짚고 다리를 돌리며 전진하는 하단 4연타',
   kind: 'special',
   total: 48,
   anim: {
@@ -357,6 +358,7 @@ const windmill: MoveDef = {
 const headspin: MoveDef = {
   id: 'headspin',
   name: '헤드스핀',
+  desc: '대공기. 머리로 서서 회전하며 다리로 올려친다. 발동 직후 무적',
   kind: 'special',
   total: 50,
   invuln: [1, 9],
@@ -411,6 +413,7 @@ const headspin: MoveDef = {
 const airflare: MoveDef = {
   id: 'airflare',
   name: '에어플레어',
+  desc: '손으로 몸을 받치고 공중에서 돌며 빠르게 돌진하는 2연타',
   kind: 'special',
   total: 50,
   anim: {
@@ -452,6 +455,7 @@ const airflare: MoveDef = {
 const swipe: MoveDef = {
   id: 'swipe',
   name: '스와이프 킥',
+  desc: '뛰어들며 위에서 내려차는 중단. 서서 막아야 한다',
   kind: 'special',
   total: 42,
   anim: {
@@ -521,6 +525,7 @@ const swipe: MoveDef = {
 const freeze: MoveDef = {
   id: 'freeze',
   name: '프리즈',
+  desc: '체어 프리즈 자세로 멈춘다. 이때 맞으면 플립 킥으로 자동 반격',
   kind: 'special',
   total: 38,
   counter: { from: 4, to: 24, into: 'freezeKick' },
@@ -586,6 +591,7 @@ const superHits = [10, 16, 22, 28, 34, 40].map((f) => ({
 const powerCombo: MoveDef = {
   id: 'powerCombo',
   name: '파워무브 콤보',
+  desc: '윈드밀 연타에서 헤드스핀으로 이어지는 파워무브 연속기',
   kind: 'super',
   total: 100,
   meterCost: 100,

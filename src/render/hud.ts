@@ -68,7 +68,8 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
     if (c.timer > 0 && c.hits >= 2) {
       g.globalAlpha = Math.min(1, c.timer / 20);
       g.textAlign = left ? 'left' : 'right';
-      const cx = left ? 30 : SCREEN_W - 30;
+      // 트레이닝에서는 왼쪽 위를 기술 가이드가 쓰므로 콤보 표시를 가이드 오른쪽으로 옮긴다
+      const cx = left ? (m.mode === 'training' ? 700 : 30) : SCREEN_W - 30;
       g.font = `900 40px ${FONT_TITLE}`;
       g.lineWidth = 6;
       g.strokeStyle = '#000';
@@ -93,7 +94,7 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
     g.font = `bold 15px ${FONT_KR}`;
     g.fillStyle = 'rgba(255,255,255,0.85)';
     g.fillText(
-      `트레이닝 · 더미: ${DUMMY_LABEL[m.dummyMode]}  [F2 변경]  [R 위치 초기화]  [F1 판정 보기]  [ESC 메뉴]`,
+      `트레이닝 · 더미: ${DUMMY_LABEL[m.dummyMode]}  [F2 변경]  [R 위치 초기화]  [Tab 가이드]  [F1 판정]  [ESC 메뉴]`,
       SCREEN_W / 2,
       100,
     );

@@ -12,7 +12,7 @@
    - `STAND`(서기), `CROUCH`(앉기) 포즈를 만든다
    - `baseAnims(STAND, CROUCH)`를 부르면 피격·가드·점프·다운·기상 동작이 자동으로 만들어진다
    - 캐릭터 개성이 드러나는 `idle`(대기), `walkF`/`walkB`(걷기), `crouch`, `win`(승리)만 직접 만든다
-3. **`moves.ts`**: 기본기 10개(서서/앉아서 × 약P·강P·약K·강K + 점프 2개), 필살기, 초필살기
+3. **`moves.ts`**: 기본기 10개(서서/앉아서 × 약P·강P·약K·강K + 점프 2개), 필살기, 초필살기. **기술 도우미(`builders.ts`)** 를 쓰면 짧게 쓸 수 있다 (아래 4장). 기본기도 장르 동작으로 만들어 주세요.
 4. **`index.ts`**: `CharacterDef` 작성 (이름, 체력, 외형, 소개, 스탯, 커맨드, 걷기·점프 속도)
 5. **등록**: `src/characters/index.ts`의 `CHARACTERS` 배열에 추가하면 선택 화면에 나온다
 6. **확인**: 갤러리(`?gallery&char=popper`), 트레이닝 모드, `npm run check`
@@ -27,7 +27,8 @@ export const POPPER: CharacterDef = {
   name: 'POPPER',          // 화면에 나오는 이름
   maxHealth: 1000,         // 기준 1000 (크럼프 1100, 락킹 950)
   look: {
-    headwear: 'backcap',   // 'backcap' | 'headband' | 'applecap' (새 모자는 fighter/types.ts의 Look과 render/stickman.ts의 drawHead에 추가)
+    headwear: 'backcap',   // backcap | headband | applecap | bun | bucket | ponytail | beanie | fedora
+                           // (새 모자는 fighter/types.ts의 Headwear와 render/stickman.ts의 drawHead에 추가)
     build: 1,              // 선 굵기 배율 = 체격
     palettes: [P1용 색, P2용 색],  // 같은 캐릭터끼리 붙어도 구분되도록 두 벌
   },
@@ -109,7 +110,44 @@ const anim: Anim = {
 - **회전 기술**은 `genKeys(시작, 끝, 간격, (프레임, 번호) => 포즈)`로 키프레임을 생성합니다 (비보이 윈드밀 참고).
 - 각도는 **숫자 그대로 보간**됩니다. `rot: 0 → 360`은 한 바퀴를 돌고, `rot: 350 → 10`은 거꾸로 340도를 돕니다.
 
-## 4. 기술 데이터 (`MoveDef`)
+## 4. 기술 도우미 (`builders.ts`)
+
+키프레임과 히트 데이터를 매번 손으로 쓰지 않도록 도우미 함수를 준비해 두었습니다. 새 캐릭터 5명(왁킹, 힙합, 걸스힙합, 하우스, 팝핑)은 전부 이걸로 만들었어요.
+
+| 함수          | 용도                                                                 | 예시                                  |
+| ------------- | -------------------------------------------------------------------- | ------------------------------------- |
+| `strike()`    | 한 번 때리는 기술 (기본기, 대공기, 돌진기)                           | 왁킹 `sLP`, 하우스 `skateSlide`       |
+| `airStrike()` | 점프 공격 (기본 중단)                                                | 모든 캐릭터의 `jL`, `jH`              |
+| `combo()`     | 여러 번 때리는 기술. `kind: 'super'`면 초필살기 설정이 자동으로 붙음 | 왁킹 `whipStorm`, 하우스 `houseParty` |
+| `shooter()`   | 장풍                                                                 | 팝핑 `wave`, 걸스힙합 `blowKiss`      |
+| `moveTable()` | 기술 배열 → 캐릭터에 넣을 사전                                       | 각 `moves.ts` 맨 아래                 |
+
+```ts
+const sLP = strike({
+  id: 'sLP',
+  name: '휩',
+  base: STAND,                                   // 시작·끝 자세
+  windup: pose(STAND, { aF: [178, -20] }),       // 예비 동작 (선택)
+  hit: pose(STAND, { torso: 10, aF: [88, 5] }),  // 판정이 나오는 순간의 자세
+  startup: 5, active: 3, recovery: 7,            // 발생 · 지속 · 빈틈 (프레임)
+  box: { x: 20, y: 110, w: 82, h: 40 },
+  damage: 28,                                    // 경직·타격감은 데미지로 자동 계산 (extra로 덮어쓰기 가능)
+  cancel: true,                                  // 적중 시 필살기 캔슬
+  chain: ['sLP', 'cLP'],
+});
+
+const whipStorm = combo({
+  id: 'whipStorm', name: '휩 스톰', desc: '양팔을 번갈아 휘두르는 5연타',
+  base: STAND, poses: [WHIP_A, WHIP_B],          // 타격마다 번갈아 쓰는 자세
+  start: 7, interval: 5, count: 5,               // 7프레임부터 5프레임 간격으로 5번
+  box: {...}, damage: 20,
+  finish: { pose: FINISH, delay: 6, damage: 40 },  // 마무리 타격 (자동으로 다운)
+  recovery: 16,
+  more: { velocity: [{ from: 6, to: 28, vx: 1.5 }] },  // 나머지 MoveDef 필드
+});
+```
+
+## 5. 기술 데이터 (`MoveDef`)
 
 ```ts
 const sLP: MoveDef = {
@@ -124,20 +162,23 @@ const sLP: MoveDef = {
 };
 ```
 
-| 필드                       | 설명                                                                |
-| -------------------------- | ------------------------------------------------------------------- |
-| `total`                    | 기술 전체 프레임. 끝나면 대기 상태로 돌아간다                       |
-| `hits`                     | 공격 판정 목록. 여러 개면 다단히트                                  |
-| `cancelWindow`             | 적중·가드 시 필살기/초필살기로 캔슬 가능한 프레임 구간              |
-| `chainInto`                | 적중·가드 시 이어서 쓸 수 있는 기본기 id (약P → 약P 연타 등)        |
-| `velocity`                 | `[{ from, to, vx }]` 구간별 전진 속도 (보는 방향 기준, px/프레임)   |
-| `invuln`                   | `[시작, 끝]` 무적 프레임 (대공기의 발동 직후 등)                    |
-| `armor`                    | `[시작, 끝]` 슈퍼아머. 이 구간에 한 번은 맞아도 기술이 계속된다     |
-| `hurtbox`                  | 이 기술 중 맞는 판정을 바꿈 (낮게 도는 기술은 작게)                 |
-| `counter`                  | `{ from, to, into }` 반격 자세. 이 구간에 맞으면 `into` 기술이 나감 |
-| `projectile`               | 장풍 (아래 참고)                                                    |
-| `air`                      | 점프 공격. 착지하면 끝난다                                          |
-| `meterCost`, `superFreeze` | 초필살기용: 게이지 소모량(100), 발동 연출 정지 프레임(40)           |
+| 필드                       | 설명                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| `total`                    | 기술 전체 프레임. 끝나면 대기 상태로 돌아간다                                   |
+| `hits`                     | 공격 판정 목록. 여러 개면 다단히트                                              |
+| `cancelWindow`             | 적중·가드 시 필살기/초필살기로 캔슬 가능한 프레임 구간                          |
+| `chainInto`                | 적중·가드 시 이어서 쓸 수 있는 기본기 id (약P → 약P 연타 등)                    |
+| `velocity`                 | `[{ from, to, vx }]` 구간별 전진 속도 (보는 방향 기준, px/프레임)               |
+| `invuln`                   | `[시작, 끝]` 무적 프레임 (대공기의 발동 직후 등)                                |
+| `armor`                    | `[시작, 끝]` 슈퍼아머. 이 구간에 한 번은 맞아도 기술이 계속된다                 |
+| `hurtbox`                  | 이 기술 중 맞는 판정을 바꿈 (낮게 도는 기술은 작게)                             |
+| `counter`                  | `{ from, to, into }` 반격 자세. 이 구간에 맞으면 `into` 기술이 나감             |
+| `projectile`               | 장풍 (아래 참고)                                                                |
+| `air`                      | 점프 공격. 착지하면 끝난다                                                      |
+| `meterCost`, `superFreeze` | 초필살기용: 게이지 소모량(100), 발동 연출 정지 프레임(40)                       |
+| `meterGain`                | `{ frame, amount }` 그 프레임에 게이지를 채운다 (왁킹 포즈)                     |
+| `trail`                    | 잔상 연출 (팝핑 애니메이션 대시)                                                |
+| `desc`                     | 연습 모드 기술 가이드에 나오는 한 줄 설명. **필살기·초필살기에는 꼭 써 주세요** |
 
 ### 공격 판정 (`HitDef`)
 
@@ -164,16 +205,16 @@ projectile: {
   x: 60, y: 20,              // 발사 위치 (캐릭터 기준)
   vx: 6.5, life: 70,         // 속도(px/프레임), 유지 시간(프레임)
   box: { x: -28, y: -20, w: 56, h: 40 },  // 장풍 중심 기준 판정
-  kind: 'shockwave',         // 모양: 'shockwave'(바닥 충격파) | 'spark'(별빛). 새 모양은 render/renderer.ts의 drawProjectile에
+  kind: 'shockwave',         // 모양: shockwave(충격파) | spark(별빛) | wave(파동) | heart(하트). 새 모양은 render/renderer.ts의 drawProjectile에
   hit: { damage: 60, hitstun: 20, blockstun: 16, level: 'low', chip: 8 },
 }
 ```
 
 장풍의 **높이**(`y`)가 전략을 만듭니다. 락킹 장풍은 높게 날아가서 앉으면 피하고, 크럼프 장풍은 바닥을 타서 하단 가드를 해야 해요. 높이가 다른 장풍끼리는 엇갈리고, 같은 높이면 서로 부딪혀 사라집니다.
 
-## 5. 프레임 데이터 기준표
+## 6. 프레임 데이터 기준표
 
-현재 세 캐릭터의 값입니다. 새 기술을 만들 때 이 범위에서 시작하면 밸런스가 크게 무너지지 않아요.
+처음 만든 세 캐릭터(비보이·크럼프·락킹)의 값입니다. 새 기술을 만들 때 이 범위에서 시작하면 밸런스가 크게 무너지지 않아요.
 ("발생"은 첫 판정이 나오는 프레임)
 
 | 분류        | 발생           | 전체 길이  | 데미지              | 예시                                           |
@@ -196,11 +237,12 @@ projectile: {
 예: 비보이 앉아 약P(`hitstun` 13) → 윈드밀(발생 9)은 이어집니다. 윈드밀 발생이 14였을 때는 1프레임 차이로 끊겼어요.
 정확한 확인은 테스트로 하는 게 확실합니다. `match.test.ts`의 "콤보:" 테스트를 복사해서 쓰세요.
 
-## 6. 완성 전 확인 목록
+## 7. 완성 전 확인 목록
 
 - [ ] 갤러리에서 모든 동작이 자연스러운가 (`?gallery&char=<id>`, 기술별 `?gallery=<기술id>&char=<id>`)
 - [ ] F1 판정 박스를 켜고 공격 판정이 팔다리 위치와 대충 맞는가
 - [ ] 트레이닝 모드에서 필살기 커맨드가 잘 나가는가
 - [ ] 연습 상대를 "자동 가드"로 두고, 하단/중단 설정이 의도대로인가
 - [ ] 캐릭터 선택 화면의 소개글·스탯·기술표가 맞는가
+- [ ] 연습 모드 기술 가이드에서 설명(`desc`)이 보이고, **Space 시범**이 기술을 제대로 보여 주는가 (시범은 테스트로도 자동 확인된다)
 - [ ] `npm run check` 통과

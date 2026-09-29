@@ -194,5 +194,105 @@ function drawHead(
       g.fill();
       break;
     }
+    case 'bun': {
+      // 올림머리: 머리카락 + 뒤통수 위쪽의 둥근 번
+      hairTop(g, hc, r, capAngle);
+      const b = P(r * 0.75, r * 0.7);
+      g.beginPath();
+      g.arc(b.x, b.y, 7, 0, Math.PI * 2);
+      g.fill();
+      break;
+    }
+    case 'ponytail': {
+      // 포니테일: 뒤로 흘러내리는 머리 묶음
+      hairTop(g, hc, r, capAngle);
+      const a = P(r * 0.55, r * 0.8);
+      const c = P(r * 0.6, r + 18);
+      const e = P(-r * 0.9, r + 14);
+      g.lineWidth = 7;
+      g.beginPath();
+      g.moveTo(a.x, a.y);
+      g.quadraticCurveTo(c.x, c.y, e.x, e.y);
+      g.stroke();
+      g.fillStyle = pal.accent;
+      g.beginPath();
+      g.arc(a.x, a.y, 3.5, 0, Math.PI * 2);
+      g.fill();
+      break;
+    }
+    case 'bucket': {
+      // 버킷햇: 둥근 윗부분 + 아래로 처진 넓은 챙
+      g.beginPath();
+      g.arc(hc.x + ux * 2, hc.y + uy * 2, r + 2, capAngle - Math.PI / 2, capAngle + Math.PI / 2);
+      g.closePath();
+      g.fill();
+      const l = P(r * 0.05, r + 9);
+      const m = P(r * 0.3, 0);
+      const f = P(r * 0.05, -(r + 9));
+      g.lineWidth = 5;
+      g.beginPath();
+      g.moveTo(l.x, l.y);
+      g.quadraticCurveTo(m.x, m.y, f.x, f.y);
+      g.stroke();
+      break;
+    }
+    case 'beanie': {
+      // 비니: 머리를 덮는 니트 모자 + 접힌 단 + 방울
+      g.beginPath();
+      g.arc(hc.x + ux * 2, hc.y + uy * 2, r + 1, capAngle - Math.PI / 2 - 0.2, capAngle + Math.PI / 2 + 0.2);
+      g.closePath();
+      g.fill();
+      const l = P(r * 0.15, r + 1);
+      const f = P(r * 0.15, -(r + 1));
+      g.strokeStyle = pal.accent;
+      g.lineWidth = 5;
+      g.beginPath();
+      g.moveTo(l.x, l.y);
+      g.lineTo(f.x, f.y);
+      g.stroke();
+      const pom = P(r + 5, 0);
+      g.fillStyle = pal.accent;
+      g.beginPath();
+      g.arc(pom.x, pom.y, 5, 0, Math.PI * 2);
+      g.fill();
+      break;
+    }
+    case 'fedora': {
+      // 페도라: 각진 크라운 + 넓은 챙 + 띠
+      const crown = [P(r * 0.3, r * 0.85), P(r + 7, r * 0.6), P(r + 5, -r * 0.6), P(r * 0.3, -r * 0.85)];
+      g.beginPath();
+      crown.forEach((p, i) => (i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)));
+      g.closePath();
+      g.fill();
+      const l = P(r * 0.3, r + 8);
+      const f = P(r * 0.3, -(r + 10));
+      g.lineWidth = 4;
+      g.beginPath();
+      g.moveTo(l.x, l.y);
+      g.lineTo(f.x, f.y);
+      g.stroke();
+      const a = P(r * 0.55, r * 0.8);
+      const b = P(r * 0.55, -r * 0.8);
+      g.strokeStyle = pal.accent;
+      g.lineWidth = 3;
+      g.beginPath();
+      g.moveTo(a.x, a.y);
+      g.lineTo(b.x, b.y);
+      g.stroke();
+      break;
+    }
   }
+
+  /** 머리 기준 좌표: up = 위쪽으로, back = 뒤통수 쪽으로 (음수면 얼굴 쪽) */
+  function P(up: number, back: number): Vec2 {
+    return { x: hc.x + ux * up + bx * back, y: hc.y + uy * up + by * back };
+  }
+}
+
+/** 머리카락 윗부분 (정수리 반원) */
+function hairTop(g: CanvasRenderingContext2D, hc: Vec2, r: number, capAngle: number): void {
+  g.beginPath();
+  g.arc(hc.x, hc.y, r + 1, capAngle - Math.PI / 2 - 0.35, capAngle + Math.PI / 2);
+  g.closePath();
+  g.fill();
 }

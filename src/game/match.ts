@@ -93,6 +93,14 @@ export class Match {
     this.startRound();
   }
 
+  /** 연습 시범용: P1을 왼쪽에, 연습 상대를 gap 만큼 떨어뜨려 세운다 */
+  placeForDemo(gap: number): void {
+    this.startRound();
+    const [p1, p2] = this.fighters;
+    p1.x = 300;
+    p2.x = Math.min(300 + gap, 900);
+  }
+
   private dummyInput(): RawInput {
     switch (this.dummyMode) {
       case 'crouch':
@@ -126,6 +134,10 @@ export class Match {
       if (f.pendingProjectile) {
         this.projectiles.push(spawnProjectile(f, f.pendingProjectile));
         f.pendingProjectile = null;
+      }
+      if (f.pendingTaunt) {
+        f.pendingTaunt = false;
+        this.events.push({ type: 'taunt', x: f.x, y: f.y + 200 });
       }
       if (f.pendingSuperFreeze) {
         this.superFreeze = f.pendingSuperFreeze;
