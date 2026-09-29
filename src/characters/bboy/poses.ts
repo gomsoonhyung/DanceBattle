@@ -1,14 +1,8 @@
 import { pose, type Anim, type Pose } from '../../anim/pose';
+import { armW, legW, LYING } from '../common';
 
-/*
- * 각도 규칙은 anim/pose.ts 참고.
- * 몸 전체가 rot만큼 돌아간 상태에서 "월드 기준" 각도를 원할 때:
- *   다리 고관절 = 월드각 + rot
- *   팔 어깨     = 월드각 + torso + rot
- * (월드각: 수직 아래 = 0, 앞쪽 = 90, 위 = 180, 뒤 = -90)
- */
-export const legW = (world: number, rot: number) => world + rot;
-export const armW = (world: number, rot: number, torso = 0) => world + torso + rot;
+export { armW, JUMP_FALL, JUMP_TUCK, legW } from '../common';
+export { jump, knockdown } from '../common';
 
 /** 탑락 기본 자세: 가드를 올리고 무릎을 살짝 굽힌 상태 */
 export const STAND: Pose = {
@@ -48,20 +42,6 @@ export const CROUCH_HAND = pose(CROUCH, { torso: 55, head: -30, aF: [55, 0], aB:
 
 export const PREJUMP = pose(STAND, { torso: 18, lF: [40, -60], lB: [10, -58], aF: [20, 90], aB: [0, 90] });
 
-export const JUMP_TUCK: Pose = {
-  x: 0,
-  y: 95,
-  rot: 0,
-  torso: 10,
-  head: -5,
-  aF: [100, 50],
-  aB: [70, 70],
-  lF: [75, -115],
-  lB: [45, -105],
-};
-
-export const JUMP_FALL = pose(JUMP_TUCK, { lF: [25, -35], lB: [-10, -25], aF: [60, 80], aB: [30, 90] });
-
 export const HIT_STAND = pose(STAND, {
   torso: -22,
   head: -18,
@@ -75,19 +55,6 @@ export const HIT_CROUCH = pose(CROUCH, { torso: 12, head: -30, aF: [30, 60], aB:
 
 export const BLOCK_STAND = pose(STAND, { torso: 2, head: 5, aF: [60, 125], aB: [50, 130], lF: [20, -20], lB: [-18, -10] });
 export const BLOCK_CROUCH = pose(CROUCH, { torso: 25, head: 0, aF: [75, 120], aB: [65, 125] });
-
-/** 등으로 누운 자세 (다운) */
-export const LYING: Pose = {
-  x: 0,
-  y: 10,
-  rot: -90,
-  torso: 0,
-  head: 10,
-  aF: [150, 10],
-  aB: [120, 20],
-  lF: [5, -15],
-  lB: [-5, -5],
-};
 
 /** 체어 프리즈: 한 손으로 바닥을 짚고 몸을 거꾸로 세운 자세 */
 export const FREEZE: Pose = {
@@ -147,15 +114,6 @@ export const crouch: Anim = {
 
 export const prejump: Anim = { keys: [{ f: 0, p: STAND }, { f: 3, p: PREJUMP }] };
 
-export const jump: Anim = {
-  snap: false,
-  keys: [
-    { f: 0, p: JUMP_TUCK },
-    { f: 18, p: pose(JUMP_TUCK, { lF: [85, -125], lB: [55, -115] }) },
-    { f: 34, p: JUMP_FALL },
-  ],
-};
-
 export const land: Anim = { keys: [{ f: 0, p: PREJUMP }, { f: 4, p: STAND }] };
 
 export const hitStand: Anim = { keys: [{ f: 0, p: STAND }, { f: 3, p: HIT_STAND }, { f: 16, p: STAND }] };
@@ -171,14 +129,6 @@ export const airHit: Anim = {
   ],
 };
 
-export const knockdown: Anim = {
-  keys: [
-    { f: 0, p: pose(LYING, { lF: [30, -40], lB: [20, -30] }) },
-    { f: 8, p: LYING },
-  ],
-};
-
-/** 킵업: 누운 상태에서 다리를 당겼다가 튕기듯 일어난다 */
 export const getup: Anim = {
   keys: [
     { f: 0, p: LYING },

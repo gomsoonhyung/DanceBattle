@@ -1,64 +1,103 @@
 import { unlockAudio } from './audio/sfx';
 import { FRAME_MS, SCREEN_H, SCREEN_W } from './core/constants';
 import { renderGallery } from './debug/gallery';
+import type { CharacterDef } from './fighter/types';
 import { Match, type MatchMode } from './game/match';
-import { anyAttackKeyPressed, endInputFrame, initKeyboard, keyPressed, readPlayerInput } from './input/devices';
+import { endInputFrame, initKeyboard, keyPressed, menu, pollMenu, readPlayerInput } from './input/devices';
 import { FONT_KR, FONT_TITLE } from './render/hud';
 import { Renderer } from './render/renderer';
 import { drawStage } from './render/stage';
+import { SelectScreen } from './screens/select';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const g = canvas.getContext('2d')!;
 
 const params = new URLSearchParams(location.search);
 if (params.has('gallery')) {
-  renderGallery(g, params.get('gallery') || '');
+  renderGallery(g, params.get('gallery') || '', params.get('char') || '');
 } else {
   startGame();
 }
+
+type Screen =
+  | { kind: 'title' }
+  | { kind: 'select'; select: SelectScreen }
+  | { kind: 'match'; match: Match; renderer: Renderer };
 
 function startGame(): void {
   initKeyboard();
   window.addEventListener('keydown', unlockAudio);
   window.addEventListener('pointerdown', unlockAudio);
 
-  let match: Match | null = null;
-  let renderer = new Renderer(g);
+  let screen: Screen = { kind: 'title' };
   let menuIndex = 0;
+  let showBoxes = false;
+  let lastChars: [CharacterDef, CharacterDef] | undefined;
   const MENU: { mode: MatchMode; label: string }[] = [
     { mode: 'versus', label: '2P 대전' },
     { mode: 'training', label: '트레이닝 (혼자 연습)' },
   ];
 
-  const begin = (mode: MatchMode) => {
-    const showBoxes = renderer.showBoxes;
-    match = new Match(mode);
-    renderer = new Renderer(g);
+  const toSelect = (mode: MatchMode) => {
+    screen = { kind: 'select', select: new SelectScreen(mode, lastChars) };
+  };
+
+  const toMatch = (mode: MatchMode, chars: [CharacterDef, CharacterDef]) => {
+    lastChars = chars;
+    const renderer = new Renderer(g);
     renderer.showBoxes = showBoxes;
+    screen = { kind: 'match', match: new Match(mode, chars), renderer };
   };
 
   /** 고정 60fps 로직 1프레임 */
   const step = () => {
-    if (keyPressed('F1')) renderer.showBoxes = !renderer.showBoxes;
-    if (!match) {
-      if (keyPressed('KeyW') || keyPressed('ArrowUp')) menuIndex = (menuIndex + MENU.length - 1) % MENU.length;
-      if (keyPressed('KeyS') || keyPressed('ArrowDown')) menuIndex = (menuIndex + 1) % MENU.length;
-      if (keyPressed('Digit1')) begin('versus');
-      else if (keyPressed('Digit2')) begin('training');
-      else if (keyPressed('Enter') || keyPressed('Space') || anyAttackKeyPressed(0)) begin(MENU[menuIndex].mode);
-    } else {
-      if (keyPressed('Escape')) {
-        match = null;
-      } else {
+    pollMenu();
+    if (keyPressed('F1')) {
+      showBoxes = !showBoxes;
+      if (screen.kind === 'match') screen.renderer.showBoxes = showBoxes;
+    }
+
+    switch (screen.kind) {
+      case 'title': {
+        const m0 = menu(0);
+        const m1 = menu(1);
+        if (m0.up || m1.up) menuIndex = (menuIndex + MENU.length - 1) % MENU.length;
+        if (m0.down || m1.down) menuIndex = (menuIndex + 1) % MENU.length;
+        if (keyPressed('Digit1')) toSelect('versus');
+        else if (keyPressed('Digit2')) toSelect('training');
+        else if (keyPressed('Enter') || keyPressed('Space') || m0.confirm || m1.confirm) toSelect(MENU[menuIndex].mode);
+        break;
+      }
+      case 'select': {
+        const r = screen.select.update();
+        if (r === 'back') screen = { kind: 'title' };
+        else if (r) toMatch(screen.select.mode, r);
+        break;
+      }
+      case 'match': {
+        const { match, renderer } = screen;
+        if (keyPressed('Escape')) {
+          screen = { kind: 'title' };
+          break;
+        }
         if (match.mode === 'training') {
           if (keyPressed('F2')) match.cycleDummyMode();
           if (keyPressed('KeyR')) match.resetPositions();
         }
-        if (match.phase === 'matchEnd' && match.phaseFrame > 60 && (anyAttackKeyPressed(0) || anyAttackKeyPressed(1))) {
-          begin(match.mode);
+        if (match.phase === 'matchEnd' && match.phaseFrame > 60) {
+          const m = [menu(0), menu(1)];
+          if (m.some((x) => x.confirm)) {
+            toMatch(match.mode, match.chars);
+            break;
+          }
+          if (m.some((x) => x.cancel)) {
+            toSelect(match.mode);
+            break;
+          }
         }
-        match!.update(readPlayerInput(0), readPlayerInput(1));
-        renderer.consume(match!.events);
+        match.update(readPlayerInput(0), readPlayerInput(1));
+        renderer.consume(match.events);
+        break;
       }
     }
     endInputFrame();
@@ -66,22 +105,22 @@ function startGame(): void {
 
   const drawTitle = () => {
     drawStage(g);
-    g.fillStyle = 'rgba(0,0,0,0.6)';
+    g.fillStyle = 'rgba(0,0,0,0.78)';
     g.fillRect(0, 0, SCREEN_W, SCREEN_H);
     g.textAlign = 'center';
     g.font = `900 72px ${FONT_TITLE}`;
     g.lineWidth = 10;
     g.lineJoin = 'round';
     g.strokeStyle = '#000';
-    g.strokeText('B-BOY FIGHTER', SCREEN_W / 2, 110);
+    g.strokeText('DANCE BATTLE', SCREEN_W / 2, 120);
     g.fillStyle = '#ffd23f';
-    g.fillText('B-BOY FIGHTER', SCREEN_W / 2, 110);
+    g.fillText('DANCE BATTLE', SCREEN_W / 2, 120);
 
     MENU.forEach((item, i) => {
       const sel = i === menuIndex;
       g.font = `bold ${sel ? 28 : 24}px ${FONT_KR}`;
       g.fillStyle = sel ? '#fff' : '#889';
-      g.fillText(`${sel ? '▶ ' : ''}${i + 1}. ${item.label}`, SCREEN_W / 2, 175 + i * 40);
+      g.fillText(`${sel ? '▶ ' : ''}${i + 1}. ${item.label}`, SCREEN_W / 2, 200 + i * 42);
     });
 
     g.font = `15px ${FONT_KR}`;
@@ -91,14 +130,13 @@ function startGame(): void {
       'P2  이동 방향키  ·   약P K  강P L  약K ,  강K .',
       '게임패드: X 약P · Y 강P · A 약K · B 강K',
       '',
-      '윈드밀 ↓↘→+P   ·   에어플레어 ↓↘→+K   ·   헤드스핀 →↓↘+P (대공)',
-      '프리즈 반격 ↓↙←+P   ·   스와이프 킥 ↓↙←+K (중단)',
-      '파워무브 콤보 (게이지 MAX) ↓↘→↓↘→+P 또는 강P+강K 동시',
-      '',
       '가드: 뒤로 (서서 가드) / 뒤아래 (앉아 가드)',
+      '초필살기: 그루브 게이지 MAX에서 ↓↘→↓↘→ + P 또는 강P+강K',
+      '캐릭터별 기술표는 캐릭터 선택 화면에서 볼 수 있습니다',
+      '',
       'F1 판정 박스 보기   ·   ESC 메뉴',
     ];
-    lines.forEach((l, i) => g.fillText(l, SCREEN_W / 2, 280 + i * 22));
+    lines.forEach((l, i) => g.fillText(l, SCREEN_W / 2, 310 + i * 22));
   };
 
   let acc = 0;
@@ -110,7 +148,8 @@ function startGame(): void {
       step();
       acc -= FRAME_MS;
     }
-    if (match) renderer.draw(match);
+    if (screen.kind === 'match') screen.renderer.draw(screen.match);
+    else if (screen.kind === 'select') screen.select.draw(g);
     else drawTitle();
     requestAnimationFrame(frame);
   };

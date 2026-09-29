@@ -1,14 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { MAX_HEALTH } from '../core/constants';
+import { CHARACTERS } from '../characters';
+import { STAGE_RIGHT } from '../core/constants';
+import { BBOY } from '../characters/bboy';
+import { KRUMP } from '../characters/krump';
+import { LOCKER } from '../characters/locking';
 import { InputBuffer } from '../input/inputBuffer';
+import type { CharacterDef } from '../fighter/types';
 import { BTN, EMPTY_INPUT, type RawInput } from '../input/types';
 import { Match } from './match';
+
+const MAX_HEALTH = BBOY.maxHealth;
 
 const I = (o: Partial<RawInput> = {}): RawInput => ({ ...EMPTY_INPUT, ...o });
 
 /** 인트로를 건너뛰고 싸움 단계로 */
-function fightingMatch(): Match {
-  const m = new Match('versus');
+function fightingMatch(chars: [CharacterDef, CharacterDef] = [BBOY, BBOY]): Match {
+  const m = new Match('versus', chars);
   while (m.phase !== 'fight') m.update(I(), I());
   return m;
 }
@@ -182,5 +189,125 @@ describe('Match', () => {
       return m.fighters.map((f) => [f.x, f.y, f.health, f.state]);
     };
     expect(script(fightingMatch())).toEqual(script(fightingMatch()));
+  });
+});
+
+const QCF = [I({ down: true }), I({ down: true, right: true }), I({ right: true })];
+
+describe('캐릭터 데이터', () => {
+  it.each(CHARACTERS.map((c) => [c.name, c] as const))('%s: 기술 참조와 프레임 데이터가 올바르다', (_n, c) => {
+    const ids = [
+      ...Object.values(c.normals.stand),
+      ...Object.values(c.normals.crouch),
+      c.normals.airLight,
+      c.normals.airHeavy,
+      ...c.specials.map((s) => s.move),
+      c.super,
+    ];
+    for (const id of ids) expect(c.moves[id], id).toBeDefined();
+    for (const m of Object.values(c.moves)) {
+      for (const h of m.hits) {
+        expect(h.frames[0], m.id).toBeLessThanOrEqual(h.frames[1]);
+        if (!m.air) expect(h.frames[1], m.id).toBeLessThanOrEqual(m.total);
+      }
+      if (m.counter) expect(c.moves[m.counter.into], m.id).toBeDefined();
+      if (m.projectile) expect(m.projectile.frame, m.id).toBeLessThanOrEqual(m.total);
+    }
+  });
+
+  it.each(CHARACTERS.map((c) => [c.name, c] as const))('%s: 모든 필살기 커맨드가 나간다', (_n, c) => {
+    const inputs: Record<string, RawInput[]> = {
+      qcf: [I({ down: true }), I({ down: true, right: true }), I({ right: true })],
+      qcb: [I({ down: true }), I({ down: true, left: true }), I({ left: true })],
+      dp: [I({ right: true }), I({ down: true }), I({ down: true, right: true })],
+    };
+    for (const sp of c.specials) {
+      const m = fightingMatch([c, c]);
+      const seqIn = inputs[sp.motion].map((x) => ({ ...x }));
+      seqIn[seqIn.length - 1].buttons = sp.button === 'P' ? BTN.LP : BTN.LK;
+      seq(m, seqIn);
+      expect(m.fighters[0].move?.id, sp.move).toBe(sp.move);
+    }
+  });
+});
+
+describe('크럼프', () => {
+  it('스톰프 웨이브 장풍이 날아가서 멀리 있는 상대를 맞힌다', () => {
+    const m = fightingMatch([KRUMP, BBOY]);
+    m.fighters[0].x = 200;
+    m.fighters[1].x = 600;
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LP })]);
+    run(m, 20);
+    expect(m.projectiles.length).toBe(1);
+    run(m, 80);
+    expect(m.fighters[1].health).toBeLessThan(BBOY.maxHealth);
+    expect(m.projectiles.length).toBe(0);
+  });
+
+  it('스톰프 웨이브는 하단이라 서서 막을 수 없다', () => {
+    const m = fightingMatch([KRUMP, BBOY]);
+    // 뒤로 누른 상대가 물러나지 않도록 벽에 붙인다
+    m.fighters[0].x = STAGE_RIGHT - 400;
+    m.fighters[1].x = STAGE_RIGHT;
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LP })], I({ right: true }));
+    run(m, 100, I(), I({ right: true }));
+    expect(m.fighters[1].health).toBeLessThan(BBOY.maxHealth);
+  });
+
+  it('버스트 러시는 아머로 한 번 버티고 계속 돌진한다', () => {
+    const m = fightingMatch([KRUMP, BBOY]);
+    closeIn(m, 110);
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LK })], I({ buttons: BTN.LP }));
+    run(m, 6);
+    const k = m.fighters[0];
+    expect(k.health).toBeLessThan(KRUMP.maxHealth);
+    expect(k.state).toBe('move');
+    expect(k.move?.id).toBe('burstRush');
+  });
+
+  it('체스트 팝은 가드할 수 없다', () => {
+    const m = fightingMatch([KRUMP, BBOY]);
+    m.fighters[0].x = STAGE_RIGHT - 70;
+    m.fighters[1].x = STAGE_RIGHT;
+    const guard = I({ right: true });
+    seq(m, [I({ down: true }), I({ down: true, left: true }), I({ left: true, buttons: BTN.LP })], guard);
+    expect(m.fighters[0].move?.id).toBe('chestPop');
+    run(m, 40, I(), guard);
+    expect(m.fighters[1].health).toBeLessThan(BBOY.maxHealth);
+  });
+});
+
+describe('락킹', () => {
+  it('포인트 장풍은 서 있는 상대에게 맞는다', () => {
+    const m = fightingMatch([LOCKER, BBOY]);
+    m.fighters[0].x = 200;
+    m.fighters[1].x = 600;
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LP })]);
+    run(m, 70);
+    expect(m.fighters[1].health).toBeLessThan(BBOY.maxHealth);
+  });
+
+  it('포인트 장풍은 앉으면 피할 수 있다', () => {
+    const m = fightingMatch([LOCKER, BBOY]);
+    m.fighters[0].x = 200;
+    m.fighters[1].x = 600;
+    const duck = I({ down: true });
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LP })], duck);
+    run(m, 70, I(), duck);
+    expect(m.fighters[1].health).toBe(BBOY.maxHealth);
+  });
+
+  it('장풍끼리 부딪히면 둘 다 사라진다', () => {
+    const m = fightingMatch([LOCKER, LOCKER]);
+    m.fighters[0].x = 200;
+    m.fighters[1].x = 700;
+    const p2qcf = [I({ down: true }), I({ down: true, left: true }), I({ left: true, buttons: BTN.LP })];
+    for (let i = 0; i < 3; i++) m.update(i < 2 ? QCF[i] : I({ right: true, buttons: BTN.LP }), p2qcf[i]);
+    run(m, 20);
+    expect(m.projectiles.length).toBe(2);
+    run(m, 40);
+    expect(m.projectiles.length).toBe(0);
+    expect(m.fighters[0].health).toBe(LOCKER.maxHealth);
+    expect(m.fighters[1].health).toBe(LOCKER.maxHealth);
   });
 });

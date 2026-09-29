@@ -7,26 +7,33 @@ const k = page.keyboard;
 const wait = (ms) => page.waitForTimeout(ms);
 const shot = (n) => page.screenshot({ path: `/tmp/shots/play_${n}.png` });
 const tap = async (code, ms = 40) => { await k.down(code); await wait(ms); await k.up(code); };
+const qcf = async (dir, btn) => {
+  // ↓ → ↓+앞 → 앞 + 버튼
+  await k.down(dir === 'p1' ? 'KeyS' : 'ArrowDown'); await wait(40);
+  await k.down(dir === 'p1' ? 'KeyD' : 'ArrowLeft'); await wait(40);
+  await k.up(dir === 'p1' ? 'KeyS' : 'ArrowDown'); await wait(30);
+  await tap(btn);
+  await k.up(dir === 'p1' ? 'KeyD' : 'ArrowLeft');
+};
 
 await page.goto('http://localhost:5173/');
-await wait(400);
+await wait(300);
 await shot('title');
 await tap('Digit1');
-await wait(600);
-await shot('intro');
-await wait(1300);
-// P1 앞으로 걸어가기
-await k.down('KeyD'); await wait(900); await k.up('KeyD');
-// 윈드밀 ↓↘→ + 약P
-await k.down('KeyS'); await wait(40); await k.down('KeyD'); await wait(40); await k.up('KeyS'); await wait(40);
+await wait(300);
+await tap('KeyD'); // P1 → KRUMPER
+await tap('ArrowRight'); // P2 → LOCKER
+await wait(300);
+await shot('select');
 await tap('KeyF');
-await k.up('KeyD');
-await wait(350);
-await shot('windmill');
-await wait(1200);
-// P2 헤드스핀 →↓↘ + 약P (P2는 왼쪽을 보므로 앞 = ArrowLeft)
-await k.down('ArrowLeft'); await wait(40); await k.up('ArrowLeft'); await k.down('ArrowDown'); await wait(40);
-await k.down('ArrowLeft'); await wait(30); await tap('KeyK'); await k.up('ArrowDown'); await k.up('ArrowLeft');
+await tap('KeyK');
+await wait(200);
+await shot('select_ready');
+await wait(900);
+await wait(1800); // 인트로
+await qcf('p1', 'KeyF'); // 스톰프 웨이브
+await wait(80);
+await qcf('p2', 'KeyK'); // 엉클 샘 포인트
 await wait(250);
-await shot('headspin');
+await shot('projectiles');
 await browser.close();

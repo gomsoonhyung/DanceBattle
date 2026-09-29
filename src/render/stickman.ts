@@ -1,19 +1,20 @@
 import { BONE, type Skeleton } from '../anim/pose';
 import { GROUND_SCREEN_Y } from '../core/constants';
 import { DEG, type Vec2 } from '../core/math';
+import type { Fighter } from '../fighter/fighter';
+import type { Look, Palette } from '../fighter/types';
 
-export interface Palette {
-  main: string; // 앞쪽 팔다리, 몸통
-  back: string; // 뒤쪽 팔다리 (어둡게)
-  cap: string;
-  skin: string;
-  shoe: string;
+/** 캐릭터 색상 (P1/P2에 따라 다른 색 세트) */
+export function fighterPalette(f: Fighter): Palette {
+  return f.def.look.palettes[f.index];
 }
 
-export const PALETTES: [Palette, Palette] = [
-  { main: '#ff4d5e', back: '#a8303d', cap: '#ffd23f', skin: '#f1c9a5', shoe: '#ffffff' },
-  { main: '#4da3ff', back: '#2d62a0', cap: '#7cffb2', skin: '#c68b5e', shoe: '#ffffff' },
-];
+/** #rrggbb 색을 어둡게 */
+function shade(hex: string, k: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  const c = (v: number) => Math.round(v * k);
+  return `rgb(${c((n >> 16) & 255)},${c((n >> 8) & 255)},${c(n & 255)})`;
+}
 
 /**
  * 스켈레톤(로컬 좌표)을 화면에 그린다.
@@ -25,44 +26,53 @@ export function drawStickman(
   worldX: number,
   worldY: number,
   facing: 1 | -1,
+  look: Look,
   pal: Palette,
 ): void {
   const S = (p: Vec2) => ({ x: worldX + p.x * facing, y: GROUND_SCREEN_Y - (worldY + p.y) });
+  const W = look.build;
 
-  const limb = (a: Vec2, b: Vec2, c: Vec2, color: string, width: number) => {
-    const pa = S(a);
-    const pb = S(b);
-    const pc = S(c);
+  const line = (pts: Vec2[], color: string, width: number) => {
     g.strokeStyle = color;
     g.lineWidth = width;
     g.beginPath();
-    g.moveTo(pa.x, pa.y);
-    g.lineTo(pb.x, pb.y);
-    g.lineTo(pc.x, pc.y);
+    pts.forEach((p, i) => (i ? g.lineTo(p.x, p.y) : g.moveTo(p.x, p.y)));
     g.stroke();
-    return pc;
   };
 
-  const foot = (knee: Vec2, ankle: Vec2) => {
-    // 발끝 방향으로 신발을 짧게 그린다
+  const leg = (knee: Vec2, foot: Vec2, color: string) => {
+    const ph = S(sk.hip);
     const pk = S(knee);
-    const pa = S(ankle);
-    const dx = pa.x - pk.x;
-    const dy = pa.y - pk.y;
+    const pf = S(foot);
+    line([ph, pk, pf], color, 10 * W);
+    if (look.suspenders) {
+      // 무릎 아래 줄무늬 양말
+      const mid = { x: pk.x + (pf.x - pk.x) * 0.45, y: pk.y + (pf.y - pk.y) * 0.45 };
+      line([mid, pf], '#ffffff', 9 * W);
+      for (const t of [0.6, 0.8]) {
+        const a = { x: pk.x + (pf.x - pk.x) * t, y: pk.y + (pf.y - pk.y) * t };
+        const b = { x: pk.x + (pf.x - pk.x) * (t + 0.07), y: pk.y + (pf.y - pk.y) * (t + 0.07) };
+        line([a, b], pal.accent, 9 * W);
+      }
+    }
+    // 신발: 정강이에 수직, 바라보는 방향 쪽
+    const dx = pf.x - pk.x;
+    const dy = pf.y - pk.y;
     const len = Math.hypot(dx, dy) || 1;
-    // 정강이에 수직, 바라보는 방향 쪽
     let nx = -dy / len;
     let ny = dx / len;
     if (nx * facing < 0) {
       nx = -nx;
       ny = -ny;
     }
-    g.strokeStyle = pal.shoe;
-    g.lineWidth = 9;
-    g.beginPath();
-    g.moveTo(pa.x, pa.y);
-    g.lineTo(pa.x + nx * 11, pa.y + ny * 11);
-    g.stroke();
+    line([pf, { x: pf.x + nx * 11 * W, y: pf.y + ny * 11 * W }], pal.shoe, 9 * W);
+  };
+
+  const shoulder = { x: sk.neck.x + (sk.hip.x - sk.neck.x) * 0.07, y: sk.neck.y + (sk.hip.y - sk.neck.y) * 0.07 };
+  const arm = (elbow: Vec2, hand: Vec2, color: string) => {
+    const ph = S(hand);
+    line([S(shoulder), S(elbow), ph], color, 9 * W);
+    return ph;
   };
 
   g.save();
@@ -70,57 +80,112 @@ export function drawStickman(
   g.lineJoin = 'round';
 
   // 뒤쪽 팔다리
-  limb(sk.hip, sk.kneeB, sk.footB, pal.back, 10);
-  foot(sk.kneeB, sk.footB);
-  const shoulder = { x: sk.neck.x + (sk.hip.x - sk.neck.x) * 0.07, y: sk.neck.y + (sk.hip.y - sk.neck.y) * 0.07 };
-  limb(shoulder, sk.elbowB, sk.handB, pal.back, 9);
+  leg(sk.kneeB, sk.footB, pal.back);
+  arm(sk.elbowB, sk.handB, look.bareArms ? shade(pal.skin, 0.75) : pal.back);
 
   // 몸통
   const ph = S(sk.hip);
   const pn = S(sk.neck);
-  g.strokeStyle = pal.main;
-  g.lineWidth = 16;
-  g.beginPath();
-  g.moveTo(ph.x, ph.y);
-  g.lineTo(pn.x, pn.y);
-  g.stroke();
+  line([ph, pn], pal.main, 16 * W);
+  if (look.suspenders) {
+    const tx = pn.x - ph.x;
+    const ty = pn.y - ph.y;
+    const tl = Math.hypot(tx, ty) || 1;
+    const ox = (-ty / tl) * 4 * facing;
+    const oy = (tx / tl) * 4 * facing;
+    line(
+      [
+        { x: ph.x + ox, y: ph.y + oy },
+        { x: pn.x + ox, y: pn.y + oy },
+      ],
+      pal.accent,
+      3,
+    );
+  }
 
   // 앞쪽 다리
-  limb(sk.hip, sk.kneeF, sk.footF, pal.main, 10);
-  foot(sk.kneeF, sk.footF);
+  leg(sk.kneeF, sk.footF, pal.main);
 
-  // 머리 + 뒤로 쓴 캡
-  const hc = S(sk.head);
-  g.fillStyle = pal.skin;
-  g.beginPath();
-  g.arc(hc.x, hc.y, BONE.headR, 0, Math.PI * 2);
-  g.fill();
-  const up = sk.headAngle * DEG; // 머리 위쪽 방향 (앞으로 기울면 +)
-  const ux = Math.sin(up) * facing;
-  const uy = -Math.cos(up);
-  const capAngle = Math.atan2(uy, ux);
-  g.fillStyle = pal.cap;
-  g.beginPath();
-  g.arc(hc.x, hc.y, BONE.headR + 1, capAngle - Math.PI / 2, capAngle + Math.PI / 2);
-  g.closePath();
-  g.fill();
-  // 챙: 머리 뒤쪽으로
-  const bx = -Math.cos(up) * facing; // 뒤쪽 방향 = 위 방향을 90도 회전
-  const by = -Math.sin(up);
-  const r = BONE.headR;
-  g.strokeStyle = pal.cap;
-  g.lineWidth = 5;
-  g.beginPath();
-  g.moveTo(hc.x + bx * r * 0.6 + ux * 2, hc.y + by * r * 0.6 + uy * 2);
-  g.lineTo(hc.x + bx * (r + 10) + ux * 2, hc.y + by * (r + 10) + uy * 2);
-  g.stroke();
+  drawHead(g, S(sk.head), sk.headAngle, facing, look, pal);
 
   // 앞쪽 팔
-  const hand = limb(shoulder, sk.elbowF, sk.handF, pal.main, 9);
+  const hand = arm(sk.elbowF, sk.handF, look.bareArms ? pal.skin : pal.main);
   g.fillStyle = pal.skin;
   g.beginPath();
-  g.arc(hand.x, hand.y, 5.5, 0, Math.PI * 2);
+  g.arc(hand.x, hand.y, 5.5 * W, 0, Math.PI * 2);
   g.fill();
 
   g.restore();
+}
+
+function drawHead(g: CanvasRenderingContext2D, hc: Vec2, headAngle: number, facing: 1 | -1, look: Look, pal: Palette): void {
+  const r = BONE.headR;
+  g.fillStyle = pal.skin;
+  g.beginPath();
+  g.arc(hc.x, hc.y, r, 0, Math.PI * 2);
+  g.fill();
+
+  const up = headAngle * DEG; // 머리 위쪽 방향 (앞으로 기울면 +)
+  const ux = Math.sin(up) * facing;
+  const uy = -Math.cos(up);
+  const bx = -Math.cos(up) * facing; // 머리 뒤쪽 방향
+  const by = -Math.sin(up);
+  const capAngle = Math.atan2(uy, ux);
+
+  g.fillStyle = pal.cap;
+  g.strokeStyle = pal.cap;
+  switch (look.headwear) {
+    case 'backcap': {
+      // 뒤로 쓴 야구모자
+      g.beginPath();
+      g.arc(hc.x, hc.y, r + 1, capAngle - Math.PI / 2, capAngle + Math.PI / 2);
+      g.closePath();
+      g.fill();
+      g.lineWidth = 5;
+      g.beginPath();
+      g.moveTo(hc.x + bx * r * 0.6 + ux * 2, hc.y + by * r * 0.6 + uy * 2);
+      g.lineTo(hc.x + bx * (r + 10) + ux * 2, hc.y + by * (r + 10) + uy * 2);
+      g.stroke();
+      break;
+    }
+    case 'headband': {
+      // 이마를 두르는 머리띠 + 뒤로 날리는 끈
+      const cx = hc.x + ux * r * 0.35;
+      const cy = hc.y + uy * r * 0.35;
+      g.lineWidth = 5;
+      g.beginPath();
+      g.moveTo(cx + bx * r * 0.95, cy + by * r * 0.95);
+      g.lineTo(cx - bx * r * 0.95, cy - by * r * 0.95);
+      g.stroke();
+      g.lineWidth = 3.5;
+      const tx = cx + bx * r;
+      const ty = cy + by * r;
+      g.beginPath();
+      g.moveTo(tx, ty);
+      g.lineTo(tx + bx * 12 - ux * 6, ty + by * 12 - uy * 6);
+      g.moveTo(tx, ty);
+      g.lineTo(tx + bx * 10 - ux * 12, ty + by * 10 - uy * 12);
+      g.stroke();
+      break;
+    }
+    case 'applecap': {
+      // 락킹의 빅 애플 캡: 부풀어 오른 윗부분 + 앞쪽 짧은 챙
+      const cx = hc.x + ux * 3;
+      const cy = hc.y + uy * 3;
+      g.beginPath();
+      g.ellipse(cx, cy, r + 5, r - 1, capAngle + Math.PI / 2, Math.PI, Math.PI * 2);
+      g.closePath();
+      g.fill();
+      g.lineWidth = 5;
+      g.beginPath();
+      g.moveTo(hc.x - bx * r * 0.3, hc.y - by * r * 0.3);
+      g.lineTo(hc.x - bx * (r + 9), hc.y - by * (r + 9));
+      g.stroke();
+      g.fillStyle = pal.accent;
+      g.beginPath();
+      g.arc(cx + ux * (r - 2), cy + uy * (r - 2), 3, 0, Math.PI * 2);
+      g.fill();
+      break;
+    }
+  }
 }

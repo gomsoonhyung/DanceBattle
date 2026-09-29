@@ -1,9 +1,9 @@
 import { evalAnim, type Anim, type Skeleton } from '../anim/pose';
-import { GRAVITY, MAX_HEALTH, MAX_METER, STAGE_LEFT, STAGE_RIGHT } from '../core/constants';
+import { GRAVITY, MAX_METER, STAGE_LEFT, STAGE_RIGHT } from '../core/constants';
 import { clamp, type Rect } from '../core/math';
 import { InputBuffer } from '../input/inputBuffer';
 import { BTN, KICKS, PUNCHES, type Button, type Dir, type RawInput } from '../input/types';
-import type { CharacterDef, HitLevel, MoveDef } from './types';
+import type { CharacterDef, HitLevel, MoveDef, ProjectileDef } from './types';
 
 export type FighterState =
   | 'idle'
@@ -60,7 +60,7 @@ export class Fighter {
   /** 현재 기술이 적중 또는 가드되었는지 (캔슬 조건) */
   moveConnected = false;
 
-  health = MAX_HEALTH;
+  health: number;
   meter = 0;
   stun = 0;
   stunCrouching = false;
@@ -77,11 +77,17 @@ export class Fighter {
   private queuedCancel: MoveDef | null = null;
   /** 초필살기 발동 시 Match가 읽어가는 화면 정지 요청 */
   pendingSuperFreeze = 0;
+  /** 이번 프레임에 발사한 장풍. Match가 읽어간다 */
+  pendingProjectile: ProjectileDef | null = null;
+  /** 슈퍼아머로 버틸 수 있는 남은 횟수 */
+  private armorHits = 0;
 
   constructor(
     readonly def: CharacterDef,
     readonly index: 0 | 1,
-  ) {}
+  ) {
+    this.health = def.maxHealth;
+  }
 
   resetForRound(x: number, facing: 1 | -1): void {
     this.x = x;
@@ -94,7 +100,7 @@ export class Fighter {
     this.moveFrame = 0;
     this.hitIds.clear();
     this.moveConnected = false;
-    this.health = MAX_HEALTH;
+    this.health = this.def.maxHealth;
     this.stun = 0;
     this.hitstop = 0;
     this.pushVel = 0;
@@ -241,6 +247,7 @@ export class Fighter {
   private updateMove(canAct: boolean): void {
     const m = this.move!;
     this.moveFrame++;
+    if (m.projectile && this.moveFrame === m.projectile.frame) this.pendingProjectile = m.projectile;
 
     if (canAct) {
       const next = this.findCancel();
@@ -294,6 +301,7 @@ export class Fighter {
     this.state = 'move';
     this.stateFrame = 0;
     this.input.consume();
+    this.armorHits = m.armor ? 1 : 0;
     if (m.meterCost) this.meter -= m.meterCost;
     if (m.superFreeze) this.pendingSuperFreeze = m.superFreeze;
     if (!m.air) this.vx = 0;
@@ -434,6 +442,15 @@ export class Fighter {
     if (this.state === 'airHit' && this.juggle >= JUGGLE_LIMIT) return true;
     const inv = this.move?.invuln;
     return !!(this.state === 'move' && inv && this.moveFrame >= inv[0] && this.moveFrame <= inv[1]);
+  }
+
+  /** 슈퍼아머 구간이면 아머를 1회 소모하고 true */
+  consumeArmor(): boolean {
+    const a = this.move?.armor;
+    if (this.state !== 'move' || !a || this.armorHits <= 0) return false;
+    if (this.moveFrame < a[0] || this.moveFrame > a[1]) return false;
+    this.armorHits--;
+    return true;
   }
 
   /** 반격기(프리즈)의 반격 구간인지 */

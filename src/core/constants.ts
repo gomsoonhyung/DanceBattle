@@ -11,7 +11,6 @@ export const STAGE_RIGHT = SCREEN_W - 40;
 export const GROUND_SCREEN_Y = 470; // 지면이 그려지는 화면 y
 
 export const GRAVITY = 0.9;
-export const MAX_HEALTH = 1000;
 export const MAX_METER = 100;
 export const ROUND_TIME = 99;
 export const ROUNDS_TO_WIN = 2;

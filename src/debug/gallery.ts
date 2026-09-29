@@ -1,17 +1,19 @@
 import { evalAnim, type Anim } from '../anim/pose';
-import { BBOY } from '../characters/bboy';
+import { CHARACTERS } from '../characters';
 import { GROUND_SCREEN_Y, SCREEN_W } from '../core/constants';
-import { drawStickman, PALETTES } from '../render/stickman';
+import { drawStickman } from '../render/stickman';
 
 /**
  * 애니메이션 확인용 페이지.
- *   ?gallery          → 모든 동작을 반복 재생
- *   ?gallery=windmill → 해당 동작을 프레임별로 나열 (필름 스트립)
+ *   ?gallery&char=krump          → 해당 캐릭터의 모든 동작을 반복 재생 (char 생략 시 비보이)
+ *   ?gallery=stompWave&char=krump → 해당 동작을 프레임별로 나열 (필름 스트립)
  */
-export function renderGallery(g: CanvasRenderingContext2D, only: string): void {
+export function renderGallery(g: CanvasRenderingContext2D, only: string, charId: string): void {
+  const c = CHARACTERS.find((x) => x.id === charId) ?? CHARACTERS[0];
+  const pal = c.look.palettes;
   const all: [string, Anim, number][] = [
-    ...Object.entries(BBOY.anims).map(([k, a]): [string, Anim, number] => [k, a, a.loop ?? 40]),
-    ...Object.values(BBOY.moves).map((m): [string, Anim, number] => [m.id, m.anim, m.total]),
+    ...Object.entries(c.anims).map(([k, a]): [string, Anim, number] => [k, a, a.loop ?? 40]),
+    ...Object.values(c.moves).map((m): [string, Anim, number] => [m.id, m.anim, m.total]),
   ];
 
   if (only) {
@@ -38,7 +40,7 @@ export function renderGallery(g: CanvasRenderingContext2D, only: string): void {
       g.moveTo(-cellW, GROUND_SCREEN_Y);
       g.lineTo(cellW, GROUND_SCREEN_Y);
       g.stroke();
-      drawStickman(g, evalAnim(anim, f), 0, 0, 1, PALETTES[0]);
+      drawStickman(g, evalAnim(anim, f), 0, 0, 1, c.look, pal[0]);
       g.restore();
       g.fillStyle = '#fff';
       g.font = '12px sans-serif';
@@ -63,7 +65,7 @@ export function renderGallery(g: CanvasRenderingContext2D, only: string): void {
       g.translate(col * cellW + cellW / 2, row * cellH + cellH - 22);
       g.scale(0.5, 0.5);
       g.translate(0, -GROUND_SCREEN_Y);
-      drawStickman(g, evalAnim(anim, t % (len + 20)), 0, 0, 1, PALETTES[i % 2]);
+      drawStickman(g, evalAnim(anim, t % (len + 20)), 0, 0, 1, c.look, pal[i % 2]);
       g.restore();
       g.fillStyle = '#ccc';
       g.font = '11px sans-serif';

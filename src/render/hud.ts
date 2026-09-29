@@ -1,6 +1,6 @@
 import { MAX_METER, ROUNDS_TO_WIN, SCREEN_H, SCREEN_W } from '../core/constants';
 import { DUMMY_LABEL, type Match } from '../game/match';
-import { PALETTES } from './stickman';
+import { fighterPalette } from './stickman';
 
 export const FONT_KR = '"Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif';
 export const FONT_TITLE = '"Arial Black", Impact, sans-serif';
@@ -33,8 +33,9 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
 
     g.font = `bold 16px ${FONT_TITLE}`;
     g.textAlign = left ? 'left' : 'right';
-    g.fillStyle = PALETTES[i].main;
-    g.fillText(`P${i + 1}  B-BOY`, left ? x : x + barW, top + barH + 20);
+    const pal = fighterPalette(m.fighters[i]);
+    g.fillStyle = pal.main;
+    g.fillText(`P${i + 1}  ${m.fighters[i].def.name}`, left ? x : x + barW, top + barH + 20);
 
     // 라운드 승리 표시
     for (let w = 0; w < ROUNDS_TO_WIN; w++) {
@@ -72,7 +73,7 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
       g.lineWidth = 6;
       g.strokeStyle = '#000';
       g.strokeText(`${c.hits} HITS`, cx, 150);
-      g.fillStyle = PALETTES[i].cap;
+      g.fillStyle = pal.cap;
       g.fillText(`${c.hits} HITS`, cx, 150);
       g.font = `bold 16px ${FONT_TITLE}`;
       g.fillStyle = '#fff';
@@ -118,17 +119,17 @@ function drawBanner(g: CanvasRenderingContext2D, m: Match): void {
     case 'ko': {
       const koed = m.fighters.some((x) => x.health <= 0);
       if (f < 90) bigText(g, koed ? 'K.O.' : 'TIME OVER', '#ff4d5e', koed ? 130 : 90);
-      else bigText(g, m.winner === null ? 'DRAW' : `P${m.winner + 1} WIN`, m.winner === null ? '#fff' : PALETTES[m.winner].main);
+      else bigText(g, m.winner === null ? 'DRAW' : `P${m.winner + 1} WIN`, m.winner === null ? '#fff' : fighterPalette(m.fighters[m.winner]).main);
       break;
     }
     case 'roundEnd':
       break;
     case 'matchEnd': {
       const w = m.matchWinner ?? 0;
-      bigText(g, `P${w + 1} WINS!`, PALETTES[w].main, 100);
+      bigText(g, `P${w + 1} WINS!`, fighterPalette(m.fighters[w]).main, 100);
       g.font = `bold 20px ${FONT_KR}`;
       g.fillStyle = '#fff';
-      g.fillText('공격 버튼: 재대결   ·   ESC: 메뉴', SCREEN_W / 2, SCREEN_H / 2 + 50);
+      g.fillText('약P: 재대결   ·   강P: 캐릭터 선택   ·   ESC: 메뉴', SCREEN_W / 2, SCREEN_H / 2 + 50);
       break;
     }
     default:

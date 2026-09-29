@@ -1,8 +1,9 @@
 import { BBOY } from '../characters/bboy';
-import { FPS, MAX_HEALTH, MAX_METER, ROUNDS_TO_WIN, ROUND_TIME } from '../core/constants';
+import { FPS, MAX_METER, ROUNDS_TO_WIN, ROUND_TIME } from '../core/constants';
 import { Fighter } from '../fighter/fighter';
+import type { CharacterDef } from '../fighter/types';
 import { EMPTY_INPUT, type RawInput } from '../input/types';
-import { resolveHits, separate } from './combat';
+import { resolveHits, separate, spawnProjectile, updateProjectiles, type Projectile } from './combat';
 import type { GameEvent } from './events';
 
 export type MatchMode = 'versus' | 'training';
@@ -49,9 +50,13 @@ export class Match {
   dummyMode: DummyMode = 'stand';
   private dummyIdle = 0;
   events: GameEvent[] = [];
+  projectiles: Projectile[] = [];
 
-  constructor(readonly mode: MatchMode) {
-    this.fighters = [new Fighter(BBOY, 0), new Fighter(BBOY, 1)];
+  constructor(
+    readonly mode: MatchMode,
+    readonly chars: [CharacterDef, CharacterDef] = [BBOY, BBOY],
+  ) {
+    this.fighters = [new Fighter(chars[0], 0), new Fighter(chars[1], 1)];
     this.startRound();
   }
 
@@ -62,6 +67,7 @@ export class Match {
     this.timerFrames = ROUND_TIME * FPS;
     this.winner = null;
     this.superFreeze = 0;
+    this.projectiles = [];
     if (this.mode === 'training') {
       this.phase = 'fight';
       p1.meter = MAX_METER;
@@ -117,6 +123,10 @@ export class Match {
     p2.update(canAct);
 
     for (const f of this.fighters) {
+      if (f.pendingProjectile) {
+        this.projectiles.push(spawnProjectile(f, f.pendingProjectile));
+        f.pendingProjectile = null;
+      }
       if (f.pendingSuperFreeze) {
         this.superFreeze = f.pendingSuperFreeze;
         this.superOwner = f.index;
@@ -126,7 +136,10 @@ export class Match {
     }
 
     separate(p1, p2);
-    if (this.phase === 'fight' || this.phase === 'ko') resolveHits(p1, p2, this.events);
+    const canHit = this.phase === 'fight' || this.phase === 'ko';
+    if (canHit) resolveHits(p1, p2, this.events);
+    updateProjectiles(this.projectiles, this.fighters, canHit, this.events);
+    this.projectiles = this.projectiles.filter((p) => !p.dead);
     this.faceEachOther();
     this.updateCombos();
 
@@ -165,14 +178,14 @@ export class Match {
     // 더미가 콤보에서 풀려나고 잠시 지나면 체력 회복
     const hurt = p2.state === 'hitstun' || p2.state === 'airHit' || p2.state === 'knockdown' || p2.state === 'blockstun';
     this.dummyIdle = hurt ? 0 : this.dummyIdle + 1;
-    if (this.dummyIdle > 40) p2.health = MAX_HEALTH;
+    if (this.dummyIdle > 40) p2.health = p2.def.maxHealth;
     if (p2.state === 'ko') {
-      p2.health = MAX_HEALTH;
+      p2.health = p2.def.maxHealth;
       p2.state = 'getup';
       p2.stateFrame = 0;
     }
     if (p1.state !== 'move') p1.meter = MAX_METER;
-    p1.health = MAX_HEALTH;
+    p1.health = p1.def.maxHealth;
   }
 
   private updatePhase(): void {
@@ -235,6 +248,6 @@ export class Match {
   }
 
   healthRatio(i: 0 | 1): number {
-    return this.fighters[i].health / MAX_HEALTH;
+    return this.fighters[i].health / this.fighters[i].def.maxHealth;
   }
 }

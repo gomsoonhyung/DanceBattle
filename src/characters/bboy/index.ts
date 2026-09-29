@@ -5,6 +5,22 @@ import * as A from './poses';
 export const BBOY: CharacterDef = {
   id: 'bboy',
   name: 'B-BOY',
+  maxHealth: 1000,
+  look: {
+    headwear: 'backcap',
+    build: 1,
+    palettes: [
+      { main: '#ff4d5e', back: '#a8303d', cap: '#ffd23f', skin: '#f1c9a5', shoe: '#ffffff', accent: '#ffd23f' },
+      { main: '#4da3ff', back: '#2d62a0', cap: '#7cffb2', skin: '#c68b5e', shoe: '#ffffff', accent: '#7cffb2' },
+    ],
+  },
+  profile: {
+    title: '브레이킹 · 올라운더',
+    desc: '파워무브로 몰아붙이는 균형형. 하단 윈드밀과 중단 스와이프로 흔들고, 프리즈로 반격한다.',
+    power: 3,
+    speed: 3,
+    range: 3,
+  },
   anims: {
     idle: A.idle,
     walkF: A.walkF,

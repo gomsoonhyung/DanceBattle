@@ -100,8 +100,42 @@ export function readPlayerInput(player: 0 | 1): RawInput {
   };
 }
 
-/** 아무 버튼이나 이번 프레임에 눌렸는지 (메뉴 진행용). */
-export function anyAttackKeyPressed(player: 0 | 1): boolean {
-  const m = KEYMAPS[player];
-  return [m.LP, m.HP, m.LK, m.HK].some((c) => pressedOnce.has(c));
+// ── 메뉴 조작 (키보드 + 게임패드, 새로 눌린 순간만) ─────────────────
+
+export interface MenuEdges {
+  up: boolean;
+  down: boolean;
+  left: boolean;
+  right: boolean;
+  confirm: boolean; // 약P
+  cancel: boolean; // 강P
+}
+
+const NO_EDGES: MenuEdges = { up: false, down: false, left: false, right: false, confirm: false, cancel: false };
+const prevMenu: RawInput[] = [
+  { up: false, down: false, left: false, right: false, buttons: 0 },
+  { up: false, down: false, left: false, right: false, buttons: 0 },
+];
+const edges: [MenuEdges, MenuEdges] = [NO_EDGES, NO_EDGES];
+
+/** 매 로직 프레임 시작 시 호출 */
+export function pollMenu(): void {
+  for (const p of [0, 1] as const) {
+    const cur = readPlayerInput(p);
+    const prev = prevMenu[p];
+    const pressed = cur.buttons & ~prev.buttons;
+    edges[p] = {
+      up: cur.up && !prev.up,
+      down: cur.down && !prev.down,
+      left: cur.left && !prev.left,
+      right: cur.right && !prev.right,
+      confirm: (pressed & BTN.LP) !== 0,
+      cancel: (pressed & BTN.HP) !== 0,
+    };
+    prevMenu[p] = cur;
+  }
+}
+
+export function menu(player: 0 | 1): MenuEdges {
+  return edges[player];
 }

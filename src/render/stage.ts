@@ -51,18 +51,18 @@ function buildStage(): HTMLCanvasElement {
   g.lineJoin = 'round';
   g.lineWidth = 14;
   g.strokeStyle = '#111';
-  g.strokeText('B-BOY', 0, 0);
+  g.strokeText('DANCE', 0, 0);
   const grad = g.createLinearGradient(-200, -60, 200, 20);
   grad.addColorStop(0, '#ff3cac');
   grad.addColorStop(0.5, '#ffd23f');
   grad.addColorStop(1, '#2bd2ff');
   g.fillStyle = grad;
-  g.fillText('B-BOY', 0, 0);
+  g.fillText('DANCE', 0, 0);
   g.font = '900 30px "Arial Black", Impact, sans-serif';
   g.lineWidth = 8;
-  g.strokeText('FIGHTER', 150, 38);
+  g.strokeText('BATTLE', 150, 38);
   g.fillStyle = '#fff';
-  g.fillText('FIGHTER', 150, 38);
+  g.fillText('BATTLE', 150, 38);
   g.restore();
 
   // 조명
