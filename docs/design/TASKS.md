@@ -222,7 +222,7 @@ T6 설정 그림을 기준으로 각 캐릭터의 `idle`을 만듭니다. 대기
 
 **확인 방법**: 트레이닝에서 해당 캐릭터로 **D**(앞) · **A**(뒤) · **S**(앉기)를 누르고 있기
 
-### ☐ T12b. 기본 이동 모델 통일 🛑
+### ☑ T12b. 기본 이동 모델 통일 🛑
 
 [REVIEW_round3.md](REVIEW_round3.md)의 표에 있는 프레임을 다시 만듭니다. **T13보다 먼저** 진행하세요.
 
@@ -230,7 +230,7 @@ T6 설정 그림을 기준으로 각 캐릭터의 `idle`을 만듭니다. 대기
 - [x] `bboy`: `crouch` 10장 전부, `walkF_20`
 - [x] `hiphopgirl`: `walkF_20` `walkF_28` `walkB_20` `walkB_28`
 - [x] `househead`: `walkF_4` `walkF_16` `walkF_20`, `crouch_4` `crouch_8` `crouch_12`
-- [ ] `popper`: `walkF_12` `walkF_24` `walkF_28` `walkF_32` `crouch_16`
+- [x] `popper`: `walkF_12` `walkF_24` `walkF_28` `walkF_32` `crouch_16`
 
 **완료 기준**: `check_sprites` ❌·⚠️ 0 + **비교 시트에서 튀는 프레임 없음** (시트 이미지를 LOG에 경로로 남겨 주세요).
 

@@ -165,3 +165,11 @@
 - `check_sprites`: 하우스 헤드 22프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
 - 비교 시트 확인: `shots/sheet_househead.png` (`sprites-work/roster-full/t12b/househead/sheet_final.png` 보관). 대기 기준과 비교해 얼굴·비니·상의·바지 색과 체형이 이어짐
 - 실제 게임 확인: 트레이닝에서 하우스 헤드를 P1으로 선택해 D 앞걷기와 S 앉기 반복을 확인. `src/` 변경 없음
+
+## 2026-10-01 · T12b 파퍼 기본 이동 모델 통일
+
+- 스프라이트 5장 수정 (`walkF_12`, `walkF_24`, `walkF_28`, `walkF_32`, `crouch_16`). 최초 imagegen 동작 시트의 캐릭터를 복원하고 채택된 대기 그림을 포함한 동작별 격자에서 산출한 고정 배율로 규격화
+- 다시 만든 이유: 다섯 프레임이 주변보다 가늘고 팔 모양이 다른 모델이었음. 최초 생성 원본 복원 뒤 걷기 3장과 앉기 1장에 앞쪽 끝·높이 경고가 남아, 생성 그림의 보폭을 줄이고 앉기를 깊게 하며 몸통·바지 체적을 주변 프레임과 같게 재생성
+- `check_sprites`: 파퍼 37프레임 검사, ❌·⚠️ 없음. T12b 대상 5명 전부 ❌·⚠️ 없음. `npm run check`: 통과
+- 비교 시트 확인: `shots/sheet_locker.png`, `shots/sheet_bboy.png`, `shots/sheet_hiphopgirl.png`, `shots/sheet_househead.png`, `shots/sheet_popper.png` (각 원본은 `sprites-work/roster-full/t12b/<캐릭터>/sheet_final.png` 보관)
+- 실제 게임 확인: 트레이닝에서 파퍼를 P1으로 선택해 D 앞걷기와 S 앉기 반복을 확인. `src/` 변경 없음. **검토 요청**
