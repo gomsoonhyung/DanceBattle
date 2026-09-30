@@ -40,3 +40,12 @@
 - 다시 만든 프레임: `sLP_7`, `sHK_12`, `sHK_16`, `cLP_0`, `cHP_9`, `cLK_10`, `cHK_7`, `cHK_12`, `cHK_27`은 참고 실루엣보다 앞쪽 끝이 20px 이상 뻗어, 팔·다리를 더 접고 원근을 줄여 재생성
 - 실제 게임 확인: 트레이닝에서 약P·약K·강K, 앉아 약P·강P·약K·강K, 점프 약공격·강공격을 F1 판정 박스와 함께 확인
 - 남은 문제: 없음. `src/` 변경 없음
+
+## 2026-09-30 · T5 필살기·초필살기
+
+- 스프라이트 53장 추가 (`stompWave` 7, `burstUpper` 8, `burstRush` 10, `chestPop` 8, `killOff` 20), manifest에 53프레임 추가
+- 생성 방법: 설정 시트와 내보낸 포즈를 함께 넣어 개별 프레임 18장을 생성하고, 나머지는 동작별 투명 격자 시트 5장으로 생성한 뒤 각 칸을 분리해 `fit_sprite.py`로 규격화. `stompWave`에는 충격파를 넣지 않음
+- `check_sprites`: ❌·⚠️ 없음. `npm run check`: 통과
+- 다시 맞춘 프레임: `burstUpper_19`, `burstUpper_24`, `burstUpper_38`, `burstRush_9`, `burstRush_13`, `burstRush_17`, `burstRush_24`, `burstRush_27`, `chestPop_10`, `chestPop_26`, `chestPop_38`, `killOff_13`, `killOff_17`, `killOff_20`, `killOff_34`는 앞쪽 끝 경고가 있어 참고 그림의 가로 폭에 맞춰 원본을 보정한 뒤 다시 규격화
+- 실제 게임 확인: 트레이닝에서 P1·P2를 크럼프로 선택하고 숫자키 1~5 + Space 시범으로 스톰프 웨이브, 버스트 어퍼, 버스트 러시, 체스트 팝, 킬 오프를 F1 판정 박스와 함께 확인
+- 남은 문제: 없음. `src/` 변경 없음. **검토 요청**
