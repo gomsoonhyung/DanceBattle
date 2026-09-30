@@ -226,7 +226,7 @@ T6 설정 그림을 기준으로 각 캐릭터의 `idle`을 만듭니다. 대기
 
 [REVIEW_round3.md](REVIEW_round3.md)의 표에 있는 프레임을 다시 만듭니다. **T13보다 먼저** 진행하세요.
 
-- [ ] `locker`: 걷기(`walkF` 9장 + `walkB` 9장) 전부. 옷차림(무릎 바지·줄무늬 양말)과 머리 크기를 대기에 맞춤
+- [x] `locker`: 걷기(`walkF` 9장 + `walkB` 9장) 전부. 옷차림(무릎 바지·줄무늬 양말)과 머리 크기를 대기에 맞춤
 - [ ] `bboy`: `crouch` 10장 전부, `walkF_20`
 - [ ] `hiphopgirl`: `walkF_20` `walkF_28` `walkB_20` `walkB_28`
 - [ ] `househead`: `walkF_4` `walkF_16` `walkF_20`, `crouch_4` `crouch_8` `crouch_12`
