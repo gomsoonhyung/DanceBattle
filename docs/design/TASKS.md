@@ -165,7 +165,7 @@ T6 설정 그림을 기준으로 각 캐릭터의 `idle`을 만듭니다. 대기
 - `public/assets/ui/portrait/<id>.png`: 216×340, 투명 배경, 오른쪽을 보는 상반신 또는 전신, 설정 그림과 같은 캐릭터
 - `public/assets/ui/logo.png`: 1600×400, 투명 배경, "DANCE BATTLE". 네온 + 그래피티 느낌
 
-### ☐ T9. 무대 배경 1종 + 타격 이펙트
+### ☑ T9. 무대 배경 1종 + 타격 이펙트
 
 - `public/assets/stage/alley/bg.png`: 1920×1080, 밤 골목 댄스 배틀. 바닥선 y = 940px. **캐릭터가 서는 가운데 아래쪽은 차분하게** (캐릭터가 묻히지 않게)
 - `public/assets/fx/hit_light_<n>.png`, `hit_heavy_<n>.png`, `block_<n>.png`, `counter_<n>.png`: 256×256, 투명 배경, 각 6장
