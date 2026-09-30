@@ -228,7 +228,7 @@ T6 설정 그림을 기준으로 각 캐릭터의 `idle`을 만듭니다. 대기
 
 - [x] `locker`: 걷기(`walkF` 9장 + `walkB` 9장) 전부. 옷차림(무릎 바지·줄무늬 양말)과 머리 크기를 대기에 맞춤
 - [x] `bboy`: `crouch` 10장 전부, `walkF_20`
-- [ ] `hiphopgirl`: `walkF_20` `walkF_28` `walkB_20` `walkB_28`
+- [x] `hiphopgirl`: `walkF_20` `walkF_28` `walkB_20` `walkB_28`
 - [ ] `househead`: `walkF_4` `walkF_16` `walkF_20`, `crouch_4` `crouch_8` `crouch_12`
 - [ ] `popper`: `walkF_12` `walkF_24` `walkF_28` `walkF_32` `crouch_16`
 

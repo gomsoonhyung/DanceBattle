@@ -149,3 +149,11 @@
 - `check_sprites`: 비보이 37프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
 - 비교 시트 확인: `shots/sheet_bboy.png` (`sprites-work/roster-full/t12b/bboy/sheet_final.png` 보관). 대기 기준과 비교해 머리 크기·체형·트랙복 색이 연속적으로 유지됨
 - 실제 게임 확인: 트레이닝에서 비보이를 P1으로 선택해 D 앞걷기와 S 앉기 반복을 확인. `src/` 변경 없음
+
+## 2026-10-01 · T12b 힙합 걸 기본 이동 모델 통일
+
+- 스프라이트 4장 수정 (`walkF_20`, `walkF_28`, `walkB_20`, `walkB_28`). 최초 imagegen 걷기 시트의 해당 캐릭터 그림과 채택된 `idle_0`을 동작별 투명 격자에 넣고, 대기 셀에서 얻은 고정 배율로 규격화
+- 다시 만든 이유: 네 프레임만 다른 프레임보다 가늘고 옅은 모델이었음. 최초 생성 원본은 모델이 맞았지만 앞쪽 끝 경고가 나서, 생성 그림의 팔을 몸 가까이 두고 앞발의 무릎을 접는 방식으로 보폭을 줄여 재생성
+- `check_sprites`: 힙합 걸 34프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
+- 비교 시트 확인: `shots/sheet_hiphopgirl.png` (`sprites-work/roster-full/t12b/hiphopgirl/sheet_final.png` 보관). 대기 기준과 비교해 얼굴·포니테일·상의·바지 색과 체형이 이어짐
+- 실제 게임 확인: 트레이닝에서 힙합 걸을 P1으로 선택해 D 앞걷기와 A 뒤걷기 반복을 확인. `src/` 변경 없음
