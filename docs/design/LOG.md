@@ -24,3 +24,11 @@
 - 다시 만든 프레임: `walkF_40` 1장. 첫 결과의 들린 앞발이 참고 실루엣보다 21px 더 뻗어, 양발을 몸 아래에 모은 회복 포즈로 재생성
 - 실제 게임 확인: 트레이닝에서 D 앞걷기, A 뒤걷기, S 앉기를 여러 반복 동안 확인했고 교체 그림이 끊기거나 코드 그림으로 돌아가지 않음
 - 남은 문제: 없음. `src/` 변경 없음
+
+## 2026-09-30 · T3 공통 동작
+
+- 스프라이트 37장 추가 (`prejump` 2, `jump` 5, `land` 2, `hitStand` 4, `hitCrouch` 4, `blockStand` 1, `blockCrouch` 1, `airHit` 3, `knockdown` 3, `getup` 7, `win` 5), manifest에 37프레임 추가
+- `check_sprites`: ❌·⚠️ 없음. `npm run check`: 통과
+- 다시 만든 프레임: `hitStand_3`, `hitCrouch_3`, `blockStand_0`, `airHit_24`, `knockdown_8`, `getup_8`, `getup_12`, `getup_21`, `win_12`는 앞쪽 끝 경고로 재생성. `airHit_24`는 다리를 더 접어 한 번 추가 재생성
+- 실제 게임 확인: 트레이닝에서 점프·착지, 서서/앉아 피격, 가드, 공중 피격, 다운·기상을 확인하고 2P 대전에서 `P1 WINS` 승리 포즈까지 확인
+- 남은 문제: 없음. `src/` 변경 없음. **검토 요청**
