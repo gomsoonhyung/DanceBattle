@@ -1,0 +1,34 @@
+{
+  "frames": {
+    "idle_0": {
+      "p1": "idle_0.png"
+    },
+    "idle_4": {
+      "p1": "idle_4.png"
+    },
+    "idle_8": {
+      "p1": "idle_8.png"
+    },
+    "idle_12": {
+      "p1": "idle_12.png"
+    },
+    "idle_16": {
+      "p1": "idle_16.png"
+    },
+    "idle_20": {
+      "p1": "idle_20.png"
+    },
+    "idle_24": {
+      "p1": "idle_24.png"
+    },
+    "idle_28": {
+      "p1": "idle_28.png"
+    },
+    "idle_32": {
+      "p1": "idle_32.png"
+    },
+    "idle_36": {
+      "p1": "idle_36.png"
+    }
+  }
+}
