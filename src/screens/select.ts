@@ -1,4 +1,4 @@
-import { evalAnim } from '../anim/pose';
+import { displayFrame, evalAnim } from '../anim/pose';
 import { sfx } from '../audio/sfx';
 import { CHARACTERS, commandList } from '../characters';
 import { GROUND_SCREEN_Y, SCREEN_H, SCREEN_W } from '../core/constants';
@@ -138,7 +138,7 @@ export class SelectScreen {
     g.translate(x + CARD_W / 2, CARD_TOP + CARD_H - 28);
     g.scale(0.56, 0.56);
     g.translate(0, -GROUND_SCREEN_Y);
-    drawDancer(g, evalAnim(c.anims.idle, this.frame), 0, 0, 1, c.look, c.look.palettes[0]);
+    drawDancer(g, evalAnim(c.anims.idle, displayFrame(c.anims.idle, this.frame)), 0, 0, 1, c.look, c.look.palettes[0]);
     g.restore();
 
     g.font = `900 12px ${FONT_TITLE}`;
@@ -187,7 +187,7 @@ export class SelectScreen {
     g.translate(0, -GROUND_SCREEN_Y);
     drawDancer(
       g,
-      evalAnim(anim, this.ready[slot] ? Math.min(this.frame, 40) : this.frame),
+      evalAnim(anim, displayFrame(anim, this.ready[slot] ? Math.min(this.frame, 40) : this.frame)),
       0,
       0,
       1,

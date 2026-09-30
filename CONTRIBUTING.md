@@ -54,6 +54,7 @@ PR을 만들면:
 | 종류        | 언제                        | 예시                                         |
 | ----------- | --------------------------- | -------------------------------------------- |
 | `feat/`     | 새 기능, 캐릭터, 기술, 화면 | `feat/popper-character`, `feat/throw-system` |
+| `art/`      | 스프라이트 그림 추가·교체   | `art/krump-idle`                             |
 | `fix/`      | 버그 수정                   | `fix/rush-passes-through-wall`               |
 | `balance/`  | 데미지, 프레임, 판정 조정   | `balance/krump-chest-pop`                    |
 | `docs/`     | 문서                        | `docs/move-guide`                            |
@@ -96,13 +97,14 @@ balance: 체스트 팝 데미지 120 → 100
 
 ## 5. 테스트와 확인 도구
 
-| 명령                               | 하는 일                                                                      |
-| ---------------------------------- | ---------------------------------------------------------------------------- |
-| `npm run check`                    | PR 전에 이것만 돌리면 됩니다 (타입 + 포맷 + 테스트)                          |
-| `npm test` / `npm run test:watch`  | 로직 테스트 (한 번 / 파일 저장할 때마다)                                     |
-| `npm run format`                   | 코드 스타일 자동 정리                                                        |
-| `npm run build`                    | 배포용 빌드                                                                  |
-| `npm run shots -- krump/stompWave` | 동작을 프레임별로 찍은 이미지를 `shots/`에 저장 (개발 서버가 켜져 있어야 함) |
+| 명령                                        | 하는 일                                                                        |
+| ------------------------------------------- | ------------------------------------------------------------------------------ |
+| `npm run check`                             | PR 전에 이것만 돌리면 됩니다 (타입 + 포맷 + 테스트)                            |
+| `npm test` / `npm run test:watch`           | 로직 테스트 (한 번 / 파일 저장할 때마다)                                       |
+| `npm run format`                            | 코드 스타일 자동 정리                                                          |
+| `npm run build`                             | 배포용 빌드                                                                    |
+| `node scripts/export-sprites.mjs krump sHP` | 스프라이트 참고 그림 내보내기 → `sprites-ref/` ([SPRITES.md](docs/SPRITES.md)) |
+| `npm run shots -- krump/stompWave`          | 동작을 프레임별로 찍은 이미지를 `shots/`에 저장 (개발 서버가 켜져 있어야 함)   |
 
 게임 안에서는:
 

@@ -8,6 +8,7 @@ import { FONT_KR, FONT_TITLE } from './render/hud';
 import { Renderer } from './render/renderer';
 import { drawStage } from './render/stage';
 import { drawGuide } from './render/guideHud';
+import { loadSprites } from './render/sprites';
 import { SelectScreen } from './screens/select';
 import { TrainingGuide } from './training/guide';
 
@@ -50,6 +51,7 @@ function startGame(): void {
 
   const toMatch = (mode: MatchMode, chars: [CharacterDef, CharacterDef]) => {
     lastChars = chars;
+    void loadSprites(chars); // 교체 그림이 있으면 불러온다 (불러오는 동안은 코드로 그린 캐릭터)
     const renderer = new Renderer(g);
     renderer.showBoxes = showBoxes;
     const guide = mode === 'training' ? new TrainingGuide(chars[0]) : null;

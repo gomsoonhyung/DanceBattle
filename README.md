@@ -3,7 +3,7 @@
 [![CI](https://github.com/gomsoonhyung/DanceBattle/actions/workflows/ci.yml/badge.svg)](https://github.com/gomsoonhyung/DanceBattle/actions/workflows/ci.yml)
 
 춤 동작으로 싸우는 2D 대전 격투 게임입니다. 왁킹, 크럼프, 힙합, 걸스힙합, 락킹, 하우스, 팝핑, 브레이킹 8개 장르의 댄서가 각 장르의 동작을 기술로 써서 싸웁니다.
-TypeScript + Vite + Canvas 2D로 만들었고, 캐릭터는 코드로 그리는 2D 퍼펫(부위별 도형 + 의상 + 외곽선)입니다. 나중에는 일러스트 컷아웃이나 3D로 발전시키는 게 목표입니다.
+TypeScript + Vite + Canvas 2D로 만들었습니다. 캐릭터는 지금은 코드로 그린 그림이고, 격투 게임처럼 키 포즈 단위로 끊어서 움직입니다. 키 포즈마다 그린 그림(스프라이트)을 넣으면 그 그림으로 바뀝니다 ([docs/SPRITES.md](docs/SPRITES.md)).
 
 ## 실행
 
@@ -79,6 +79,7 @@ npm run dev        # 브라우저에서 http://localhost:5173
 | [CONTRIBUTING.md](CONTRIBUTING.md)                 | 처음 설정, 작업 흐름(브랜치 → PR → 리뷰), 커밋 규칙, 코드 규칙     |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)       | 폴더 구조, 한 프레임에 일어나는 일, 타격 처리 순서, 결정론 규칙    |
 | [docs/CHARACTER_GUIDE.md](docs/CHARACTER_GUIDE.md) | 캐릭터·기술·포즈 만드는 법, 기술 데이터 필드, 프레임 데이터 기준표 |
+| [docs/SPRITES.md](docs/SPRITES.md)                 | 스프라이트(그림) 만들기: 참고 그림 내보내기, 규격, 게임에 넣는 법  |
 | [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)       | 저장소 관리자용 GitHub 설정                                        |
 
 자주 쓰는 명령:

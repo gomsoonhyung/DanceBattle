@@ -176,6 +176,41 @@ export function evalAnim(anim: Anim, frame: number): Skeleton {
   return anim.snap === false ? sk : snapToGround(sk, p.lift ?? 0);
 }
 
+/** 반복 동작(대기·걷기)을 몇 프레임마다 한 장씩 보여줄지 (4 = 초당 15장) */
+export const LOOP_STEP = 4;
+/** 키프레임 사이가 이만큼 이상 벌어지면 중간 그림을 한 장 끼운다 */
+const INBETWEEN_GAP = 6;
+
+/**
+ * 스프라이트처럼 보이게 하는 "끊어 보여주기":
+ * 키프레임(키 포즈)과 사이의 중간 그림 한 장만 보여 주고 나머지 프레임은 앞 그림을 그대로 유지한다.
+ * 격투 게임 스프라이트가 포즈 → 포즈로 딱딱 넘어가는 느낌을 낸다. 표시 전용이며 게임 로직과 무관하다.
+ * 반환값은 실제로 그릴 애니메이션 프레임 (같은 값이면 같은 그림).
+ */
+export function displayFrame(anim: Anim, frame: number): number {
+  if (anim.loop) return Math.floor(frame / LOOP_STEP) * LOOP_STEP;
+  const keys = anim.keys;
+  if (frame <= keys[0].f) return keys[0].f;
+  for (let i = 0; i < keys.length - 1; i++) {
+    const a = keys[i].f;
+    const b = keys[i + 1].f;
+    if (frame < b) {
+      const gap = b - a;
+      if (gap < INBETWEEN_GAP) return a;
+      const mid = a + Math.round(gap / 2);
+      return frame < mid ? a : mid;
+    }
+  }
+  return keys[keys.length - 1].f;
+}
+
+/** 끊어 보여주기로 표시할 모든 그림의 프레임 번호 (스프라이트 내보내기·교체용) */
+export function displayFrames(anim: Anim, length: number): number[] {
+  const set = new Set<number>();
+  for (let f = 0; f < length; f++) set.add(displayFrame(anim, f));
+  return [...set].sort((a, b) => a - b);
+}
+
 /** from~to 프레임 사이에 step 간격으로 키프레임을 생성 (회전 기술용). */
 export function genKeys(from: number, to: number, step: number, fn: (f: number, i: number) => Pose): Keyframe[] {
   const out: Keyframe[] = [];

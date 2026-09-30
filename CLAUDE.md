@@ -9,5 +9,6 @@ AI 코딩 도구(Claude Code 등)로 이 저장소를 작업할 때의 안내입
 - 새 기술 동작은 `fighter.ts`에 기술 id로 분기하지 말고 `MoveDef` 필드로 표현한다. 기술은 가능하면 `src/characters/builders.ts`의 도우미로 만들고, 필살기에는 `desc`를 단다.
 - 새 규칙이나 시스템에는 `src/game/match.test.ts`에 테스트를 추가한다.
 - 동작(포즈)을 바꿨다면 개발 서버를 켠 상태에서 `npm run shots -- <캐릭터id>/<기술id>`로 `shots/`에 프레임 이미지를 찍어 확인한다. 외형은 `node scripts/look.mjs "gallery=lineup"` 또는 `"gallery=closeup&char=<id>&anim=<기술id>&f=<프레임>"`.
+- 캐릭터 그림: 코드 그림은 `src/render/dancer.ts`, 교체 그림(스프라이트)은 `public/sprites/<id>/` + `docs/SPRITES.md`. 동작은 `displayFrame`으로 키 포즈 단위로 끊어 보인다.
 - 주석과 문서는 한국어로, 코드 이름은 영어로 쓴다.
-- 브랜치는 `feat/`, `fix/`, `balance/`, `docs/`, `refactor/`로 시작하고, 커밋 메시지는 `종류: 내용` 형식을 따른다.
+- 브랜치는 `feat/`, `art/`, `fix/`, `balance/`, `docs/`, `refactor/`로 시작하고, 커밋 메시지는 `종류: 내용` 형식을 따른다.

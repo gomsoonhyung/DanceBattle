@@ -20,11 +20,20 @@ export function fighterPalette(f: Fighter): Palette {
 }
 
 /** #rrggbb 색의 밝기 조절 (k < 1 어둡게, k > 1 밝게) */
-export function shade(hex: string, k: number): string {
-  const n = parseInt(hex.slice(1), 16);
+export function shade(color: string, k: number): string {
+  let r: number, gg: number, bb: number;
+  if (color.startsWith('#')) {
+    const n = parseInt(color.slice(1), 16);
+    [r, gg, bb] = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  } else {
+    [r, gg, bb] = (color.match(/\d+/g) ?? ['0', '0', '0']).map(Number);
+  }
   const c = (v: number) => Math.min(255, Math.round(v * k));
-  return `rgb(${c((n >> 16) & 255)},${c((n >> 8) & 255)},${c(n & 255)})`;
+  return `rgb(${c(r)},${c(gg)},${c(bb)})`;
 }
+
+/** 부위 안쪽 경계선 색: 같은 계열의 어두운 색 (검은 테두리는 몸 전체 바깥에만) */
+const inner = (color: string) => shade(color, 0.5);
 
 // ── 벡터 도우미 ─────────────────────────────────────────────────────
 
@@ -76,7 +85,7 @@ class Painter {
     readonly silhouette?: string,
   ) {}
 
-  /** 채우기 + 음영 + 외곽선 */
+  /** 채우기 + 음영 + 안쪽 경계선 */
   part(path: Path2D, color: string, opts: { shadow?: boolean; outline?: boolean } = {}): void {
     const g = this.g;
     if (this.silhouette) {
@@ -97,8 +106,8 @@ class Painter {
       g.restore();
     }
     if (opts.outline !== false) {
-      g.strokeStyle = OUTLINE;
-      g.lineWidth = 2;
+      g.strokeStyle = inner(color);
+      g.lineWidth = 1.4;
       g.stroke(path);
     }
   }
@@ -122,16 +131,16 @@ class Painter {
     g.stroke();
   }
 
-  /** 끊김 없는 외곽선을 가진 띠 (머리카락, 끈): 굵은 외곽선을 먼저 칠하고 그 위에 색을 칠한다 */
+  /** 끊김 없는 경계선을 가진 띠 (머리카락, 끈): 굵은 경계선을 먼저 칠하고 그 위에 색을 칠한다 */
   ribbon(pts: Vec2[], w0: number, w1: number, color: string): void {
     const g = this.g;
     const n = pts.length - 1;
     const w = (i: number) => w0 + ((w1 - w0) * i) / n;
     for (const pass of [0, 1]) {
       if (pass === 0 && this.silhouette) continue;
-      g.fillStyle = this.silhouette ?? (pass ? color : OUTLINE);
+      g.fillStyle = this.silhouette ?? (pass ? color : inner(color));
       for (let i = 0; i < n; i++)
-        g.fill(capsule(pts[i], pts[i + 1], w(i) + (pass ? 0 : 1.6), w(i + 1) + (pass ? 0 : 1.6)));
+        g.fill(capsule(pts[i], pts[i + 1], w(i) + (pass ? 0 : 1.2), w(i + 1) + (pass ? 0 : 1.2)));
     }
   }
 }
@@ -183,11 +192,102 @@ export interface DancerOpts {
   tail?: Vec2[];
 }
 
+/** 바깥 테두리 두께 */
+const CONTOUR = 2.1;
+const CONTOUR_DIRS = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+  [0.71, 0.71],
+  [-0.71, 0.71],
+  [0.71, -0.71],
+  [-0.71, -0.71],
+];
+const buffers: HTMLCanvasElement[] = [];
+function buffer(i: number, w: number, h: number): CanvasRenderingContext2D {
+  let c = buffers[i];
+  if (!c) c = buffers[i] = document.createElement('canvas');
+  if (c.width < w || c.height < h) {
+    c.width = Math.max(c.width, w);
+    c.height = Math.max(c.height, h);
+  }
+  return c.getContext('2d')!;
+}
+
 /**
  * 캐릭터 하나를 그린다.
  * sk = 로컬 좌표 스켈레톤, (x, y) = 캐릭터 월드 위치, facing = 보는 방향
+ *
+ * 부위를 먼저 따로 그린 다음, 몸 전체 실루엣에만 검은 테두리를 두른다.
+ * 그래서 관절 이음새마다 선이 생기지 않고 한 장의 그림처럼 보인다.
  */
 export function drawDancer(
+  g: CanvasRenderingContext2D,
+  sk: Skeleton,
+  x: number,
+  y: number,
+  facing: 1 | -1,
+  look: Look,
+  pal: Palette,
+  opts: DancerOpts = {},
+): void {
+  if (opts.silhouette) {
+    paintBody(g, sk, x, y, facing, look, pal, opts);
+    return;
+  }
+  // 그릴 영역 (화면 좌표)
+  const S = (p: Vec2): Vec2 => ({ x: x + p.x * facing, y: GROUND_SCREEN_Y - (y + p.y) });
+  const pts = [
+    sk.hip,
+    sk.neck,
+    sk.head,
+    sk.elbowF,
+    sk.handF,
+    sk.elbowB,
+    sk.handB,
+    sk.kneeF,
+    sk.footF,
+    sk.kneeB,
+    sk.footB,
+  ].map(S);
+  for (const t of opts.tail ?? []) pts.push(t);
+  const m = 40;
+  const minX = Math.min(...pts.map((q) => q.x)) - m;
+  const minY = Math.min(...pts.map((q) => q.y)) - m;
+  const w = Math.max(...pts.map((q) => q.x)) - minX + m;
+  const h = Math.max(...pts.map((q) => q.y)) - minY + m;
+
+  // 현재 확대 비율에 맞춰 선명하게
+  const t = g.getTransform();
+  const scale = Math.min(5, Math.max(1, Math.hypot(t.a, t.b)));
+  const W = Math.ceil(w * scale);
+  const H = Math.ceil(h * scale);
+
+  const bg = buffer(0, W, H);
+  bg.setTransform(1, 0, 0, 1, 0, 0);
+  bg.clearRect(0, 0, W, H);
+  bg.setTransform(scale, 0, 0, scale, -minX * scale, -minY * scale);
+  paintBody(bg, sk, x, y, facing, look, pal, opts);
+
+  // 실루엣을 테두리 색으로 칠한 사본
+  const tg = buffer(1, W, H);
+  tg.setTransform(1, 0, 0, 1, 0, 0);
+  tg.clearRect(0, 0, W, H);
+  tg.globalCompositeOperation = 'source-over';
+  tg.drawImage(bg.canvas, 0, 0, W, H, 0, 0, W, H);
+  tg.globalCompositeOperation = 'source-in';
+  tg.fillStyle = OUTLINE;
+  tg.fillRect(0, 0, W, H);
+  tg.globalCompositeOperation = 'source-over';
+
+  for (const [dx, dy] of CONTOUR_DIRS) {
+    g.drawImage(tg.canvas, 0, 0, W, H, minX + dx * CONTOUR, minY + dy * CONTOUR, w, h);
+  }
+  g.drawImage(bg.canvas, 0, 0, W, H, minX, minY, w, h);
+}
+
+function paintBody(
   g: CanvasRenderingContext2D,
   sk: Skeleton,
   x: number,
@@ -231,6 +331,25 @@ export function drawDancer(
 
   // ── 부위 ──────────────────────────────────────────────────────────
 
+  /** 관절이 굽은 만큼 안쪽에 옷 주름을 그린다 */
+  function folds(p: Painter, a: Vec2, j: Vec2, c: Vec2, r: number, color: string): void {
+    const d1 = norm(sub(a, j));
+    const d2 = norm(sub(c, j));
+    const bend = Math.PI - Math.acos(Math.max(-1, Math.min(1, d1.x * d2.x + d1.y * d2.y)));
+    if (bend < 0.45) return;
+    const inside = norm(add(d1, d2)); // 굽은 쪽 안쪽
+    const across = { x: -inside.y, y: inside.x };
+    const n = bend > 1.1 ? 3 : 2;
+    for (let i = 0; i < n; i++) {
+      const base = add(j, add(mul(inside, r * 0.55), mul(add(d1, d2), (i - (n - 1) / 2) * r * 0.25)));
+      p.line(
+        [add(base, mul(across, -r * 0.45)), add(add(base, mul(inside, r * 0.25)), mul(across, r * 0.1))],
+        color,
+        1.3,
+      );
+    }
+  }
+
   function drawArm(p: Painter, a: { sh: Vec2; el: Vec2; ha: Vec2 }, lk: Look, pl: Palette, k: number): void {
     const top = shade(pl.main, k);
     const skin = shade(pl.skin, k);
@@ -250,6 +369,7 @@ export function drawDancer(
     if (lk.outfit.wristbands && sleeve !== 'long') {
       p.part(capsule(mix(a.el, a.ha, 0.76), mix(a.el, a.ha, 0.9), rW + 1.3, rW + 1.3), shade(pl.accent, k));
     }
+    if (sleeve === 'long') folds(p, a.sh, a.el, a.ha, rE, inner(top));
     const hand = lk.outfit.gloves ? shade('#ffffff', k) : skin;
     p.part(circle(a.ha, 6 * b), hand);
   }
@@ -285,6 +405,19 @@ export function drawDancer(
     if (lk.outfit.bottom === 'cargo') {
       const c = mix(l.hp, l.kn, 0.55);
       p.part(capsule(add(c, mul(shinDir, -3)), add(c, mul(shinDir, 5)), 4.5 * b, 4.5 * b), shade(pl.pants, k * 0.85));
+    }
+    folds(p, l.hp, l.kn, l.ft, r1, inner(pants));
+    if (lk.outfit.bottom === 'baggy' || lk.outfit.bottom === 'wide') {
+      // 발목에 쌓이는 주름
+      const across = { x: -shinDir.y, y: shinDir.x };
+      for (const t of [0.72, 0.84]) {
+        const c = mix(l.kn, l.ft, t);
+        p.line(
+          [add(c, mul(across, -r3 * 0.7)), add(add(c, mul(shinDir, 3)), mul(across, r3 * 0.3))],
+          inner(pants),
+          1.3,
+        );
+      }
     }
     p.part(capsule(heel, tip, 6 * b, 5 * b), shade(pl.shoe, k));
     p.line([add(heel, mul(shinDir, 4.5 * b)), add(tip, mul(shinDir, 3.5 * b))], shade(pl.shoe, k * 0.55), 2.6);
@@ -335,8 +468,8 @@ export function drawDancer(
       p.g.clip(body);
       p.line([B(0.14, 12), F(0.14, 12)], shade(pl.pants, 0.55), 2.5);
       p.g.restore();
-      p.g.strokeStyle = OUTLINE;
-      p.g.lineWidth = 2;
+      p.g.strokeStyle = inner(pl.main);
+      p.g.lineWidth = 1.4;
       p.g.stroke(body);
     }
 
@@ -471,8 +604,8 @@ function drawHead(
       g.arc(e.x, e.y, 3.8, 0, Math.PI * 2);
       g.stroke();
     }
-    g.strokeStyle = OUTLINE;
-    g.lineWidth = 2;
+    g.strokeStyle = inner(pal.skin);
+    g.lineWidth = 1.4;
     g.stroke(headPath);
   }
 

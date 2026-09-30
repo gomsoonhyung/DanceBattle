@@ -1,17 +1,20 @@
-import { evalAnim, type Anim } from '../anim/pose';
+import { displayFrame, evalAnim, type Anim } from '../anim/pose';
 import { CHARACTERS } from '../characters';
 import { GROUND_SCREEN_Y, SCREEN_W } from '../core/constants';
 import { drawDancer } from '../render/dancer';
+import { installExportApi } from './exportPage';
 
 /**
  * 애니메이션 확인용 페이지.
  *   ?gallery&char=krump          → 해당 캐릭터의 모든 동작을 반복 재생 (char 생략 시 비보이)
  *   ?gallery=stompWave&char=krump → 해당 동작을 프레임별로 나열 (필름 스트립)
  *   ?gallery=lineup               → 8명 전원을 나란히 (대기 동작, P1/P2 색)
+ *   ?gallery=export               → 스프라이트 내보내기용 (scripts/export-sprites.mjs)
  *   ?gallery=closeup&char=krump&anim=sHP&f=12 → 한 동작의 한 프레임을 크게
  */
 export function renderGallery(g: CanvasRenderingContext2D, only: string, charId: string): void {
   const params = new URLSearchParams(location.search);
+  if (only === 'export') return installExportApi();
   if (only === 'lineup') return lineup(g);
   if (only === 'closeup') return closeup(g, charId, params.get('anim') || 'idle', Number(params.get('f') || 0));
   const c = CHARACTERS.find((x) => x.id === charId) ?? CHARACTERS[0];
@@ -70,7 +73,7 @@ export function renderGallery(g: CanvasRenderingContext2D, only: string, charId:
       g.translate(col * cellW + cellW / 2, row * cellH + cellH - 22);
       g.scale(0.5, 0.5);
       g.translate(0, -GROUND_SCREEN_Y);
-      drawDancer(g, evalAnim(anim, t % (len + 20)), 0, 0, 1, c.look, pal[i % 2]);
+      drawDancer(g, evalAnim(anim, displayFrame(anim, t % (len + 20))), 0, 0, 1, c.look, pal[i % 2]);
       g.restore();
       g.fillStyle = '#ccc';
       g.font = '11px sans-serif';
@@ -101,7 +104,7 @@ function lineup(g: CanvasRenderingContext2D): void {
         g.translate(cx, slot ? GROUND_SCREEN_Y : GROUND_SCREEN_Y - 250);
         g.scale(slot ? 0.95 : 0.95, 0.95);
         g.translate(0, -GROUND_SCREEN_Y);
-        drawDancer(g, evalAnim(c.anims.idle, t), 0, 0, 1, c.look, c.look.palettes[slot]);
+        drawDancer(g, evalAnim(c.anims.idle, displayFrame(c.anims.idle, t)), 0, 0, 1, c.look, c.look.palettes[slot]);
         g.restore();
       }
       g.fillStyle = '#fff';

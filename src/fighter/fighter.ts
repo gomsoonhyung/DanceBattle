@@ -1,4 +1,4 @@
-import { evalAnim, type Anim, type Skeleton } from '../anim/pose';
+import { displayFrame, evalAnim, type Anim, type Skeleton } from '../anim/pose';
 import { GRAVITY, MAX_METER, STAGE_LEFT, STAGE_RIGHT } from '../core/constants';
 import { clamp, type Rect } from '../core/math';
 import { InputBuffer } from '../input/inputBuffer';
@@ -502,43 +502,48 @@ export class Fighter {
 
   // ── 렌더링용 ────────────────────────────────────────────────────
 
-  currentAnim(): { anim: Anim; frame: number } {
-    const A = this.def.anims;
+  /** 지금 재생 중인 동작: id = 기술 id 또는 기본 동작 이름 (idle, walkF, hitStand ...) */
+  currentAnim(): { id: string; anim: Anim; frame: number } {
+    const base = (id: keyof CharacterDef['anims'], frame = this.stateFrame) => ({
+      id,
+      anim: this.def.anims[id],
+      frame,
+    });
     switch (this.state) {
       case 'move':
-        return { anim: this.move!.anim, frame: this.moveFrame - 1 };
+        return { id: this.move!.id, anim: this.move!.anim, frame: this.moveFrame - 1 };
       case 'walkF':
-        return { anim: A.walkF, frame: this.stateFrame };
       case 'walkB':
-        return { anim: A.walkB, frame: this.stateFrame };
       case 'crouch':
-        return { anim: A.crouch, frame: this.stateFrame };
       case 'prejump':
-        return { anim: A.prejump, frame: this.stateFrame };
       case 'jump':
-        return { anim: A.jump, frame: this.stateFrame };
       case 'land':
-        return { anim: A.land, frame: this.stateFrame };
-      case 'hitstun':
-        return { anim: this.stunCrouching ? A.hitCrouch : A.hitStand, frame: this.stateFrame };
-      case 'blockstun':
-        return { anim: this.stunCrouching ? A.blockCrouch : A.blockStand, frame: this.stateFrame };
       case 'airHit':
-        return { anim: A.airHit, frame: this.stateFrame };
-      case 'knockdown':
-      case 'ko':
-        return { anim: A.knockdown, frame: this.state === 'ko' ? 99 : this.stateFrame };
       case 'getup':
-        return { anim: A.getup, frame: this.stateFrame };
       case 'win':
-        return { anim: A.win, frame: this.stateFrame };
+        return base(this.state);
+      case 'hitstun':
+        return base(this.stunCrouching ? 'hitCrouch' : 'hitStand');
+      case 'blockstun':
+        return base(this.stunCrouching ? 'blockCrouch' : 'blockStand');
+      case 'knockdown':
+        return base('knockdown');
+      case 'ko':
+        return base('knockdown', 99);
       default:
-        return { anim: A.idle, frame: this.stateFrame };
+        return base('idle');
     }
   }
 
+  /** 화면에 그릴 그림의 식별자: 같은 값이면 같은 그림 (스프라이트 교체에 사용) */
+  displayKey(): { id: string; frame: number } {
+    const { id, anim, frame } = this.currentAnim();
+    return { id, frame: displayFrame(anim, frame) };
+  }
+
+  /** 화면에 그릴 자세 (끊어 보여주기 적용: 키 포즈 사이를 딱딱 넘어간다) */
   skeleton(): Skeleton {
     const { anim, frame } = this.currentAnim();
-    return evalAnim(anim, frame);
+    return evalAnim(anim, displayFrame(anim, frame));
   }
 }

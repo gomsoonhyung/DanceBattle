@@ -11,6 +11,7 @@ import { drawHud, FONT_KR, FONT_TITLE } from './hud';
 import { drawStage } from './stage';
 import { drawDancer, fighterPalette, headFrame, tailAnchor } from './dancer';
 import { TailChain, type Smear } from './dynamics';
+import { drawSprite, spriteFor } from './sprites';
 import { drawCrowd } from './stage';
 
 export class Renderer {
@@ -104,7 +105,11 @@ export class Renderer {
       if (freeze && f.index === m.superOwner) this.drawAura(f);
       const sk = f.skeleton();
       this.drawTrail(f, sk, freeze);
-      drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), { tail: this.updateTail(f, sk) });
+      // 교체 그림(스프라이트)이 있으면 그 그림을, 없으면 코드로 그린 캐릭터를
+      const key = f.displayKey();
+      const sprite = spriteFor(f.def.id, key.id, key.frame, f.index);
+      if (sprite) drawSprite(g, sprite.img, f.x, f.y, f.facing, sprite.recolor);
+      else drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), { tail: this.updateTail(f, sk) });
       this.trackSmears(f, sk, freeze);
     }
     this.drawSmears();
