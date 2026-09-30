@@ -17,6 +17,39 @@
 - 실제 게임 확인: 트레이닝에서 크럼프 대기와 강P(G)를 확인했고, F1 빨간 공격 판정 박스가 `sHP_11` 주먹과 겹침
 - 남은 문제: 없음. `src/` 변경 없음. **검토 요청**
 
+## 2026-09-30 · T2 기본 이동
+
+- 스프라이트 30장 추가 (`walkF` 11, `walkB` 9, `crouch` 10), manifest에 30프레임 추가
+- `check_sprites`: ❌·⚠️ 없음. `npm run check`: 통과
+- 다시 만든 프레임: `walkF_40` 1장. 첫 결과의 들린 앞발이 참고 실루엣보다 21px 더 뻗어, 양발을 몸 아래에 모은 회복 포즈로 재생성
+- 실제 게임 확인: 트레이닝에서 D 앞걷기, A 뒤걷기, S 앉기를 여러 반복 동안 확인했고 교체 그림이 끊기거나 코드 그림으로 돌아가지 않음
+- 남은 문제: 없음. `src/` 변경 없음
+
+## 2026-09-30 · T3 공통 동작
+
+- 스프라이트 37장 추가 (`prejump` 2, `jump` 5, `land` 2, `hitStand` 4, `hitCrouch` 4, `blockStand` 1, `blockCrouch` 1, `airHit` 3, `knockdown` 3, `getup` 7, `win` 5), manifest에 37프레임 추가
+- `check_sprites`: ❌·⚠️ 없음. `npm run check`: 통과
+- 다시 만든 프레임: `hitStand_3`, `hitCrouch_3`, `blockStand_0`, `airHit_24`, `knockdown_8`, `getup_8`, `getup_12`, `getup_21`, `win_12`는 앞쪽 끝 경고로 재생성. `airHit_24`는 다리를 더 접어 한 번 추가 재생성
+- 실제 게임 확인: 트레이닝에서 점프·착지, 서서/앉아 피격, 가드, 공중 피격, 다운·기상을 확인하고 2P 대전에서 `P1 WINS` 승리 포즈까지 확인
+- 남은 문제: 없음. `src/` 변경 없음. **검토 요청**
+
+## 2026-09-30 · T4 기본기
+
+- 스프라이트 49장 추가 (`sLP` 4, `sLK` 5, `sHK` 6, `cLP` 4, `cHP` 5, `cLK` 5, `cHK` 6, `jL` 6, `jH` 8), manifest에 49프레임 추가
+- `check_sprites`: ❌·⚠️ 없음. `npm run check`: 통과
+- 다시 만든 프레임: `sLP_7`, `sHK_12`, `sHK_16`, `cLP_0`, `cHP_9`, `cLK_10`, `cHK_7`, `cHK_12`, `cHK_27`은 참고 실루엣보다 앞쪽 끝이 20px 이상 뻗어, 팔·다리를 더 접고 원근을 줄여 재생성
+- 실제 게임 확인: 트레이닝에서 약P·약K·강K, 앉아 약P·강P·약K·강K, 점프 약공격·강공격을 F1 판정 박스와 함께 확인
+- 남은 문제: 없음. `src/` 변경 없음
+
+## 2026-09-30 · T5 필살기·초필살기
+
+- 스프라이트 53장 추가 (`stompWave` 7, `burstUpper` 8, `burstRush` 10, `chestPop` 8, `killOff` 20), manifest에 53프레임 추가
+- 생성 방법: 설정 시트와 내보낸 포즈를 함께 넣어 개별 프레임 18장을 생성하고, 나머지는 동작별 투명 격자 시트 5장으로 생성한 뒤 각 칸을 분리해 `fit_sprite.py`로 규격화. `stompWave`에는 충격파를 넣지 않음
+- `check_sprites`: ❌·⚠️ 없음. `npm run check`: 통과
+- 다시 맞춘 프레임: `burstUpper_19`, `burstUpper_24`, `burstUpper_38`, `burstRush_9`, `burstRush_13`, `burstRush_17`, `burstRush_24`, `burstRush_27`, `chestPop_10`, `chestPop_26`, `chestPop_38`, `killOff_13`, `killOff_17`, `killOff_20`, `killOff_34`는 앞쪽 끝 경고가 있어 참고 그림의 가로 폭에 맞춰 원본을 보정한 뒤 다시 규격화
+- 실제 게임 확인: 트레이닝에서 P1·P2를 크럼프로 선택하고 숫자키 1~5 + Space 시범으로 스톰프 웨이브, 버스트 어퍼, 버스트 러시, 체스트 팝, 킬 오프를 F1 판정 박스와 함께 확인
+- 남은 문제: 없음. `src/` 변경 없음. **검토 요청**
+
 ## 2026-09-30 · T6 설정 그림 7장
 
 - 설정 그림 7장 (`waacker`, `hiphopper`, `hiphopgirl`, `locker`, `househead`, `popper`, `bboy`)과 8인 비교 이미지 `roster_lineup.png` 추가
