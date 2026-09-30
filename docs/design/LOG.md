@@ -157,3 +157,11 @@
 - `check_sprites`: 힙합 걸 34프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
 - 비교 시트 확인: `shots/sheet_hiphopgirl.png` (`sprites-work/roster-full/t12b/hiphopgirl/sheet_final.png` 보관). 대기 기준과 비교해 얼굴·포니테일·상의·바지 색과 체형이 이어짐
 - 실제 게임 확인: 트레이닝에서 힙합 걸을 P1으로 선택해 D 앞걷기와 A 뒤걷기 반복을 확인. `src/` 변경 없음
+
+## 2026-10-01 · T12b 하우스 헤드 기본 이동 모델 통일
+
+- 스프라이트 6장 수정 (`walkF_4`, `walkF_16`, `walkF_20`, `crouch_4`, `crouch_8`, `crouch_12`). 최초 imagegen 동작 시트의 캐릭터를 편집하고, 채택된 대기 그림을 포함한 동작별 격자에서 산출한 고정 배율로 규격화
+- 다시 만든 이유: 걷기 3장은 가늘고 비니 모양이 달랐고, 앉기 3장은 주변보다 작았음. 최초 생성 원본 복원 뒤 걷기 앞쪽 끝과 `crouch_8` 높이 경고가 남아, 팔·발을 몸 가까이 접고 앉는 깊이를 맞춰 재생성. 걷기 비니는 비교 시트에서 커 보여 머리·비니만 작게 다시 보정
+- `check_sprites`: 하우스 헤드 22프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
+- 비교 시트 확인: `shots/sheet_househead.png` (`sprites-work/roster-full/t12b/househead/sheet_final.png` 보관). 대기 기준과 비교해 얼굴·비니·상의·바지 색과 체형이 이어짐
+- 실제 게임 확인: 트레이닝에서 하우스 헤드를 P1으로 선택해 D 앞걷기와 S 앉기 반복을 확인. `src/` 변경 없음
