@@ -23,6 +23,84 @@
     },
     "idle_28": {
       "p1": "idle_28.png"
+    },
+    "walkF_0": {
+      "p1": "walkF_0.png"
+    },
+    "walkF_4": {
+      "p1": "walkF_4.png"
+    },
+    "walkF_8": {
+      "p1": "walkF_8.png"
+    },
+    "walkF_12": {
+      "p1": "walkF_12.png"
+    },
+    "walkF_16": {
+      "p1": "walkF_16.png"
+    },
+    "walkF_20": {
+      "p1": "walkF_20.png"
+    },
+    "walkF_24": {
+      "p1": "walkF_24.png"
+    },
+    "walkF_28": {
+      "p1": "walkF_28.png"
+    },
+    "walkB_0": {
+      "p1": "walkB_0.png"
+    },
+    "walkB_4": {
+      "p1": "walkB_4.png"
+    },
+    "walkB_8": {
+      "p1": "walkB_8.png"
+    },
+    "walkB_12": {
+      "p1": "walkB_12.png"
+    },
+    "walkB_16": {
+      "p1": "walkB_16.png"
+    },
+    "walkB_20": {
+      "p1": "walkB_20.png"
+    },
+    "walkB_24": {
+      "p1": "walkB_24.png"
+    },
+    "walkB_28": {
+      "p1": "walkB_28.png"
+    },
+    "crouch_0": {
+      "p1": "crouch_0.png"
+    },
+    "crouch_4": {
+      "p1": "crouch_4.png"
+    },
+    "crouch_8": {
+      "p1": "crouch_8.png"
+    },
+    "crouch_12": {
+      "p1": "crouch_12.png"
+    },
+    "crouch_16": {
+      "p1": "crouch_16.png"
+    },
+    "crouch_20": {
+      "p1": "crouch_20.png"
+    },
+    "crouch_24": {
+      "p1": "crouch_24.png"
+    },
+    "crouch_28": {
+      "p1": "crouch_28.png"
+    },
+    "crouch_32": {
+      "p1": "crouch_32.png"
+    },
+    "crouch_36": {
+      "p1": "crouch_36.png"
     }
   }
 }

@@ -117,3 +117,12 @@
 - `check_sprites`: 크럼프 183프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
 - 실제 게임 확인: 트레이닝에서 크럼프 숫자키 3 + Space 시범과 F1 판정 표시를 확인했으며, 돌진 순간 팔뚝이 앞으로 뻗어 판정 위치와 겹침
 - 남은 문제: 없음. `src/` 변경 없음. **검토 요청**
+
+## 2026-10-01 · T12 7명 기본 이동
+
+- 7명의 `walkF`, `walkB`, `crouch` 스프라이트 175장과 각 캐릭터 manifest 항목 추가 (`waacker` 28, `hiphopper` 24, `hiphopgirl` 26, `locker` 26, `househead` 17, `popper` 26, `bboy` 28)
+- 생성 방법: 캐릭터 설정 그림·채택된 대기 프레임·내보낸 포즈를 함께 넣어 5×2 투명 격자로 동작별 생성. 칸당 넉넉한 여백을 두고 분리한 뒤 `fit_sprite.py`의 균일 배율로 규격화
+- 다시 만든 프레임: 앞쪽 끝 경고로 `waacker` 10장, `hiphopgirl` 11장, `locker` 16장, `househead` 3장, `popper` 4장, `bboy` 18장을 기준 포즈 직접 편집 방식으로 재생성. `waacker crouch_20`은 바지 색조 불일치로 한 번 더 재생성. `hiphopper`는 최초 결과로 통과
+- `check_sprites`: 7명 모두 ❌·⚠️ 없음. `npm run check`: 통과
+- 실제 게임 확인: 트레이닝에서 7명을 각각 P1으로 선택해 D 앞걷기, A 뒤걷기, S 앉기 반복을 확인했으며 코드 그림 혼입·색 변화·프레임 누락 없음
+- 남은 문제: 없음. `src/` 변경 없음
