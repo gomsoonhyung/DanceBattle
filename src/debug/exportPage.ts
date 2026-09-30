@@ -52,6 +52,7 @@ export function installExportApi(): void {
         1,
         c.look,
         c.look.palettes[slot],
+        { airborne: a.snap === false },
       );
       return canvas.toDataURL('image/png');
     },

@@ -97,14 +97,16 @@ balance: 체스트 팝 데미지 120 → 100
 
 ## 5. 테스트와 확인 도구
 
-| 명령                                        | 하는 일                                                                        |
-| ------------------------------------------- | ------------------------------------------------------------------------------ |
-| `npm run check`                             | PR 전에 이것만 돌리면 됩니다 (타입 + 포맷 + 테스트)                            |
-| `npm test` / `npm run test:watch`           | 로직 테스트 (한 번 / 파일 저장할 때마다)                                       |
-| `npm run format`                            | 코드 스타일 자동 정리                                                          |
-| `npm run build`                             | 배포용 빌드                                                                    |
-| `node scripts/export-sprites.mjs krump sHP` | 스프라이트 참고 그림 내보내기 → `sprites-ref/` ([SPRITES.md](docs/SPRITES.md)) |
-| `npm run shots -- krump/stompWave`          | 동작을 프레임별로 찍은 이미지를 `shots/`에 저장 (개발 서버가 켜져 있어야 함)   |
+| 명령                                                             | 하는 일                                                                        |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `npm run check`                                                  | PR 전에 이것만 돌리면 됩니다 (타입 + 포맷 + 테스트)                            |
+| `npm test` / `npm run test:watch`                                | 로직 테스트 (한 번 / 파일 저장할 때마다)                                       |
+| `npm run format`                                                 | 코드 스타일 자동 정리                                                          |
+| `npm run build`                                                  | 배포용 빌드                                                                    |
+| `node scripts/export-sprites.mjs krump sHP`                      | 스프라이트 참고 그림 내보내기 → `sprites-ref/` ([SPRITES.md](docs/SPRITES.md)) |
+| `python3 scripts/fit_sprite.py 생성.png 결과.png --ref 참고.png` | 생성한 그림을 스프라이트 규격에 맞추기                                         |
+| `python3 scripts/check_sprites.py krump`                         | 넣은 스프라이트 검사                                                           |
+| `npm run shots -- krump/stompWave`                               | 동작을 프레임별로 찍은 이미지를 `shots/`에 저장 (개발 서버가 켜져 있어야 함)   |
 
 게임 안에서는:
 

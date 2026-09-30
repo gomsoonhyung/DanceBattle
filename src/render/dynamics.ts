@@ -13,8 +13,8 @@ export class TailChain {
     readonly segment: number,
   ) {}
 
-  /** anchor = 붙는 위치, drift = 끝이 흘러가려는 방향 (보통 머리 뒤쪽) */
-  update(anchor: Vec2, drift: Vec2): Vec2[] {
+  /** anchor = 붙는 위치, drift = 끝이 흘러가려는 방향 (보통 머리 뒤쪽), floorY = 바닥 화면 y */
+  update(anchor: Vec2, drift: Vec2, floorY = Infinity): Vec2[] {
     if (!this.pts.length || Math.hypot(this.pts[0].x - anchor.x, this.pts[0].y - anchor.y) > 80) {
       // 처음이거나 순간이동(라운드 시작 등)했으면 새로 늘어뜨린다
       this.pts = Array.from({ length: this.count }, (_, i) => ({
@@ -45,6 +45,8 @@ export class TailChain {
         b.y = a.y + dy * t;
       }
     }
+    // 바닥(floorY)에 닿으면 바닥을 따라 눕는다
+    for (const p of this.pts) p.y = Math.min(p.y, floorY - 3);
     return this.pts.map((p) => ({ ...p }));
   }
 }

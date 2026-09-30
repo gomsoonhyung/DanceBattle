@@ -109,7 +109,11 @@ export class Renderer {
       const key = f.displayKey();
       const sprite = spriteFor(f.def.id, key.id, key.frame, f.index);
       if (sprite) drawSprite(g, sprite.img, f.x, f.y, f.facing, sprite.recolor);
-      else drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), { tail: this.updateTail(f, sk) });
+      else
+        drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), {
+          tail: this.updateTail(f, sk),
+          airborne: f.y > 0,
+        });
       this.trackSmears(f, sk, freeze);
     }
     this.drawSmears();
@@ -133,7 +137,7 @@ export class Renderer {
     if (!anchor) return undefined;
     const ponytail = f.def.look.headwear === 'ponytail';
     const chain = (this.tails[f.index] ??= new TailChain(ponytail ? 5 : 4, ponytail ? 7 : 6));
-    return chain.update(anchor, { x: -h.front.x, y: -h.front.y });
+    return chain.update(anchor, { x: -h.front.x, y: -h.front.y }, GROUND_SCREEN_Y);
   }
 
   /** 기술 중 빠르게 움직인 손발 끝을 궤적으로 남긴다 */

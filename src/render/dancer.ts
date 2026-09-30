@@ -46,8 +46,15 @@ function norm(a: Vec2): Vec2 {
   return { x: a.x / l, y: a.y / l };
 }
 
+/** 그리는 부위들의 가장 낮은 화면 y (바닥 맞추기용). null이면 기록하지 않는다 */
+let lowest: number | null = null;
+function track(y: number): void {
+  if (lowest !== null && y > lowest) lowest = y;
+}
+
 /** 두 점을 잇는 둥근 막대 (양 끝 반지름이 다를 수 있음) */
 function capsule(a: Vec2, b: Vec2, ra: number, rb: number): Path2D {
+  track(Math.max(a.y + ra, b.y + rb));
   const p = new Path2D();
   const ang = Math.atan2(b.y - a.y, b.x - a.x);
   p.arc(a.x, a.y, ra, ang + Math.PI / 2, ang - Math.PI / 2);
@@ -57,6 +64,7 @@ function capsule(a: Vec2, b: Vec2, ra: number, rb: number): Path2D {
 }
 
 function circle(c: Vec2, r: number): Path2D {
+  track(c.y + r);
   const p = new Path2D();
   p.arc(c.x, c.y, r, 0, Math.PI * 2);
   return p;
@@ -64,6 +72,7 @@ function circle(c: Vec2, r: number): Path2D {
 
 /** 점들을 부드럽게 잇는 닫힌 도형 */
 function smoothClosed(pts: Vec2[]): Path2D {
+  for (const q of pts) track(q.y);
   const p = new Path2D();
   const n = pts.length;
   const mid = (i: number) => mix(pts[i % n], pts[(i + 1) % n], 0.5);
@@ -134,6 +143,7 @@ class Painter {
   /** 끊김 없는 경계선을 가진 띠 (머리카락, 끈): 굵은 경계선을 먼저 칠하고 그 위에 색을 칠한다 */
   ribbon(pts: Vec2[], w0: number, w1: number, color: string): void {
     const g = this.g;
+    const saved = lowest;
     const n = pts.length - 1;
     const w = (i: number) => w0 + ((w1 - w0) * i) / n;
     for (const pass of [0, 1]) {
@@ -142,6 +152,7 @@ class Painter {
       for (let i = 0; i < n; i++)
         g.fill(capsule(pts[i], pts[i + 1], w(i) + (pass ? 0 : 1.2), w(i + 1) + (pass ? 0 : 1.2)));
     }
+    lowest = saved;
   }
 }
 
@@ -190,6 +201,8 @@ export interface DancerOpts {
   silhouette?: string;
   /** 흔들리는 머리카락·끈의 점들 (화면 좌표). 없으면 기본 모양으로 그린다 */
   tail?: Vec2[];
+  /** 공중에 떠 있음 (점프·띄워짐). false면 신발·바지 끝이 바닥선 아래로 내려가지 않게 한다 */
+  airborne?: boolean;
 }
 
 /** 바깥 테두리 두께 */
@@ -205,6 +218,16 @@ const CONTOUR_DIRS = [
   [-0.71, -0.71],
 ];
 const buffers: HTMLCanvasElement[] = [];
+let measure: CanvasRenderingContext2D | null = null;
+/** 치수만 재는 용도의 1×1 캔버스 (그려지는 픽셀은 버린다) */
+function measureCtx(): CanvasRenderingContext2D {
+  if (!measure) {
+    const c = document.createElement('canvas');
+    c.width = c.height = 1;
+    measure = c.getContext('2d')!;
+  }
+  return measure;
+}
 function buffer(i: number, w: number, h: number): CanvasRenderingContext2D {
   let c = buffers[i];
   if (!c) c = buffers[i] = document.createElement('canvas');
@@ -264,16 +287,25 @@ export function drawDancer(
   const W = Math.ceil(w * scale);
   const H = Math.ceil(h * scale);
 
+  // 임시 캔버스는 재사용하므로 전체를 지운다 (일부만 지우면 확대·축소할 때 가장자리의 이전 그림이 묻어난다)
   const bg = buffer(0, W, H);
   bg.setTransform(1, 0, 0, 1, 0, 0);
-  bg.clearRect(0, 0, W, H);
-  bg.setTransform(scale, 0, 0, scale, -minX * scale, -minY * scale);
+  bg.clearRect(0, 0, bg.canvas.width, bg.canvas.height);
+  // 땅에 서 있으면: 실제로 그려질 부위의 가장 낮은 지점을 먼저 재서, 바닥 아래로 내려간 만큼 전체를 올린다
+  let rise = 0;
+  if (!opts.airborne) {
+    lowest = -Infinity;
+    paintBody(measureCtx(), sk, x, y, facing, look, pal, opts);
+    rise = Math.max(0, lowest - (GROUND_SCREEN_Y - y));
+    lowest = null;
+  }
+  bg.setTransform(scale, 0, 0, scale, -minX * scale, -(minY + rise) * scale);
   paintBody(bg, sk, x, y, facing, look, pal, opts);
 
   // 실루엣을 테두리 색으로 칠한 사본
   const tg = buffer(1, W, H);
   tg.setTransform(1, 0, 0, 1, 0, 0);
-  tg.clearRect(0, 0, W, H);
+  tg.clearRect(0, 0, tg.canvas.width, tg.canvas.height);
   tg.globalCompositeOperation = 'source-over';
   tg.drawImage(bg.canvas, 0, 0, W, H, 0, 0, W, H);
   tg.globalCompositeOperation = 'source-in';
@@ -313,8 +345,9 @@ function paintBody(
   const off = (k: number) => mul(front, k);
   const armB = { sh: add(shoulder, off(-2.5)), el: add(S(sk.elbowB), off(-2.5)), ha: add(S(sk.handB), off(-2.5)) };
   const armF = { sh: add(shoulder, off(2)), el: add(S(sk.elbowF), off(2)), ha: add(S(sk.handF), off(2)) };
-  const legB = { hp: add(hip, off(-2.5)), kn: S(sk.kneeB), ft: S(sk.footB) };
-  const legF = { hp: add(hip, off(2.5)), kn: S(sk.kneeF), ft: S(sk.footF) };
+  const groundY = opts.airborne ? null : GROUND_SCREEN_Y - y;
+  const legB = { hp: add(hip, off(-2.5)), kn: S(sk.kneeB), ft: S(sk.footB), ftLocalY: sk.footB.y };
+  const legF = { hp: add(hip, off(2.5)), kn: S(sk.kneeF), ft: S(sk.footF), ftLocalY: sk.footF.y };
 
   g.save();
   g.lineCap = 'round';
@@ -324,7 +357,7 @@ function paintBody(
   drawLeg(P, legB, facing, look, pal, BACK_SHADE);
   drawTorso(P, hip, neck, up, front, look, pal);
   drawLeg(P, legF, facing, look, pal, 1);
-  drawHead(P, sk, x, y, facing, neck, look, pal, opts.tail);
+  drawHead(P, sk, x, y, facing, neck, look, pal, opts.tail, groundY);
   drawArm(P, armF, look, pal, 1);
 
   g.restore();
@@ -374,7 +407,14 @@ function paintBody(
     p.part(circle(a.ha, 6 * b), hand);
   }
 
-  function drawLeg(p: Painter, l: { hp: Vec2; kn: Vec2; ft: Vec2 }, f: 1 | -1, lk: Look, pl: Palette, k: number): void {
+  function drawLeg(
+    p: Painter,
+    l: { hp: Vec2; kn: Vec2; ft: Vec2; ftLocalY: number },
+    f: 1 | -1,
+    lk: Look,
+    pl: Palette,
+    k: number,
+  ): void {
     const pants = shade(pl.pants, k);
     const [r0, r1, r2, r3] = LEG_RADII[lk.outfit.bottom].map((r) => r * b);
     const shinDir = norm(sub(l.ft, l.kn));
@@ -382,14 +422,32 @@ function paintBody(
     // 신발 (발목 아래, 보는 방향 쪽으로)
     let toe = { x: -shinDir.y, y: shinDir.x };
     if (toe.x * f < 0) toe = mul(toe, -1);
-    const heel = add(add(l.ft, mul(toe, -4 * b)), shinDir);
-    const tip = add(add(l.ft, mul(toe, 13 * b)), shinDir);
+    // 발목 관절은 바닥 3 위에 있다 (anim/pose.ts snapToGround). 신발·바지 끝이 바닥선에 딱 닿도록 반지름만큼 올린다
+    // 바닥을 딛고 있으면 화면 수직으로, 공중(발차기 등)이면 정강이 방향으로 올린다
+    const grounded = l.ftLocalY < 6;
+    const lift = grounded ? { x: 0, y: 1 } : shinDir;
+    if (grounded) {
+      toe = { x: f, y: 0 }; // 바닥을 디딘 발은 바닥과 수평으로
+    } else if (l.ftLocalY < 40) {
+      // 뒤꿈치를 든 발: 앞코가 바닥 아래로 내려가지 않게 (까치발)
+      const maxDown = (l.ftLocalY - 5 * b) / (13 * b);
+      if (toe.y > maxDown) {
+        const y = Math.max(-1, Math.min(1, maxDown));
+        toe = { x: f * Math.sqrt(1 - y * y), y };
+      }
+    }
+    // 땅에 서 있는 캐릭터는 반지름 r인 둥근 끝이 바닥선 아래로 내려가지 않게 한다 (점프 중에는 제한 없음)
+    const floor = (q: Vec2, r: number): Vec2 =>
+      groundY !== null && q.y + r > groundY ? { x: q.x, y: groundY - r } : q;
+    const toGround = (r: number) => floor(add(l.ft, mul(lift, 3 - r)), r);
+    const heel = floor(add(toGround(6 * b), mul(toe, -4 * b)), 6 * b);
+    const tip = floor(add(toGround(5 * b), mul(toe, 13 * b)), 5 * b);
 
     p.part(capsule(l.hp, l.kn, r0, r1), pants);
     if (lk.outfit.bottom === 'knickers') {
       // 무릎 바지 + 양말
       const cuff = mix(l.kn, l.ft, 0.45);
-      p.part(capsule(cuff, l.ft, 6.5 * b, 5.5 * b), shade('#ffffff', k));
+      p.part(capsule(cuff, toGround(5.5 * b), 6.5 * b, 5.5 * b), shade('#ffffff', k));
       if (lk.outfit.stripedSocks) {
         for (const t of [0.62, 0.8]) {
           p.flat(capsule(mix(l.kn, l.ft, t), mix(l.kn, l.ft, t + 0.07), 6.6 * b, 6.4 * b), shade(pl.accent, k));
@@ -397,7 +455,7 @@ function paintBody(
       }
       p.part(capsule(l.kn, cuff, r2, r2 - 0.5), pants);
     } else {
-      p.part(capsule(l.kn, l.ft, r2, r3), pants);
+      p.part(capsule(l.kn, toGround(r3), r2, r3), pants);
     }
     if (lk.outfit.sideStripes) {
       p.line([l.hp, l.kn, lk.outfit.bottom === 'knickers' ? mix(l.kn, l.ft, 0.45) : l.ft], shade(pl.accent, k), 2.4);
@@ -410,8 +468,9 @@ function paintBody(
     if (lk.outfit.bottom === 'baggy' || lk.outfit.bottom === 'wide') {
       // 발목에 쌓이는 주름
       const across = { x: -shinDir.y, y: shinDir.x };
+      const cuffEnd = toGround(r3);
       for (const t of [0.72, 0.84]) {
-        const c = mix(l.kn, l.ft, t);
+        const c = mix(l.kn, cuffEnd, t);
         p.line(
           [add(c, mul(across, -r3 * 0.7)), add(add(c, mul(shinDir, 3)), mul(across, r3 * 0.3))],
           inner(pants),
@@ -420,7 +479,8 @@ function paintBody(
       }
     }
     p.part(capsule(heel, tip, 6 * b, 5 * b), shade(pl.shoe, k));
-    p.line([add(heel, mul(shinDir, 4.5 * b)), add(tip, mul(shinDir, 3.5 * b))], shade(pl.shoe, k * 0.55), 2.6);
+    // 밑창: 신발 아랫면 안쪽에
+    p.line([add(heel, mul(lift, 6 * b - 2)), add(tip, mul(lift, 5 * b - 2))], shade(pl.shoe, k * 0.55), 2.6);
   }
 
   function drawTorso(p: Painter, h: Vec2, n: Vec2, u: Vec2, f: Vec2, lk: Look, pl: Palette): void {
@@ -534,6 +594,7 @@ function drawHead(
   look: Look,
   pal: Palette,
   tail?: Vec2[],
+  groundY: number | null = null,
 ): void {
   const g = p.g;
   const h = headFrame(sk, x, y, facing);
@@ -559,6 +620,7 @@ function drawHead(
             add(anchor, add(mul(back, 17), mul(up, -25))),
           ]
         : [anchor, add(anchor, add(mul(back, 10), mul(up, -3))), add(anchor, add(mul(back, 19), mul(up, -8)))]);
+    if (groundY !== null) for (const q of pts) q.y = Math.min(q.y, groundY - 3);
     if (look.headwear === 'ponytail') p.ribbon(pts, 6, 3, pal.hair);
     else {
       p.ribbon(pts, 2.4, 1.8, pal.cap);
@@ -574,6 +636,7 @@ function drawHead(
   // 머리 (살짝 세로로 긴 타원)
   const headPath = new Path2D();
   headPath.ellipse(c.x, c.y, r * 0.98, r * 1.06, Math.atan2(front.y, front.x), 0, Math.PI * 2);
+  track(c.y + r * 1.06);
   p.part(headPath, pal.skin);
 
   if (!p.silhouette) {

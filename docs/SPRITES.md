@@ -36,6 +36,17 @@ node scripts/export-sprites.mjs krump sHP --p2   # P2 색도 함께
 | 기준점    | 캐릭터 발밑 중심이 **(320, 580) px**. 참고 그림과 같은 위치에 서 있으면 된다 |
 | 캐릭터 키 | 서 있을 때 약 380px                                                          |
 
+### 2-1. 이미지 생성 도구로 만들었다면
+
+생성된 그림은 배경·크기·위치가 규격과 다르기 마련입니다. 도구로 맞추세요 (Python 3 + Pillow 필요).
+
+```bash
+# 배경 지우기 + 참고 그림과 같은 키·발밑·위치로 640×640에 배치
+python3 scripts/fit_sprite.py 생성그림.png public/sprites/krump/idle_0.png --ref sprites-ref/krump/idle_0.png
+# 넣은 그림 전체 검사 (크기, 투명 배경, 위치, 빠진 프레임)
+python3 scripts/check_sprites.py krump
+```
+
 ### 3. 게임에 넣기
 
 1. 그린 그림을 `public/sprites/krump/sHP_11.png`처럼 **참고 그림과 같은 이름**으로 저장합니다.
