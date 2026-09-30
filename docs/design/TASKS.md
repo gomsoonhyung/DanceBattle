@@ -42,13 +42,13 @@
 
 크럼프 한 명을 끝까지 완성해서, 걷고 앉고 맞고 기술을 써도 그림이 섞이지 않게 만드는 것이 목표입니다. 총 183장.
 
-### ☐ T1. 시범 수정 🛑
+### ☑ T1. 시범 수정 🛑
 
 [REVIEW_krump_pilot.md](REVIEW_krump_pilot.md)의 "다음 작업" 1~2번입니다.
 
-- [ ] `docs/design/krump_sheet.png`: 머리띠를 **이마(눈썹 위)** 로
-- [ ] `sHP` 6장 다시 만들기: `sHP_0 sHP_4 sHP_7 sHP_11 sHP_15 sHP_24`. 참고 그림의 실루엣 폭 안에 (앞쪽 끝 ⚠️ 없게)
-- [ ] `idle` 8장 다시 만들기 (추천: 새 설정 그림의 머리띠 위치에 맞춤): `idle_0 idle_4 idle_8 idle_12 idle_16 idle_20 idle_24 idle_28`
+- [x] `docs/design/krump_sheet.png`: 머리띠를 **이마(눈썹 위)** 로
+- [x] `sHP` 6장 다시 만들기: `sHP_0 sHP_4 sHP_7 sHP_11 sHP_15 sHP_24`. 참고 그림의 실루엣 폭 안에 (앞쪽 끝 ⚠️ 없게)
+- [x] `idle` 8장 다시 만들기 (추천: 새 설정 그림의 머리띠 위치에 맞춤): `idle_0 idle_4 idle_8 idle_12 idle_16 idle_20 idle_24 idle_28`
 
 **확인 방법**: 트레이닝 → 크럼프 선택 → 가만히 서서 대기 모습 보기 → **G** 눌러 강P. **F1**을 켜서 강P가 맞는 순간(빨간 판정 박스)과 주먹 위치가 맞는지 봅니다.
 
