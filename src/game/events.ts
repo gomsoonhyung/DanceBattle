@@ -4,6 +4,7 @@ export type GameEvent =
   | { type: 'block'; x: number; y: number; heavy: boolean }
   | { type: 'counter'; x: number; y: number }
   | { type: 'armor'; x: number; y: number }
+  | { type: 'taunt'; x: number; y: number }
   | { type: 'super'; player: 0 | 1; name: string }
   | { type: 'ko' }
   | { type: 'announce'; text: string };

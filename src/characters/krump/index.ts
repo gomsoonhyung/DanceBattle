@@ -8,11 +8,27 @@ export const KRUMP: CharacterDef = {
   maxHealth: 1100,
   look: {
     headwear: 'headband',
-    build: 1.3,
-    bareArms: true,
+    build: 1.25,
+    outfit: { top: 'tank', bottom: 'baggy', facePaint: true, wristbands: true },
     palettes: [
-      { main: '#ff7a1a', back: '#a34e0f', cap: '#ff2d2d', skin: '#8d5a3b', shoe: '#ffffff', accent: '#ff2d2d' },
-      { main: '#8a5cff', back: '#57399e', cap: '#ffffff', skin: '#e8b894', shoe: '#ffffff', accent: '#ffffff' },
+      {
+        main: '#ff7a1a',
+        pants: '#3a3a44',
+        hair: '#141414',
+        cap: '#ff2d2d',
+        skin: '#8d5a3b',
+        shoe: '#ffffff',
+        accent: '#ff2d2d',
+      },
+      {
+        main: '#8a5cff',
+        pants: '#3b4a33',
+        hair: '#3b2418',
+        cap: '#ffffff',
+        skin: '#e8b894',
+        shoe: '#ffffff',
+        accent: '#ffffff',
+      },
     ],
   },
   profile: {

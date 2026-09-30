@@ -271,6 +271,7 @@ const jH: MoveDef = {
 const unclePoint: MoveDef = {
   id: 'unclePoint',
   name: '엉클 샘 포인트',
+  desc: '상대를 가리키며 별빛 장풍을 쏜다. 높게 날아가서 앉으면 피할 수 있다',
   kind: 'special',
   total: 40,
   anim: {
@@ -299,6 +300,7 @@ const unclePoint: MoveDef = {
 const jumpLock: MoveDef = {
   id: 'jumpLock',
   name: '점프 락',
+  desc: '대공기. 무릎을 모아 뛰어오르며 락. 발동 직후 무적',
   kind: 'special',
   total: 46,
   invuln: [1, 7],
@@ -332,6 +334,7 @@ const jumpLock: MoveDef = {
 const scoobyRush: MoveDef = {
   id: 'scoobyRush',
   name: '스쿠비 두 러시',
+  desc: '스쿠비 두 스텝으로 달려들어 2연타 후 다운',
   kind: 'special',
   total: 42,
   anim: {
@@ -375,6 +378,7 @@ const scoobyRush: MoveDef = {
 const kneeDrop: MoveDef = {
   id: 'kneeDrop',
   name: '니 드롭',
+  desc: '뛰어올라 무릎으로 내려앉는 중단. 서서 막아야 한다',
   kind: 'special',
   total: 42,
   anim: {
@@ -420,6 +424,7 @@ const twirlHit = (from: number, last = false): HitDef => ({
 const wristTwirl: MoveDef = {
   id: 'wristTwirl',
   name: '리스트 트월',
+  desc: '손목을 돌리며 근거리 4연타',
   kind: 'special',
   total: 38,
   anim: {
@@ -453,6 +458,7 @@ const rushHits: HitDef[] = [8, 13, 18, 23].map((f) => ({
 const lockAndPoint: MoveDef = {
   id: 'lockAndPoint',
   name: '락 앤 포인트',
+  desc: '러시 연타 뒤 멀리까지 닿는 포인트로 마무리',
   kind: 'super',
   total: 80,
   meterCost: 100,

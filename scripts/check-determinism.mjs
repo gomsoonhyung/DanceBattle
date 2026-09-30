@@ -4,6 +4,7 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 
 const LOGIC_PATHS = [
+  'src/training/guide.ts',
   'src/game',
   'src/fighter',
   'src/characters',

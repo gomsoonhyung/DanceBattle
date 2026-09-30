@@ -9,9 +9,26 @@ export const BBOY: CharacterDef = {
   look: {
     headwear: 'backcap',
     build: 1,
+    outfit: { top: 'longsleeve', bottom: 'track', sideStripes: true },
     palettes: [
-      { main: '#ff4d5e', back: '#a8303d', cap: '#ffd23f', skin: '#f1c9a5', shoe: '#ffffff', accent: '#ffd23f' },
-      { main: '#4da3ff', back: '#2d62a0', cap: '#7cffb2', skin: '#c68b5e', shoe: '#ffffff', accent: '#7cffb2' },
+      {
+        main: '#ff4d5e',
+        pants: '#1f1f2b',
+        hair: '#2b1b17',
+        cap: '#ffd23f',
+        skin: '#f1c9a5',
+        shoe: '#ffffff',
+        accent: '#ffffff',
+      },
+      {
+        main: '#4da3ff',
+        pants: '#2a2238',
+        hair: '#1a1a1a',
+        cap: '#7cffb2',
+        skin: '#c68b5e',
+        shoe: '#ffffff',
+        accent: '#7cffb2',
+      },
     ],
   },
   profile: {

@@ -272,6 +272,7 @@ const jH: MoveDef = {
 const stompWave: MoveDef = {
   id: 'stompWave',
   name: '스톰프 웨이브',
+  desc: '땅을 내리찍어 바닥을 타고 가는 충격파를 보낸다. 하단',
   kind: 'special',
   total: 46,
   anim: {
@@ -299,6 +300,7 @@ const stompWave: MoveDef = {
 const burstUpper: MoveDef = {
   id: 'burstUpper',
   name: '버스트 어퍼',
+  desc: '대공기. 양팔을 크게 올려친다. 발동 직후 무적',
   kind: 'special',
   total: 52,
   invuln: [1, 8],
@@ -364,6 +366,7 @@ const chargePose = (step: 0 | 1) =>
 const burstRush: MoveDef = {
   id: 'burstRush',
   name: '버스트 러시',
+  desc: '가슴을 내밀고 돌진한다. 한 번은 맞아도 멈추지 않는다(아머)',
   kind: 'special',
   total: 46,
   armor: [3, 22],
@@ -397,6 +400,7 @@ const burstRush: MoveDef = {
 const chestPop: MoveDef = {
   id: 'chestPop',
   name: '체스트 팝',
+  desc: '가슴을 튕겨 밀쳐낸다. 가드 불가지만 느려서 점프로 피할 수 있다',
   kind: 'special',
   total: 50,
   anim: {
@@ -446,6 +450,7 @@ const killOffHits: HitDef[] = [10, 17, 24, 31, 38].map((f) => ({
 const killOff: MoveDef = {
   id: 'killOff',
   name: '킬 오프',
+  desc: '암 스윙 연타 뒤 스톰프로 마무리하는 크럼프의 킬 오프',
   kind: 'super',
   total: 84,
   meterCost: 100,

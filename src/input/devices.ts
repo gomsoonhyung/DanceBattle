@@ -33,7 +33,9 @@ export function initKeyboard(): void {
   window.addEventListener('keydown', (e) => {
     if (!held.has(e.code)) pressedOnce.add(e.code);
     held.add(e.code);
-    if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code.startsWith('F')) e.preventDefault();
+    if (e.code.startsWith('Arrow') || e.code === 'Space' || e.code === 'Tab' || /^F\d+$/.test(e.code)) {
+      e.preventDefault();
+    }
   });
   window.addEventListener('keyup', (e) => held.delete(e.code));
   window.addEventListener('blur', () => held.clear());

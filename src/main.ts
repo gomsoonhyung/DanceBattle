@@ -1,5 +1,5 @@
 import { unlockAudio } from './audio/sfx';
-import { FRAME_MS, SCREEN_H, SCREEN_W } from './core/constants';
+import { FRAME_MS, RENDER_SCALE, SCREEN_H, SCREEN_W } from './core/constants';
 import { renderGallery } from './debug/gallery';
 import type { CharacterDef } from './fighter/types';
 import { Match, type MatchMode } from './game/match';
@@ -7,10 +7,16 @@ import { endInputFrame, initKeyboard, keyPressed, menu, pollMenu, readPlayerInpu
 import { FONT_KR, FONT_TITLE } from './render/hud';
 import { Renderer } from './render/renderer';
 import { drawStage } from './render/stage';
+import { drawGuide } from './render/guideHud';
 import { SelectScreen } from './screens/select';
+import { TrainingGuide } from './training/guide';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const g = canvas.getContext('2d')!;
+// 게임 좌표(960×540)로 그리면 실제로는 2배 해상도로 그려지도록
+canvas.width = SCREEN_W * RENDER_SCALE;
+canvas.height = SCREEN_H * RENDER_SCALE;
+g.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
 
 const params = new URLSearchParams(location.search);
 if (params.has('gallery')) {
@@ -20,7 +26,9 @@ if (params.has('gallery')) {
 }
 
 type Screen =
-  { kind: 'title' } | { kind: 'select'; select: SelectScreen } | { kind: 'match'; match: Match; renderer: Renderer };
+  | { kind: 'title' }
+  | { kind: 'select'; select: SelectScreen }
+  | { kind: 'match'; match: Match; renderer: Renderer; guide: TrainingGuide | null };
 
 function startGame(): void {
   initKeyboard();
@@ -44,7 +52,8 @@ function startGame(): void {
     lastChars = chars;
     const renderer = new Renderer(g);
     renderer.showBoxes = showBoxes;
-    screen = { kind: 'match', match: new Match(mode, chars), renderer };
+    const guide = mode === 'training' ? new TrainingGuide(chars[0]) : null;
+    screen = { kind: 'match', match: new Match(mode, chars), renderer, guide };
   };
 
   /** 고정 60fps 로직 1프레임 */
@@ -73,7 +82,7 @@ function startGame(): void {
         break;
       }
       case 'match': {
-        const { match, renderer } = screen;
+        const { match, renderer, guide } = screen;
         if (keyPressed('Escape')) {
           screen = { kind: 'title' };
           break;
@@ -81,6 +90,11 @@ function startGame(): void {
         if (match.mode === 'training') {
           if (keyPressed('F2')) match.cycleDummyMode();
           if (keyPressed('KeyR')) match.resetPositions();
+        }
+        if (guide) {
+          if (keyPressed('Tab')) guide.visible = !guide.visible;
+          for (let i = 0; i < 9; i++) if (keyPressed(`Digit${i + 1}`)) guide.select(i);
+          if (keyPressed('Space')) guide.startDemo(match);
         }
         if (match.phase === 'matchEnd' && match.phaseFrame > 60) {
           const m = [menu(0), menu(1)];
@@ -93,7 +107,10 @@ function startGame(): void {
             break;
           }
         }
-        match.update(readPlayerInput(0), readPlayerInput(1));
+        // 시범 중에는 가이드가 P1 대신 입력한다
+        const p1Input = guide?.nextInput() ?? readPlayerInput(0);
+        match.update(p1Input, readPlayerInput(1));
+        guide?.observe(match);
         renderer.consume(match.events);
         break;
       }
@@ -146,8 +163,10 @@ function startGame(): void {
       step();
       acc -= FRAME_MS;
     }
-    if (screen.kind === 'match') screen.renderer.draw(screen.match);
-    else if (screen.kind === 'select') screen.select.draw(g);
+    if (screen.kind === 'match') {
+      screen.renderer.draw(screen.match);
+      if (screen.guide) drawGuide(g, screen.guide, screen.match);
+    } else if (screen.kind === 'select') screen.select.draw(g);
     else drawTitle();
     requestAnimationFrame(frame);
   };

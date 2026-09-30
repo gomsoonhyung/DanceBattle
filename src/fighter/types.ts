@@ -22,7 +22,7 @@ export interface HitDef {
   unblockable?: boolean; // 가드 불가
 }
 
-export type ProjectileKind = 'shockwave' | 'spark';
+export type ProjectileKind = 'shockwave' | 'spark' | 'wave' | 'heart';
 
 /** 기술에서 발사되는 장풍. 캐릭터 기준 위치에서 생성되어 직진한다. */
 export interface ProjectileDef {
@@ -65,28 +65,55 @@ export interface MoveDef {
   /** 슈퍼아머: 이 구간에서는 한 번 맞아도 경직 없이 기술이 계속된다 */
   armor?: [number, number];
   projectile?: ProjectileDef;
+  /** 게이지 충전 (도발·포즈 기술): frame 프레임에 amount 만큼 */
+  meterGain?: { frame: number; amount: number };
+  /** 잔상 연출 (팝핑 애니메이션 대시 등) */
+  trail?: boolean;
+  /** 연습 모드 가이드에 나오는 한 줄 설명 */
+  desc?: string;
 }
 
-/** 스틱맨 색상 */
+/** 캐릭터 색상 */
 export interface Palette {
-  main: string; // 몸통, 앞쪽 팔다리
-  back: string; // 뒤쪽 팔다리 (어둡게)
-  cap: string; // 모자/머리띠
+  main: string; // 상의
+  pants: string; // 바지
+  hair: string;
+  cap: string; // 모자 · 머리띠
   skin: string;
   shoe: string;
-  accent: string; // 멜빵, 양말 등 포인트 색
+  accent: string; // 포인트 색 (줄무늬, 멜빵, 넥타이, 페인트 등)
+}
+
+/** 머리 장식: 뒤로 쓴 캡 / 머리띠 / 빅 애플 캡 / 올림머리 / 버킷햇 / 포니테일 / 비니 / 페도라 */
+export type Headwear = 'backcap' | 'headband' | 'applecap' | 'bun' | 'bucket' | 'ponytail' | 'beanie' | 'fedora';
+
+/** 상의: 반팔 / 민소매 / 후디 / 긴팔 / 크롭 / 수트 / 큰 칼라 셔츠 */
+export type TopStyle = 'tee' | 'tank' | 'hoodie' | 'longsleeve' | 'crop' | 'suit' | 'collar';
+
+/** 하의: 트랙 팬츠 / 배기 / 와이드(나팔) / 카고 / 슬림 / 무릎 바지 */
+export type BottomStyle = 'track' | 'baggy' | 'wide' | 'cargo' | 'slim' | 'knickers';
+
+export interface Outfit {
+  top: TopStyle;
+  bottom: BottomStyle;
+  gloves?: boolean; // 흰 장갑 (팝핑)
+  chain?: boolean; // 금목걸이 (힙합)
+  suspenders?: boolean; // 멜빵 (락킹)
+  stripedSocks?: boolean; // 줄무늬 양말 (락킹)
+  facePaint?: boolean; // 페이스 페인트 (크럼프)
+  wristbands?: boolean; // 손목 밴드
+  earrings?: boolean; // 후프 귀걸이
+  tie?: boolean; // 넥타이
+  sideStripes?: boolean; // 바지 옆선
 }
 
 export interface Look {
   /** [P1용, P2용] — 같은 캐릭터끼리 붙어도 구분되도록 */
   palettes: [Palette, Palette];
-  headwear: 'backcap' | 'headband' | 'applecap';
-  /** 선 굵기 배율 (체격) */
+  headwear: Headwear;
+  /** 체격 배율 (팔다리·몸통 굵기) */
   build: number;
-  /** 팔을 피부색으로 (민소매) */
-  bareArms?: boolean;
-  /** 멜빵 + 줄무늬 양말 (락킹 의상) */
-  suspenders?: boolean;
+  outfit: Outfit;
 }
 
 export interface Profile {

@@ -77,6 +77,10 @@ export class Fighter {
   private queuedCancel: MoveDef | null = null;
   /** 초필살기 발동 시 Match가 읽어가는 화면 정지 요청 */
   pendingSuperFreeze = 0;
+  /** 기술을 시작할 때마다 1씩 증가 (연습 가이드가 성공 여부를 알아보는 데 사용) */
+  moveSerial = 0;
+  /** 포즈 등으로 게이지를 채운 순간. Match가 읽어서 연출 이벤트를 보낸다 */
+  pendingTaunt = false;
   /** 이번 프레임에 발사한 장풍. Match가 읽어간다 */
   pendingProjectile: ProjectileDef | null = null;
   /** 슈퍼아머로 버틸 수 있는 남은 횟수 */
@@ -248,6 +252,10 @@ export class Fighter {
     const m = this.move!;
     this.moveFrame++;
     if (m.projectile && this.moveFrame === m.projectile.frame) this.pendingProjectile = m.projectile;
+    if (m.meterGain && this.moveFrame === m.meterGain.frame) {
+      this.addMeter(m.meterGain.amount);
+      this.pendingTaunt = true;
+    }
 
     if (canAct) {
       const next = this.findCancel();
@@ -295,6 +303,7 @@ export class Fighter {
   startMove(m: MoveDef): void {
     this.move = m;
     this.moveFrame = 1;
+    this.moveSerial++;
     this.hitIds.clear();
     this.moveConnected = false;
     this.queuedCancel = null;

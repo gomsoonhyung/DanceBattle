@@ -7,12 +7,12 @@ import type { MatchMode } from '../game/match';
 import { keyPressed, menu } from '../input/devices';
 import { FONT_KR, FONT_TITLE } from '../render/hud';
 import { drawStage } from '../render/stage';
-import { drawStickman } from '../render/stickman';
+import { drawDancer } from '../render/dancer';
 
 const SLOT_COLORS = ['#ff4d5e', '#4da3ff'];
-const CARD_W = 150;
+const CARD_W = 108;
 const CARD_H = 170;
-const CARD_GAP = 20;
+const CARD_GAP = 6;
 const CARD_TOP = 78;
 const READY_DELAY = 45;
 
@@ -136,12 +136,12 @@ export class SelectScreen {
     g.rect(x, CARD_TOP, CARD_W, CARD_H);
     g.clip();
     g.translate(x + CARD_W / 2, CARD_TOP + CARD_H - 28);
-    g.scale(0.62, 0.62);
+    g.scale(0.56, 0.56);
     g.translate(0, -GROUND_SCREEN_Y);
-    drawStickman(g, evalAnim(c.anims.idle, this.frame), 0, 0, 1, c.look, c.look.palettes[0]);
+    drawDancer(g, evalAnim(c.anims.idle, this.frame), 0, 0, 1, c.look, c.look.palettes[0]);
     g.restore();
 
-    g.font = `900 17px ${FONT_TITLE}`;
+    g.font = `900 12px ${FONT_TITLE}`;
     g.fillStyle = '#fff';
     g.textAlign = 'center';
     g.fillText(c.name, x + CARD_W / 2, CARD_TOP + CARD_H - 8);
@@ -185,7 +185,7 @@ export class SelectScreen {
     g.translate(px + 75, bottom - 12);
     g.scale(0.82, 0.82);
     g.translate(0, -GROUND_SCREEN_Y);
-    drawStickman(
+    drawDancer(
       g,
       evalAnim(anim, this.ready[slot] ? Math.min(this.frame, 40) : this.frame),
       0,
