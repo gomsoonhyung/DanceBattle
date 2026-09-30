@@ -9,9 +9,26 @@ export const HIPHOPPER: CharacterDef = {
   look: {
     headwear: 'bucket',
     build: 1.1,
+    outfit: { top: 'hoodie', bottom: 'baggy', chain: true },
     palettes: [
-      { main: '#3ddc84', back: '#248a52', cap: '#ffd23f', skin: '#8d5a3b', shoe: '#ffffff', accent: '#ffd23f' },
-      { main: '#ff9f1c', back: '#b36b00', cap: '#ffffff', skin: '#f1c9a5', shoe: '#ffffff', accent: '#ff3c3c' },
+      {
+        main: '#3ddc84',
+        pants: '#2c3e8f',
+        hair: '#141414',
+        cap: '#ffd23f',
+        skin: '#8d5a3b',
+        shoe: '#ffffff',
+        accent: '#ffd23f',
+      },
+      {
+        main: '#ff9f1c',
+        pants: '#4a4a55',
+        hair: '#3b2418',
+        cap: '#ffffff',
+        skin: '#f1c9a5',
+        shoe: '#ffffff',
+        accent: '#ff3c3c',
+      },
     ],
   },
   profile: {

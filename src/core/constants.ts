@@ -4,6 +4,8 @@ export const FRAME_MS = 1000 / FPS;
 
 export const SCREEN_W = 960;
 export const SCREEN_H = 540;
+/** 실제 캔버스 해상도 배율. 화면을 키워도 선명하도록 2배로 그린다 */
+export const RENDER_SCALE = 2;
 
 // 월드 좌표: x는 오른쪽 +, y는 위쪽 + (지면 = 0)
 export const STAGE_LEFT = 40;

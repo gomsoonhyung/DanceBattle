@@ -9,9 +9,26 @@ export const WAACKER: CharacterDef = {
   look: {
     headwear: 'bun',
     build: 0.9,
+    outfit: { top: 'longsleeve', bottom: 'wide', earrings: true },
     palettes: [
-      { main: '#e040fb', back: '#8e24aa', cap: '#8d5a3b', skin: '#f1c9a5', shoe: '#ffffff', accent: '#ffd23f' },
-      { main: '#00e5c0', back: '#00917a', cap: '#5a3825', skin: '#c68b5e', shoe: '#ffffff', accent: '#ffffff' },
+      {
+        main: '#e040fb',
+        pants: '#2a2238',
+        hair: '#3b2418',
+        cap: '#3b2418',
+        skin: '#f1c9a5',
+        shoe: '#ffffff',
+        accent: '#ffd23f',
+      },
+      {
+        main: '#00e5c0',
+        pants: '#f0f0f0',
+        hair: '#6d3b1f',
+        cap: '#6d3b1f',
+        skin: '#c68b5e',
+        shoe: '#ffffff',
+        accent: '#ffd23f',
+      },
     ],
   },
   profile: {

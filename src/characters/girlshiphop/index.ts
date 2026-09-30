@@ -9,9 +9,26 @@ export const HIPHOP_GIRL: CharacterDef = {
   look: {
     headwear: 'ponytail',
     build: 0.9,
+    outfit: { top: 'crop', bottom: 'cargo', earrings: true },
     palettes: [
-      { main: '#ff4fa3', back: '#b0306e', cap: '#8d5a3b', skin: '#f1c9a5', shoe: '#ffffff', accent: '#ffffff' },
-      { main: '#b388ff', back: '#6f4bc0', cap: '#ffcf6b', skin: '#c68b5e', shoe: '#ffffff', accent: '#ff4fa3' },
+      {
+        main: '#ff4fa3',
+        pants: '#d8cfb8',
+        hair: '#3b2418',
+        cap: '#3b2418',
+        skin: '#f1c9a5',
+        shoe: '#ffffff',
+        accent: '#ffffff',
+      },
+      {
+        main: '#b388ff',
+        pants: '#2f3542',
+        hair: '#ffcf6b',
+        cap: '#ffcf6b',
+        skin: '#c68b5e',
+        shoe: '#ffffff',
+        accent: '#ff4fa3',
+      },
     ],
   },
   profile: {

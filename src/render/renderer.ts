@@ -1,6 +1,6 @@
 import { sfx } from '../audio/sfx';
 import { GROUND_SCREEN_Y, SCREEN_H, SCREEN_W } from '../core/constants';
-import type { Rect } from '../core/math';
+import type { Rect, Vec2 } from '../core/math';
 import type { Skeleton } from '../anim/pose';
 import type { Fighter } from '../fighter/fighter';
 import type { GameEvent } from '../game/events';
@@ -9,7 +9,9 @@ import type { Match } from '../game/match';
 import { Effects } from './effects';
 import { drawHud, FONT_KR, FONT_TITLE } from './hud';
 import { drawStage } from './stage';
-import { drawStickman, fighterPalette } from './stickman';
+import { drawDancer, fighterPalette, headFrame, tailAnchor } from './dancer';
+import { TailChain, type Smear } from './dynamics';
+import { drawCrowd } from './stage';
 
 export class Renderer {
   readonly fx = new Effects();
@@ -18,6 +20,12 @@ export class Renderer {
   private superColor = '#fff';
   /** 잔상 연출용: 캐릭터별 최근 모습 */
   private trails: { x: number; y: number; facing: 1 | -1; sk: Skeleton }[][] = [[], []];
+  /** 흔들리는 머리카락·끈 */
+  private tails: (TailChain | null)[] = [null, null];
+  /** 공격 궤적 */
+  private smears: Smear[] = [];
+  private lastEnds: (Vec2[] | null)[] = [null, null];
+  private frame = 0;
 
   constructor(private readonly g: CanvasRenderingContext2D) {}
 
@@ -73,6 +81,7 @@ export class Renderer {
       g.translate((Math.random() - 0.5) * this.fx.shake, (Math.random() - 0.5) * this.fx.shake);
     }
     drawStage(g);
+    drawCrowd(g, this.frame++);
 
     const freeze = m.superFreeze > 0;
     if (freeze) {
@@ -95,8 +104,10 @@ export class Renderer {
       if (freeze && f.index === m.superOwner) this.drawAura(f);
       const sk = f.skeleton();
       this.drawTrail(f, sk, freeze);
-      drawStickman(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f));
+      drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), { tail: this.updateTail(f, sk) });
+      this.trackSmears(f, sk, freeze);
     }
+    this.drawSmears();
 
     for (const p of m.projectiles) this.drawProjectile(p, fighterPalette(m.fighters[p.owner]).main);
     if (this.showBoxes) {
@@ -110,6 +121,48 @@ export class Renderer {
     if (this.superText) this.drawSuperText();
   }
 
+  /** 포니테일·머리띠 끈 흔들림 계산 */
+  private updateTail(f: Fighter, sk: Skeleton): Vec2[] | undefined {
+    const h = headFrame(sk, f.x, f.y, f.facing);
+    const anchor = tailAnchor(h, f.def.look);
+    if (!anchor) return undefined;
+    const ponytail = f.def.look.headwear === 'ponytail';
+    const chain = (this.tails[f.index] ??= new TailChain(ponytail ? 5 : 4, ponytail ? 7 : 6));
+    return chain.update(anchor, { x: -h.front.x, y: -h.front.y });
+  }
+
+  /** 기술 중 빠르게 움직인 손발 끝을 궤적으로 남긴다 */
+  private trackSmears(f: Fighter, sk: Skeleton, frozen: boolean): void {
+    const S = (p: Vec2): Vec2 => ({ x: f.x + p.x * f.facing, y: GROUND_SCREEN_Y - (f.y + p.y) });
+    const ends = [S(sk.handF), S(sk.footF), S(sk.handB), S(sk.footB)];
+    const last = this.lastEnds[f.index];
+    if (last && !frozen && f.state === 'move') {
+      ends.forEach((e, i) => {
+        const d = Math.hypot(e.x - last[i].x, e.y - last[i].y);
+        if (d > 9 && d < 120) this.smears.push({ a: last[i], b: e, life: 8, width: Math.min(16, 6 + d * 0.3) });
+      });
+    }
+    this.lastEnds[f.index] = ends;
+  }
+
+  private drawSmears(): void {
+    const g = this.g;
+    g.save();
+    g.lineCap = 'round';
+    for (const sm of this.smears) {
+      const t = sm.life / 8;
+      g.strokeStyle = `rgba(255,255,255,${0.32 * t})`;
+      g.lineWidth = sm.width * t;
+      g.beginPath();
+      g.moveTo(sm.a.x, sm.a.y);
+      g.lineTo(sm.b.x, sm.b.y);
+      g.stroke();
+      sm.life--;
+    }
+    g.restore();
+    this.smears = this.smears.filter((sm) => sm.life > 0);
+  }
+
   /** 잔상이 있는 기술(trail) 중이면 지나온 모습을 반투명하게 그린다 */
   private drawTrail(f: Fighter, sk: Skeleton, frozen: boolean): void {
     const list = this.trails[f.index];
@@ -119,8 +172,8 @@ export class Renderer {
     }
     const pal = fighterPalette(f);
     list.forEach((t, i) => {
-      this.g.globalAlpha = 0.12 + (i / list.length) * 0.25;
-      drawStickman(this.g, t.sk, t.x, t.y, t.facing, f.def.look, pal);
+      this.g.globalAlpha = 0.12 + (i / list.length) * 0.3;
+      drawDancer(this.g, t.sk, t.x, t.y, t.facing, f.def.look, pal, { silhouette: pal.main });
     });
     this.g.globalAlpha = 1;
     if (!frozen) {

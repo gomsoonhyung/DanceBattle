@@ -9,9 +9,26 @@ export const HOUSE_HEAD: CharacterDef = {
   look: {
     headwear: 'beanie',
     build: 1,
+    outfit: { top: 'tee', bottom: 'track', wristbands: true },
     palettes: [
-      { main: '#29b6f6', back: '#1a6f99', cap: '#ff7043', skin: '#a8703f', shoe: '#ffffff', accent: '#ffffff' },
-      { main: '#ffee58', back: '#b3a52a', cap: '#26a69a', skin: '#f1c9a5', shoe: '#ffffff', accent: '#ffffff' },
+      {
+        main: '#29b6f6',
+        pants: '#263238',
+        hair: '#141414',
+        cap: '#ff7043',
+        skin: '#a8703f',
+        shoe: '#ffffff',
+        accent: '#ffffff',
+      },
+      {
+        main: '#ffee58',
+        pants: '#37474f',
+        hair: '#3b2418',
+        cap: '#26a69a',
+        skin: '#f1c9a5',
+        shoe: '#ffffff',
+        accent: '#26a69a',
+      },
     ],
   },
   profile: {

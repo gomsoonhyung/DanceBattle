@@ -3,7 +3,7 @@
 [![CI](https://github.com/gomsoonhyung/DanceBattle/actions/workflows/ci.yml/badge.svg)](https://github.com/gomsoonhyung/DanceBattle/actions/workflows/ci.yml)
 
 춤 동작으로 싸우는 2D 대전 격투 게임입니다. 왁킹, 크럼프, 힙합, 걸스힙합, 락킹, 하우스, 팝핑, 브레이킹 8개 장르의 댄서가 각 장르의 동작을 기술로 써서 싸웁니다.
-TypeScript + Vite + Canvas 2D로 만들었고, 그래픽은 코드로 그리는 스틱맨입니다. (나중에는 2.5D/3D가 목표)
+TypeScript + Vite + Canvas 2D로 만들었고, 캐릭터는 코드로 그리는 2D 퍼펫(부위별 도형 + 의상 + 외곽선)입니다. 나중에는 일러스트 컷아웃이나 3D로 발전시키는 게 목표입니다.
 
 ## 실행
 
@@ -93,4 +93,6 @@ npm run build      # 배포용 빌드 → dist/
 
 - `http://localhost:5173/?gallery&char=krump`: 캐릭터의 모든 동작 반복 재생 (`waacker` `krump` `hiphopper` `hiphopgirl` `locker` `househead` `popper` `bboy`)
 - `http://localhost:5173/?gallery=stompWave&char=krump`: 한 동작을 프레임별로 나열
+- `http://localhost:5173/?gallery=lineup`: 8명 전원 나란히 (P1·P2 색)
+- `http://localhost:5173/?gallery=closeup&char=krump&anim=sHP&f=11`: 한 동작의 한 프레임을 크게
 - 게임 중 **F1**: 판정 박스 보기

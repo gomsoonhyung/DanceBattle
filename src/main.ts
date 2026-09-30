@@ -1,5 +1,5 @@
 import { unlockAudio } from './audio/sfx';
-import { FRAME_MS, SCREEN_H, SCREEN_W } from './core/constants';
+import { FRAME_MS, RENDER_SCALE, SCREEN_H, SCREEN_W } from './core/constants';
 import { renderGallery } from './debug/gallery';
 import type { CharacterDef } from './fighter/types';
 import { Match, type MatchMode } from './game/match';
@@ -13,6 +13,10 @@ import { TrainingGuide } from './training/guide';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
 const g = canvas.getContext('2d')!;
+// 게임 좌표(960×540)로 그리면 실제로는 2배 해상도로 그려지도록
+canvas.width = SCREEN_W * RENDER_SCALE;
+canvas.height = SCREEN_H * RENDER_SCALE;
+g.setTransform(RENDER_SCALE, 0, 0, RENDER_SCALE, 0, 0);
 
 const params = new URLSearchParams(location.search);
 if (params.has('gallery')) {

@@ -1,6 +1,6 @@
 import { MAX_METER, ROUNDS_TO_WIN, SCREEN_H, SCREEN_W } from '../core/constants';
 import { DUMMY_LABEL, type Match } from '../game/match';
-import { fighterPalette } from './stickman';
+import { fighterPalette } from './dancer';
 
 export const FONT_KR = '"Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif';
 export const FONT_TITLE = '"Arial Black", Impact, sans-serif';

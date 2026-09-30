@@ -9,10 +9,26 @@ export const LOCKER: CharacterDef = {
   look: {
     headwear: 'applecap',
     build: 0.95,
-    suspenders: true,
+    outfit: { top: 'collar', bottom: 'knickers', suspenders: true, stripedSocks: true },
     palettes: [
-      { main: '#ffd23f', back: '#b8931c', cap: '#ff3cac', skin: '#f1c9a5', shoe: '#ffffff', accent: '#ff3cac' },
-      { main: '#2bd2ff', back: '#1a86a3', cap: '#ff8c1a', skin: '#a8703f', shoe: '#ffffff', accent: '#ff8c1a' },
+      {
+        main: '#ffd23f',
+        pants: '#2b2b35',
+        hair: '#2b1b17',
+        cap: '#ff3cac',
+        skin: '#f1c9a5',
+        shoe: '#ffffff',
+        accent: '#ff3cac',
+      },
+      {
+        main: '#2bd2ff',
+        pants: '#3a2a1a',
+        hair: '#141414',
+        cap: '#ff8c1a',
+        skin: '#a8703f',
+        shoe: '#ffffff',
+        accent: '#ff8c1a',
+      },
     ],
   },
   profile: {

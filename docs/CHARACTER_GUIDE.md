@@ -29,7 +29,8 @@ export const POPPER: CharacterDef = {
   look: {
     headwear: 'backcap',   // backcap | headband | applecap | bun | bucket | ponytail | beanie | fedora
                            // (새 모자는 fighter/types.ts의 Headwear와 render/stickman.ts의 drawHead에 추가)
-    build: 1,              // 선 굵기 배율 = 체격
+    build: 1,              // 체격 배율 (팔다리·몸통 굵기). 크럼프 1.25, 왁킹 0.9
+    outfit: { top: 'hoodie', bottom: 'baggy', chain: true },  // 의상 (아래 '외형과 의상' 참고)
     palettes: [P1용 색, P2용 색],  // 같은 캐릭터끼리 붙어도 구분되도록 두 벌
   },
   profile: { title: '팝핑 · 견제형', desc: '한두 문장 소개', power: 3, speed: 3, range: 4 },  // 스탯은 1~5
@@ -44,6 +45,21 @@ export const POPPER: CharacterDef = {
   walkF: 3.4, walkB: 2.7, jumpV: 16, jumpVX: 4.2,   // 비보이 기준값
 };
 ```
+
+### 외형과 의상
+
+캐릭터는 `src/render/dancer.ts`가 스켈레톤을 따라 부위별로 그립니다. 외형은 데이터로만 정합니다.
+
+| 항목              | 값                                                                                                                                                                                                     |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `outfit.top`      | `tee`(반팔) · `tank`(민소매) · `hoodie`(후디) · `longsleeve`(긴팔) · `crop`(크롭) · `suit`(수트) · `collar`(큰 칼라 셔츠)                                                                              |
+| `outfit.bottom`   | `track`(트랙 팬츠) · `baggy`(배기) · `wide`(나팔) · `cargo`(카고) · `slim`(슬림) · `knickers`(무릎 바지)                                                                                               |
+| 소품 (true/false) | `gloves` 흰 장갑 · `chain` 금목걸이 · `suspenders` 멜빵 · `stripedSocks` 줄무늬 양말 · `facePaint` 페이스 페인트 · `wristbands` 손목 밴드 · `earrings` 귀걸이 · `tie` 넥타이 · `sideStripes` 바지 옆선 |
+| 색 (`palettes`)   | `main` 상의 · `pants` 바지 · `hair` 머리 · `cap` 모자 · `skin` 피부 · `shoe` 신발 · `accent` 포인트(줄무늬, 멜빵, 페인트 등)                                                                           |
+
+- 새 의상이나 소품은 `fighter/types.ts`의 `Outfit`에 필드를 추가하고 `render/dancer.ts`에서 그립니다.
+- 어두운 배경에서 안 보이는 색(검정 모자 등)은 피해 주세요. `?gallery=lineup`에서 8명을 나란히 놓고 비교할 수 있습니다.
+- 포니테일과 머리띠 끈은 렌더러가 흔들림을 계산합니다 (`render/dynamics.ts`).
 
 ## 2. 포즈 만들기
 
@@ -239,7 +255,7 @@ projectile: {
 
 ## 7. 완성 전 확인 목록
 
-- [ ] 갤러리에서 모든 동작이 자연스러운가 (`?gallery&char=<id>`, 기술별 `?gallery=<기술id>&char=<id>`)
+- [ ] 갤러리에서 모든 동작이 자연스러운가 (`?gallery&char=<id>`, 기술별 `?gallery=<기술id>&char=<id>`, 크게 보기 `?gallery=closeup&char=<id>&anim=<기술id>&f=<프레임>`)
 - [ ] F1 판정 박스를 켜고 공격 판정이 팔다리 위치와 대충 맞는가
 - [ ] 트레이닝 모드에서 필살기 커맨드가 잘 나가는가
 - [ ] 연습 상대를 "자동 가드"로 두고, 하단/중단 설정이 의도대로인가

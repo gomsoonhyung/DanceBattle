@@ -9,9 +9,26 @@ export const POPPER: CharacterDef = {
   look: {
     headwear: 'fedora',
     build: 1,
+    outfit: { top: 'suit', bottom: 'slim', gloves: true, tie: true },
     palettes: [
-      { main: '#f5f5f5', back: '#9e9e9e', cap: '#e53935', skin: '#f1c9a5', shoe: '#e53935', accent: '#212121' },
-      { main: '#80deea', back: '#4a9aa3', cap: '#ffffff', skin: '#8d5a3b', shoe: '#ffffff', accent: '#ff4081' },
+      {
+        main: '#f5f5f5',
+        pants: '#f5f5f5',
+        hair: '#141414',
+        cap: '#e53935',
+        skin: '#f1c9a5',
+        shoe: '#e53935',
+        accent: '#e53935',
+      },
+      {
+        main: '#5c6bc0',
+        pants: '#5c6bc0',
+        hair: '#3b2418',
+        cap: '#ffffff',
+        skin: '#8d5a3b',
+        shoe: '#ffffff',
+        accent: '#ff4081',
+      },
     ],
   },
   profile: {
