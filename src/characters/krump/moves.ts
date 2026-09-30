@@ -353,20 +353,31 @@ const burstUpper: MoveDef = {
   ],
 };
 
+/** 어깨를 앞세워 달려드는 자세: 상체를 크게 숙이고 앞팔로 얼굴을 가린 채 뒷팔을 흔든다 */
 const chargePose = (step: 0 | 1) =>
   pose(STAND, {
-    torso: -15,
-    head: -20,
-    aF: [-30, 60],
-    aB: [-40, 50],
-    lF: step ? [-10, -20] : [45, -55],
-    lB: step ? [40, -70] : [-30, -20],
+    torso: 40,
+    head: -30,
+    aF: [60, 70],
+    aB: step ? [-55, 70] : [20, 80],
+    lF: step ? [-15, -25] : [60, -75],
+    lB: step ? [55, -80] : [-35, -10],
   });
+
+/** 들이받는 순간: 몸을 던지며 팔뚝을 쭉 뻗는다 */
+const RUSH_IMPACT = pose(STAND, {
+  torso: 50,
+  head: -35,
+  aF: [95, 10],
+  aB: [-60, 40],
+  lF: [55, -40],
+  lB: [-45, -5],
+});
 
 const burstRush: MoveDef = {
   id: 'burstRush',
   name: '버스트 러시',
-  desc: '가슴을 내밀고 돌진한다. 한 번은 맞아도 멈추지 않는다(아머)',
+  desc: '어깨를 앞세워 돌진해 팔뚝으로 들이받는다. 한 번은 맞아도 멈추지 않는다(아머)',
   kind: 'special',
   total: 46,
   armor: [3, 22],
@@ -374,7 +385,7 @@ const burstRush: MoveDef = {
     keys: [
       { f: 0, p: STAND },
       ...genKeys(5, 21, 4, (_f, i) => chargePose((i % 2) as 0 | 1)),
-      { f: 24, p: pose(CHEST_OUT, { torso: -25, head: -25, aF: [-40, 40], aB: [-50, 40], lF: [40, -40] }) },
+      { f: 24, p: RUSH_IMPACT },
       { f: 30, p: CHEST_OUT },
       { f: 46, p: STAND },
     ],
@@ -383,7 +394,7 @@ const burstRush: MoveDef = {
   hits: [
     {
       frames: [10, 22],
-      box: { x: 10, y: 60, w: 60, h: 100 },
+      box: { x: 10, y: 60, w: 90, h: 100 },
       damage: 90,
       hitstun: 22,
       blockstun: 14,
