@@ -141,3 +141,11 @@
 - `check_sprites`: 로커 36프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
 - 비교 시트 확인: `shots/sheet_locker.png` (`sprites-work/roster-full/t12b/locker/sheet_final.png` 보관). 대기 기준선과 비교해 복장·체형·색이 연속적으로 유지됨
 - 실제 게임 확인: 트레이닝에서 로커를 P1으로 선택해 D 앞걷기, A 뒤걷기, S 앉기 반복을 확인. `src/` 변경 없음
+
+## 2026-10-01 · T12b 비보이 기본 이동 모델 통일
+
+- 스프라이트 11장 수정 (`crouch` 10, `walkF_20`). 채택된 `idle_0`과 최초 생성된 비보이 동작 그림을 같은 격자에 넣어 imagegen으로 다시 그린 뒤, 대기 셀에서 얻은 고정 배율을 동작 묶음에 적용
+- 다시 만든 이유: 앉기 10장이 대기·걷기보다 통통하고 머리가 컸으며 `walkF_20`도 다른 모델처럼 보임. 최초 앉기 격자는 세로 여백이 부족해 등분 시 옆 셀이 섞여, 투명 연결 요소 경계로 각 캐릭터를 다시 분리해 규격화
+- `check_sprites`: 비보이 37프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
+- 비교 시트 확인: `shots/sheet_bboy.png` (`sprites-work/roster-full/t12b/bboy/sheet_final.png` 보관). 대기 기준과 비교해 머리 크기·체형·트랙복 색이 연속적으로 유지됨
+- 실제 게임 확인: 트레이닝에서 비보이를 P1으로 선택해 D 앞걷기와 S 앉기 반복을 확인. `src/` 변경 없음
