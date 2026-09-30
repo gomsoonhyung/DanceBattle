@@ -108,7 +108,7 @@ export class Renderer {
       // 교체 그림(스프라이트)이 있으면 그 그림을, 없으면 코드로 그린 캐릭터를
       const key = f.displayKey();
       const sprite = spriteFor(f.def.id, key.id, key.frame, f.index);
-      if (sprite) drawSprite(g, sprite.img, f.x, f.y, f.facing, sprite.recolor);
+      if (sprite) drawSprite(g, sprite.img, f.x, f.y, f.facing, sprite.recolor ? fighterPalette(f).main : null);
       else
         drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), {
           tail: this.updateTail(f, sk),

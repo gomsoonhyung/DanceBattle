@@ -9,7 +9,7 @@ public/sprites/<캐릭터>/ 의 스프라이트를 규격대로 검사한다.
   ❌ manifest.json 이 없거나 형식이 틀림, 적힌 파일이 없음
   ❌ 640×640 이 아님, 투명 배경이 아님
   ⚠️ 300KB 초과
-  ⚠️ 참고 그림과 비교해 발밑 높이 ±6px, 가로 중심 ±25px, 키 ±15% 를 벗어남
+  ⚠️ 참고 그림과 비교해 발밑 높이 ±6px, 가로 중심 ±25px, 키 ±15%, 앞쪽 끝(주먹·발끝) ±20px 를 벗어남
   ⚠️ 한 동작의 일부 프레임만 들어 있음 (참고 그림 manifest 기준)
 
 필요: Python 3 + Pillow
@@ -88,6 +88,11 @@ def main():
                         warns.append(f"{name}: 가로 중심이 참고 그림보다 {dx:+.0f}px")
                     if not 0.85 <= hr <= 1.15:
                         warns.append(f"{name}: 키가 참고 그림의 {hr * 100:.0f}%")
+                    # 앞쪽(오른쪽) 끝: 주먹·발끝이 참고 그림보다 멀리 뻗으면 공격 판정과 어긋난다
+                    reach = a[2] - b[2]
+                    if abs(reach) > 20:
+                        more = "더 멀리 뻗음" if reach > 0 else "덜 뻗음"
+                        warns.append(f"{name}: 앞쪽 끝이 참고 그림보다 {abs(reach)}px {more} (공격 판정과 어긋날 수 있음)")
 
     # 동작 일부만 교체되었는지
     ref_manifest = f"{ref_dir}/manifest.json" if ref_dir else None

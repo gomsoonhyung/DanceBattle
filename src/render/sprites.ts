@@ -11,7 +11,7 @@ import type { CharacterDef } from '../fighter/types';
 export const SPRITE = { width: 320, height: 320, anchorX: 160, anchorY: 290, scale: 2 } as const;
 
 interface Manifest {
-  /** 키 = "<동작id>_<프레임>", 값 = 파일 이름 (p2가 없으면 p1 그림을 색만 돌려서 쓴다) */
+  /** 키 = "<동작id>_<프레임>", 값 = 파일 이름 (p2가 없으면 p1 그림에 P2 색 테두리 빛을 둘러 쓴다) */
   frames: Record<string, { p1: string; p2?: string }>;
 }
 
@@ -56,7 +56,7 @@ export async function loadSprites(chars: CharacterDef[]): Promise<void> {
   );
 }
 
-/** 이 프레임을 대신할 그림이 있으면 반환. recolor = P2인데 전용 그림이 없어 색을 돌려야 함 */
+/** 이 프레임을 대신할 그림이 있으면 반환. recolor = P2인데 전용 그림이 없어 P1 그림으로 대신함 */
 export function spriteFor(
   charId: string,
   animId: string,
@@ -69,19 +69,23 @@ export function spriteFor(
   return { img: e[0], recolor: false };
 }
 
-/** 스프라이트를 캐릭터 위치(발밑)에 맞춰 그린다. 왼쪽을 보면 좌우 반전 */
+/**
+ * 스프라이트를 캐릭터 위치(발밑)에 맞춰 그린다. 왼쪽을 보면 좌우 반전.
+ * glow: P2 전용 그림이 없을 때 P1 그림에 두르는 구분용 테두리 빛 색
+ * (색상 전체를 돌리면 피부색까지 바뀌어 어색하므로, 색은 그대로 두고 테두리로만 구분한다)
+ */
 export function drawSprite(
   g: CanvasRenderingContext2D,
   img: HTMLImageElement,
   x: number,
   y: number,
   facing: 1 | -1,
-  recolor: boolean,
+  glow: string | null,
 ): void {
   g.save();
   g.translate(x, GROUND_SCREEN_Y - y);
   g.scale(facing, 1);
-  if (recolor) g.filter = 'hue-rotate(160deg)';
+  if (glow) g.filter = `drop-shadow(0 0 2px ${glow}) drop-shadow(0 0 4px ${glow})`;
   g.drawImage(img, -SPRITE.anchorX, -SPRITE.anchorY, SPRITE.width, SPRITE.height);
   g.restore();
 }

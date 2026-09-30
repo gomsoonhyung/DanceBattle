@@ -190,7 +190,11 @@ const INBETWEEN_GAP = 6;
  * 반환값은 실제로 그릴 애니메이션 프레임 (같은 값이면 같은 그림).
  */
 export function displayFrame(anim: Anim, frame: number): number {
-  if (anim.loop) return Math.floor(frame / LOOP_STEP) * LOOP_STEP;
+  if (anim.loop) {
+    // 반복 동작은 한 바퀴 안의 번호로 (그래야 스프라이트 이름 idle_0 ~ idle_28 과 맞는다)
+    const f = ((frame % anim.loop) + anim.loop) % anim.loop;
+    return Math.floor(f / LOOP_STEP) * LOOP_STEP;
+  }
   const keys = anim.keys;
   if (frame <= keys[0].f) return keys[0].f;
   for (let i = 0; i < keys.length - 1; i++) {

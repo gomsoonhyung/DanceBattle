@@ -180,7 +180,7 @@ export function headFrame(sk: Skeleton, x: number, y: number, facing: 1 | -1): H
 export function tailAnchor(h: HeadFrame, look: Look): Vec2 | null {
   const at = (u: number, f: number) => add(h.c, add(mul(h.up, u * h.r), mul(h.front, f * h.r)));
   if (look.headwear === 'ponytail') return at(0.55, -0.8);
-  if (look.headwear === 'headband') return at(0.35, -1);
+  if (look.headwear === 'headband') return at(0.6, -0.95);
   return null;
 }
 
@@ -693,7 +693,8 @@ function drawHeadwear(p: Painter, h: HeadFrame, look: Look, pal: Palette): void 
       break;
     }
     case 'headband': {
-      p.part(capsule(at(0.38, -0.98), at(0.38, 0.98), 3, 3), pal.cap, { shadow: false });
+      // 머리띠는 이마(눈썹 위)에
+      p.part(capsule(at(0.62, -0.92), at(0.62, 0.9), 3, 3), pal.cap, { shadow: false });
       break;
     }
     case 'applecap': {
