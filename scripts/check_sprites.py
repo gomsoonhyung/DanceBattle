@@ -8,7 +8,7 @@ public/sprites/<캐릭터>/ 의 스프라이트를 규격대로 검사한다.
 
 검사 항목 (❌ = 게임에서 문제가 됨, ⚠️ = 확인 필요)
   ❌ manifest.json 이 없거나 형식이 틀림, 적힌 파일이 없음
-  ❌ 640×640 이 아님, 투명 배경이 아님
+  ❌ 640×640 이 아님, 투명 배경이 아님, 본체와 떨어진 조각이 있음, 옷 색이 다른 프레임과 다름
   ⚠️ 300KB 초과
   ⚠️ 참고 그림과 비교해 발밑 높이 ±6px, 가로 중심 ±25px, 키 ±15%, 앞쪽 끝(주먹·발끝) ±20px 를 벗어남
   ⚠️ 한 동작의 일부 프레임만 들어 있음 (참고 그림 manifest 기준)
@@ -30,6 +30,59 @@ MAX_KB = 300
 
 def bbox(img):
     return img.getchannel("A").point(lambda a: 255 if a >= ALPHA_MIN else 0).getbbox()
+
+
+def lower_cloth_color(img):
+    """몸 아래쪽 45%의 어두운 옷감 평균 색 (피부·신발·외곽선 제외). 바지 색 일관성 검사용"""
+    box = bbox(img)
+    if not box:
+        return None
+    top = box[1] + (box[3] - box[1]) * 0.55
+    px = img.load()
+    rs = gs = bs = n = 0
+    for y in range(int(top), max(int(top) + 1, box[3] - 12), 3):
+        for x in range(box[0], box[2], 3):
+            r, g, b, a = px[x, y]
+            lum = (r + g + b) / 3
+            if a > 200 and 25 < lum < 95 and abs(r - b) < 40:
+                rs += r
+                gs += g
+                bs += b
+                n += 1
+    return (rs / n, gs / n, bs / n) if n >= 50 else None
+
+
+def stray_pieces(img, grid=4, min_cells=3):
+    """본체와 떨어진 조각 (격자로 생성한 그림을 잘라 낼 때 옆 칸이 딸려 온 경우 등).
+    grid px 단위로 줄여서 덩어리를 찾고, 가장 큰 덩어리 말고 min_cells 칸 이상인 덩어리를 반환"""
+    a = img.getchannel("A")
+    w, h = a.size
+    small = a.resize((w // grid, h // grid), Image.BOX).point(lambda v: 1 if v >= 24 else 0)
+    sw, sh = small.size
+    px = small.load()
+    seen = [[False] * sh for _ in range(sw)]
+    comps = []
+    for x in range(sw):
+        for y in range(sh):
+            if px[x, y] and not seen[x][y]:
+                stack, cells = [(x, y)], []
+                seen[x][y] = True
+                while stack:
+                    cx, cy = stack.pop()
+                    cells.append((cx, cy))
+                    for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
+                        if 0 <= nx < sw and 0 <= ny < sh and px[nx, ny] and not seen[nx][ny]:
+                            seen[nx][ny] = True
+                            stack.append((nx, ny))
+                comps.append(cells)
+    comps.sort(key=len, reverse=True)
+    out = []
+    for c in comps[1:]:
+        if len(c) >= min_cells:
+            xs = [p[0] for p in c]
+            ys = [p[1] for p in c]
+            out.append((min(xs) * grid, min(ys) * grid, len(c) * grid * grid))
+    return out
 
 
 def main():
@@ -78,6 +131,8 @@ def main():
             corners = [img.getpixel(p)[3] for p in [(0, 0), (SIZE - 1, 0), (0, SIZE - 1), (SIZE - 1, SIZE - 1)]]
             if max(corners) > 0:
                 errors.append(f"{name}: 배경이 투명하지 않습니다 (모서리 알파 {max(corners)})")
+            for x, y, area in stray_pieces(img):
+                errors.append(f"{name}: 본체와 떨어진 조각 (x={x}, y={y}, 약 {area}px²). 격자를 잘라 낼 때 옆 칸이 딸려 온 것일 수 있습니다")
             kb = os.path.getsize(path) / 1024
             if kb > MAX_KB:
                 warns.append(f"{name}: {kb:.0f}KB (목표 {MAX_KB}KB 이하)")
@@ -101,6 +156,29 @@ def main():
                     if abs(reach) > 20:
                         more = "더 멀리 뻗음" if reach > 0 else "덜 뻗음"
                         warns.append(f"{name}: 앞쪽 끝이 참고 그림보다 {abs(reach)}px {more} (공격 판정과 어긋날 수 있음)")
+
+    # 색 일관성: 프레임마다 바지(아래쪽 옷감) 색이 이 캐릭터의 대표 색에서 크게 벗어나지 않는지
+    colors = {}
+    for key, entry in frames.items():
+        path = f"{base}/{entry.get('p1', '')}"
+        if os.path.exists(path):
+            c = lower_cloth_color(Image.open(path).convert("RGBA"))
+            if c:
+                colors[key] = c
+    def tone(c):
+        """밝기를 뺀 색조 (그림자로 어두워진 건 같은 색으로 본다)"""
+        m = sum(c) / 3 or 1
+        return [v / m for v in c]
+
+    if len(colors) >= 5:
+        med = [sorted(c[i] for c in colors.values())[len(colors) // 2] for i in range(3)]
+        mt = tone(med)
+        for key, c in sorted(colors.items()):
+            dist = sum((a - b) ** 2 for a, b in zip(tone(c), mt)) ** 0.5
+            if dist > 0.12:
+                errors.append(
+                    f"{key}: 아래쪽 옷 색이 다른 프레임과 다릅니다 (rgb{tuple(round(v) for v in c)} vs 대표 rgb{tuple(round(v) for v in med)}). 설정 그림의 색을 확인하세요"
+                )
 
     # 동작 일부만 교체되었는지 (참고 그림 목록들을 합쳐서 비교)
     ref_frames = {}
