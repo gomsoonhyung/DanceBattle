@@ -9,6 +9,11 @@
   2. 캐릭터만 잘라 내기
   3. 참고 그림(--ref)과 같은 키, 같은 발밑 높이, 같은 가로 중심으로 640×640에 배치
      (--ref가 없으면 키 380px, 발밑 y=580, 가로 중심 x=320)
+     --scale 을 주면 키를 맞추지 않고 그 배율로 고정 (발밑·가로 중심은 그대로 맞춤)
+
+격자 묶음의 크기를 일정하게 맞추는 법
+  묶음 안에 이미 채택된 그림(예: idle_0)을 한 칸 같이 그려 달라고 한 뒤,
+  그 칸을 --ref 로 맞춰서 나온 "배율"을 나머지 칸 전부에 --scale 로 준다.
 
 필요: Python 3 + Pillow (pip install pillow)
 """
@@ -66,6 +71,11 @@ def main():
     ap.add_argument("--key", default="auto", help="지울 배경색: auto(모서리 색) | #rrggbb | none")
     ap.add_argument("--tol", type=float, default=48, help="배경색 허용 범위 (기본 48)")
     ap.add_argument("--flip", action="store_true", help="캐릭터가 왼쪽을 보고 있으면 좌우 반전")
+    ap.add_argument(
+        "--scale",
+        type=float,
+        help="키 맞추기 대신 이 배율로 고정 (한 번에 생성한 격자 묶음은 모두 같은 배율로 맞춰야 크기가 일정하다)",
+    )
     args = ap.parse_args()
 
     img = Image.open(args.input).convert("RGBA")
@@ -93,7 +103,7 @@ def main():
     else:
         target_h, bottom, center = DEFAULT_HEIGHT, DEFAULT_BOTTOM, DEFAULT_CENTER
 
-    scale = target_h / char.height
+    scale = args.scale if args.scale else target_h / char.height
     new_w = max(1, round(char.width * scale))
     new_h = max(1, round(char.height * scale))
     char = char.resize((new_w, new_h), Image.LANCZOS)

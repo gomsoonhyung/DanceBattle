@@ -107,6 +107,7 @@ balance: 체스트 팝 데미지 120 → 100
 | `python3 scripts/fit_sprite.py 생성.png 결과.png --ref 참고.png` | 생성한 그림을 스프라이트 규격에 맞추기                                         |
 | `python3 scripts/check_sprites.py krump`                         | 넣은 스프라이트 검사                                                           |
 | `python3 scripts/optimize_assets.py`                             | 무대 배경·로고 PNG를 웹용 WebP로 변환                                          |
+| `python3 scripts/contact_sheet.py locker walkF walkB`            | 스프라이트 비교 시트 (대기 그림 기준선으로 크기·모델 차이 확인)                |
 | `npm run shots -- krump/stompWave`                               | 동작을 프레임별로 찍은 이미지를 `shots/`에 저장 (개발 서버가 켜져 있어야 함)   |
 
 게임 안에서는:
