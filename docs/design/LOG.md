@@ -109,3 +109,11 @@
 - 무대 배경·로고는 WebP로 변환 (2942KB → 292KB, 451KB → 112KB). 앞으로 PNG를 넣으면 `python3 scripts/optimize_assets.py`로 변환
 - 크럼프 `burstRush` 참고 자세를 어깨 돌진 → 팔뚝 들이받기로 바꾸고 판정을 앞으로 넓힘. 지금 들어 있는 버스트 러시 10장은 새 참고 자세와 맞지 않으므로 → **T11**에서 다시 만들기
 - 다음 작업: TASKS.md 3차 (T11~T15, 1181장)
+
+## 2026-09-30 · T11 크럼프 버스트 러시 다시 만들기
+
+- `burstRush` 10장 전체를 새 팔뚝 돌진 참고 자세로 재생성하고 `fit_sprite.py`의 균일 배율로 규격화
+- 다시 만든 프레임: `burstRush_5`, `burstRush_13`, `burstRush_17`, `burstRush_21`, `burstRush_24`, `burstRush_27`, `burstRush_30`, `burstRush_38`은 첫 결과의 앞쪽 끝이 새 참고보다 20px 이상 뻗어 개별 재생성. `burstRush_13`은 2차 결과도 26px 초과해 한 번 더 재생성
+- `check_sprites`: 크럼프 183프레임 검사, ❌·⚠️ 없음. `npm run check`: 통과
+- 실제 게임 확인: 트레이닝에서 크럼프 숫자키 3 + Space 시범과 F1 판정 표시를 확인했으며, 돌진 순간 팔뚝이 앞으로 뻗어 판정 위치와 겹침
+- 남은 문제: 없음. `src/` 변경 없음. **검토 요청**
