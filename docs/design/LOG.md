@@ -84,3 +84,12 @@
 - 실제 게임 확인: TASKS 안내대로 현재 게임은 무대·이펙트 PNG를 아직 불러오지 않아 연결 상태를 확인할 수 없음. `src/`는 수정하지 않았으며 개발 쪽 연결 필요
 - 검사: 파일 치수·알파 확인, `npm run check` 통과. T9는 스프라이트 manifest 대상이 아니어서 `check_sprites.py` 대상 없음
 - 남은 문제: 게임 연결 코드 필요. `src/` 변경 없음
+
+## 2026-09-30 · T10 크럼프 필살기 다시 만들기 + 초상화 수정
+
+- 스프라이트 53장 전체 재생성 (`stompWave` 7, `burstUpper` 8, `burstRush` 10, `chestPop` 8, `killOff` 20) 및 락킹 초상화 1장 수정
+- 생성 방법: 확정된 T1~T4 크럼프와 내보낸 포즈를 imagegen 기준으로 사용하고, P1 색(`#ff7a1a`, `#3a3a44`, `#ff2d2d`, `#8d5a3b`)과 넉넉한 격자 여백을 지정해 동작별 시트를 생성. 격자 결과 중 기준 실루엣을 벗어난 프레임은 기존 기준 포즈를 직접 편집하는 방식으로 개별 재생성했으며, `fit_sprite.py` 규격화 뒤 필요한 미세 배치는 균일 비율 조정과 수평 이동만 사용함
+- 다시 만든 프레임: `burstRush_5`, `burstRush_9`, `burstRush_13`, `burstRush_17`, `burstRush_21`, `burstRush_24`, `burstRush_27`, `burstRush_30`, `burstRush_38`, `chestPop` 8장 전체, `killOff_6`, `killOff_10`, `killOff_13`, `killOff_17`, `killOff_24`, `killOff_31`, `killOff_34`, `killOff_41`, `killOff_53`, `killOff_56`, `killOff_63`, `killOff_70`, `killOff_77`. 사유는 앞쪽 끝 도달거리 초과 또는 격자 옆 칸 조각 혼입이며, 가로·세로 비균일 늘이기는 사용하지 않음
+- 초상화 수정: 채택된 락킹 초상화의 나머지 픽셀은 유지하고 손끝 오른쪽의 1px 폭 분리 점만 제거
+- `check_sprites`: 183프레임 검사, ❌·⚠️ 없음. 실제 게임 확인: 트레이닝에서 크럼프 앞걷기 후 숫자키 1~5 + Space 시범을 각각 확인했으며, 걷기와 필살기 사이에 바지 색이 바뀌지 않음
+- 남은 문제: 없음. `src/` 변경 없음. **검토 요청**

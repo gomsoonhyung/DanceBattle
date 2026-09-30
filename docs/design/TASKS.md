@@ -179,13 +179,13 @@ T6 설정 그림을 기준으로 각 캐릭터의 `idle`을 만듭니다. 대기
 
 [REVIEW_round2.md](REVIEW_round2.md)를 먼저 읽어 주세요.
 
-### ☐ T10. 크럼프 필살기 다시 만들기 + 초상화 수정 🛑
+### ☑ T10. 크럼프 필살기 다시 만들기 + 초상화 수정 🛑
 
-- [ ] T5의 53장을 **전부 다시** 만들기: `stompWave` `burstUpper` `burstRush` `chestPop` `killOff` (프레임 번호는 T5 표와 같음)
+- [x] T5의 53장을 **전부 다시** 만들기: `stompWave` `burstUpper` `burstRush` `chestPop` `killOff` (프레임 번호는 T5 표와 같음)
   - P1 색만: 민소매 `#ff7a1a`, 바지 `#3a3a44`, 머리띠 `#ff2d2d`, 피부 `#8d5a3b`
   - T1~T4 프레임과 같은 바지 색·체격·크기로 (나란히 놓고 비교해 보세요)
   - 가로·세로 따로 늘이거나 줄이지 않기, 격자는 칸 사이 여백 넉넉히
-- [ ] `public/assets/ui/portrait/locker.png`의 손끝 옆 작은 점 지우기
+- [x] `public/assets/ui/portrait/locker.png`의 손끝 옆 작은 점 지우기
 
 **완료 기준**: `python3 scripts/check_sprites.py krump`에 ❌·⚠️ 0 (새로 추가된 옷 색·떨어진 조각 검사 포함). 트레이닝에서 필살기 시범(숫자키 + Space)을 보며 걷기 → 필살기 사이에 바지 색이 바뀌지 않는지 확인.
 
