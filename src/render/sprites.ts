@@ -27,31 +27,47 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
   });
 }
 
-/** 캐릭터들의 교체 그림을 불러온다. 없으면 조용히 넘어간다 (코드로 그린 캐릭터를 쓴다) */
-export async function loadSprites(chars: CharacterDef[]): Promise<void> {
+const manifests = new Map<string, Promise<Manifest | null>>();
+const requested = new Set<string>();
+
+function manifestOf(id: string): Promise<Manifest | null> {
+  let m = manifests.get(id);
+  if (!m) {
+    m = fetch(`sprites/${id}/manifest.json`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json: Manifest | null) => (json?.frames ? json : null))
+      // 파일이 없거나 JSON이 아님 (개발 서버는 없는 파일 대신 index.html을 줄 수 있다)
+      .catch(() => null);
+    manifests.set(id, m);
+  }
+  return m;
+}
+
+/**
+ * 캐릭터들의 교체 그림을 불러온다. 없으면 조용히 넘어간다 (코드로 그린 캐릭터를 쓴다).
+ * anims를 주면 그 동작의 그림만 불러온다 (선택 화면은 대기·승리만). 이미 불러온 그림은 다시 불러오지 않는다.
+ */
+export async function loadSprites(chars: CharacterDef[], anims?: string[]): Promise<void> {
   await Promise.all(
     chars.map(async (c) => {
-      if (sheets.has(c.id)) return;
-      sheets.set(c.id, new Map());
+      const manifest = await manifestOf(c.id);
+      if (!manifest) return;
+      let loaded = sheets.get(c.id);
+      if (!loaded) sheets.set(c.id, (loaded = new Map()));
+      const target = loaded;
       const base = `sprites/${c.id}/`;
-      let manifest: Manifest;
-      try {
-        const res = await fetch(base + 'manifest.json');
-        if (!res.ok) return;
-        manifest = await res.json();
-      } catch {
-        return; // 파일이 없거나 JSON이 아님 (개발 서버는 없는 파일 대신 index.html을 줄 수 있다)
-      }
-      if (!manifest?.frames) return;
-      const loaded: Loaded = new Map();
+      const todo = Object.entries(manifest.frames).filter(([key]) => {
+        const anim = key.slice(0, key.lastIndexOf('_'));
+        return (!anims || anims.includes(anim)) && !requested.has(`${c.id}/${key}`);
+      });
       await Promise.all(
-        Object.entries(manifest.frames).map(async ([key, f]) => {
+        todo.map(async ([key, f]) => {
+          requested.add(`${c.id}/${key}`);
           const p1 = await loadImage(base + f.p1);
           const p2 = f.p2 ? await loadImage(base + f.p2) : null;
-          if (p1) loaded.set(key, [p1, p2]);
+          if (p1) target.set(key, [p1, p2]);
         }),
       );
-      sheets.set(c.id, loaded);
     }),
   );
 }

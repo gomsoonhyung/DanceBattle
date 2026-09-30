@@ -7,7 +7,9 @@ import type { MatchMode } from '../game/match';
 import { keyPressed, menu } from '../input/devices';
 import { FONT_KR, FONT_TITLE } from '../render/hud';
 import { drawStage } from '../render/stage';
+import { ASSET, image } from '../render/assets';
 import { drawDancer } from '../render/dancer';
+import { drawSprite, loadSprites, spriteFor } from '../render/sprites';
 
 const SLOT_COLORS = ['#ff4d5e', '#4da3ff'];
 const CARD_W = 108;
@@ -34,6 +36,8 @@ export class SelectScreen {
   ) {
     const idx = (c: CharacterDef) => Math.max(0, CHARACTERS.indexOf(c));
     this.cursor = initial ? [idx(initial[0]), idx(initial[1])] : [0, 1 % CHARACTERS.length];
+    // 미리보기용: 대기·승리 그림만 불러 둔다 (전체 그림은 대전을 시작할 때)
+    void loadSprites(CHARACTERS, ['idle', 'win']);
   }
 
   update(): SelectResult {
@@ -130,15 +134,34 @@ export class SelectScreen {
     g.fillStyle = selected.length ? '#2a2440' : '#191526';
     g.fillRect(x, CARD_TOP, CARD_W, CARD_H);
 
-    // 카드 안 캐릭터 (대기 동작)
+    // 카드 안 캐릭터: 초상화 그림이 있으면 그림, 없으면 코드로 그린 대기 동작
     g.save();
     g.beginPath();
     g.rect(x, CARD_TOP, CARD_W, CARD_H);
     g.clip();
-    g.translate(x + CARD_W / 2, CARD_TOP + CARD_H - 28);
-    g.scale(0.56, 0.56);
-    g.translate(0, -GROUND_SCREEN_Y);
-    drawDancer(g, evalAnim(c.anims.idle, displayFrame(c.anims.idle, this.frame)), 0, 0, 1, c.look, c.look.palettes[0]);
+    const portrait = image(ASSET.portrait(c.id));
+    if (portrait) {
+      g.drawImage(portrait, x, CARD_TOP, CARD_W, CARD_H);
+      // 이름이 잘 보이도록 아래쪽을 어둡게
+      const shade = g.createLinearGradient(0, CARD_TOP + CARD_H - 40, 0, CARD_TOP + CARD_H);
+      shade.addColorStop(0, 'rgba(10,8,20,0)');
+      shade.addColorStop(1, 'rgba(10,8,20,0.85)');
+      g.fillStyle = shade;
+      g.fillRect(x, CARD_TOP + CARD_H - 40, CARD_W, 40);
+    } else {
+      g.translate(x + CARD_W / 2, CARD_TOP + CARD_H - 28);
+      g.scale(0.56, 0.56);
+      g.translate(0, -GROUND_SCREEN_Y);
+      drawDancer(
+        g,
+        evalAnim(c.anims.idle, displayFrame(c.anims.idle, this.frame)),
+        0,
+        0,
+        1,
+        c.look,
+        c.look.palettes[0],
+      );
+    }
     g.restore();
 
     g.font = `900 12px ${FONT_TITLE}`;
@@ -180,20 +203,17 @@ export class SelectScreen {
     g.globalAlpha = active || this.ready[slot] ? 1 : 0.45;
 
     // 큰 미리보기: 결정하면 승리 포즈
-    const anim = this.ready[slot] ? c.anims.win : c.anims.idle;
+    const animId = this.ready[slot] ? 'win' : 'idle';
+    const anim = c.anims[animId];
+    const frame = displayFrame(anim, this.ready[slot] ? Math.min(this.frame, 40) : this.frame);
     g.save();
     g.translate(px + 75, bottom - 12);
     g.scale(0.82, 0.82);
     g.translate(0, -GROUND_SCREEN_Y);
-    drawDancer(
-      g,
-      evalAnim(anim, displayFrame(anim, this.ready[slot] ? Math.min(this.frame, 40) : this.frame)),
-      0,
-      0,
-      1,
-      c.look,
-      c.look.palettes[slot],
-    );
+    // 교체 그림(스프라이트)이 있으면 그림으로
+    const sprite = spriteFor(c.id, animId, frame, slot);
+    if (sprite) drawSprite(g, sprite.img, 0, 0, 1, null);
+    else drawDancer(g, evalAnim(anim, frame), 0, 0, 1, c.look, c.look.palettes[slot]);
     g.restore();
 
     const tx = px + 150;

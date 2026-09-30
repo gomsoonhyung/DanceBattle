@@ -1,6 +1,19 @@
 import { GROUND_SCREEN_Y } from '../core/constants';
+import { ASSET, FX_FRAMES, images, type FxKind } from './assets';
+
+type SparkKind = 'hit' | 'heavy' | 'block' | 'counter';
+
+/** 이펙트 종류 → 그림 파일 이름과 화면 크기 */
+const FX: Record<SparkKind, { file: FxKind; size: number }> = {
+  hit: { file: 'hit_light', size: 120 },
+  heavy: { file: 'hit_heavy', size: 165 },
+  block: { file: 'block', size: 115 },
+  counter: { file: 'counter', size: 175 },
+};
 
 interface Spark {
+  kind: SparkKind;
+  rot: number;
   x: number;
   y: number;
   life: number;
@@ -24,13 +37,23 @@ export class Effects {
   private texts: FloatText[] = [];
   shake = 0;
 
-  spark(wx: number, wy: number, kind: 'hit' | 'heavy' | 'block' | 'counter'): void {
+  spark(wx: number, wy: number, kind: SparkKind): void {
     const color =
       kind === 'block' ? '#9fd8ff' : kind === 'counter' ? '#ffe14d' : kind === 'heavy' ? '#ffb13b' : '#fff3a0';
     const size = kind === 'heavy' || kind === 'counter' ? 46 : kind === 'block' ? 26 : 30;
     const n = kind === 'block' ? 6 : 10;
     const rays = Array.from({ length: n }, (_, i) => (i / n) * Math.PI * 2 + Math.random() * 0.4);
-    this.sparks.push({ x: wx, y: GROUND_SCREEN_Y - wy, life: 0, max: 14, color, size, rays });
+    this.sparks.push({
+      kind,
+      rot: Math.random() * Math.PI * 2,
+      x: wx,
+      y: GROUND_SCREEN_Y - wy,
+      life: 0,
+      max: 14,
+      color,
+      size,
+      rays,
+    });
     if (kind === 'heavy' || kind === 'counter') this.shake = Math.max(this.shake, 8);
   }
 
@@ -55,6 +78,19 @@ export class Effects {
     g.lineCap = 'round';
     for (const s of this.sparks) {
       const t = s.life / s.max;
+      // 이펙트 그림이 준비됐으면 그림 애니메이션으로
+      const fx = FX[s.kind];
+      const frames = images(Array.from({ length: FX_FRAMES }, (_, i) => ASSET.fx(fx.file, i)));
+      if (frames) {
+        const img = frames[Math.min(FX_FRAMES - 1, Math.floor(t * FX_FRAMES))];
+        g.globalAlpha = 1;
+        g.save();
+        g.translate(s.x, s.y);
+        g.rotate(s.rot);
+        g.drawImage(img, -fx.size / 2, -fx.size / 2, fx.size, fx.size);
+        g.restore();
+        continue;
+      }
       g.globalAlpha = 1 - t;
       g.strokeStyle = s.color;
       g.lineWidth = 4 * (1 - t) + 1;

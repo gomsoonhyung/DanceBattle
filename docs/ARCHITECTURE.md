@@ -32,6 +32,7 @@ src/
 │   ├── dancer.ts        캐릭터 그리기: 스켈레톤을 따라 부위·의상·얼굴·모자를 그린다
 │   ├── dynamics.ts      머리카락·끈 흔들림, 공격 궤적 (연출 전용)
 │   ├── sprites.ts       교체 그림(스프라이트) 불러오기·그리기
+│   ├── assets.ts        무대 배경·로고·초상화·타격 이펙트 그림 불러오기 (없으면 코드 그림)
 │   ├── renderer.ts      대전 화면 조립 (무대 → 관중 → 캐릭터 → 장풍 → 이펙트 → HUD)
 │   └── stage.ts, hud.ts, effects.ts, guideHud.ts
 ├── audio/sfx.ts     Web Audio로 합성하는 효과음

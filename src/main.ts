@@ -1,6 +1,7 @@
 import { unlockAudio } from './audio/sfx';
 import { FRAME_MS, RENDER_SCALE, SCREEN_H, SCREEN_W } from './core/constants';
 import { renderGallery } from './debug/gallery';
+import { CHARACTERS } from './characters';
 import type { CharacterDef } from './fighter/types';
 import { Match, type MatchMode } from './game/match';
 import { endInputFrame, initKeyboard, keyPressed, menu, pollMenu, readPlayerInput } from './input/devices';
@@ -8,6 +9,7 @@ import { FONT_KR, FONT_TITLE } from './render/hud';
 import { Renderer } from './render/renderer';
 import { drawStage } from './render/stage';
 import { drawGuide } from './render/guideHud';
+import { ASSET, image, preloadAssets } from './render/assets';
 import { loadSprites } from './render/sprites';
 import { SelectScreen } from './screens/select';
 import { TrainingGuide } from './training/guide';
@@ -33,6 +35,7 @@ type Screen =
 
 function startGame(): void {
   initKeyboard();
+  preloadAssets(CHARACTERS.map((c) => c.id));
   window.addEventListener('keydown', unlockAudio);
   window.addEventListener('pointerdown', unlockAudio);
 
@@ -125,13 +128,19 @@ function startGame(): void {
     g.fillStyle = 'rgba(0,0,0,0.78)';
     g.fillRect(0, 0, SCREEN_W, SCREEN_H);
     g.textAlign = 'center';
-    g.font = `900 72px ${FONT_TITLE}`;
-    g.lineWidth = 10;
-    g.lineJoin = 'round';
-    g.strokeStyle = '#000';
-    g.strokeText('DANCE BATTLE', SCREEN_W / 2, 120);
-    g.fillStyle = '#ffd23f';
-    g.fillText('DANCE BATTLE', SCREEN_W / 2, 120);
+    const logo = image(ASSET.logo);
+    if (logo) {
+      const w = 640;
+      g.drawImage(logo, (SCREEN_W - w) / 2, 22, w, (w * logo.height) / logo.width);
+    } else {
+      g.font = `900 72px ${FONT_TITLE}`;
+      g.lineWidth = 10;
+      g.lineJoin = 'round';
+      g.strokeStyle = '#000';
+      g.strokeText('DANCE BATTLE', SCREEN_W / 2, 120);
+      g.fillStyle = '#ffd23f';
+      g.fillText('DANCE BATTLE', SCREEN_W / 2, 120);
+    }
 
     MENU.forEach((item, i) => {
       const sel = i === menuIndex;

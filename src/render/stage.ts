@@ -1,9 +1,21 @@
 import { GROUND_SCREEN_Y, RENDER_SCALE, SCREEN_H, SCREEN_W } from '../core/constants';
+import { ASSET, image } from './assets';
 
 let cache: HTMLCanvasElement | null = null;
 
 /** 골목 배틀 무대 (벽돌 벽 + 그래피티 + 골판지 매트). 한 번 그려서 캐시한다. */
+/** 무대 그림(에셋)이 준비됐는지. 준비되면 관중은 그림에 들어 있으므로 따로 그리지 않는다 */
+export function stageImageReady(): boolean {
+  return image(ASSET.stage) !== null;
+}
+
 export function drawStage(g: CanvasRenderingContext2D): void {
+  const bg = image(ASSET.stage);
+  if (bg) {
+    g.drawImage(bg, 0, 0, SCREEN_W, SCREEN_H);
+    return;
+  }
+  // 그림을 불러오는 동안은 코드로 그린 무대
   if (!cache) cache = buildStage();
   g.drawImage(cache, 0, 0, SCREEN_W, SCREEN_H);
 }
@@ -138,6 +150,9 @@ export function drawCrowd(g: CanvasRenderingContext2D, frame: number): void {
     g.fill();
   }
   g.restore();
+
+  // 무대 그림에는 관중이 이미 있다
+  if (stageImageReady()) return;
 
   // 뒷줄 (작고 어둡게, 무대 전체)
   for (let i = 0; i < 17; i++) person(g, 20 + i * 57 + hash(i) * 20, 0.72, i, frame, '#1e172d', '#2c2342');
