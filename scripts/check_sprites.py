@@ -4,6 +4,7 @@ public/sprites/<캐릭터>/ 의 스프라이트를 규격대로 검사한다.
 
   python3 scripts/check_sprites.py krump
   python3 scripts/check_sprites.py krump --ref sprites-ref/krump   (참고 그림 폴더를 직접 지정)
+  (기본: sprites-ref/<캐릭터> → docs/design/reference/<캐릭터> 순서로 찾음)
 
 검사 항목 (❌ = 게임에서 문제가 됨, ⚠️ = 확인 필요)
   ❌ manifest.json 이 없거나 형식이 틀림, 적힌 파일이 없음
@@ -38,12 +39,17 @@ def main():
     args = ap.parse_args()
 
     base = f"public/sprites/{args.char}"
-    ref_dir = args.ref
-    if not ref_dir:
-        for d in (f"docs/design/reference/{args.char}", f"sprites-ref/{args.char}"):
-            if os.path.isdir(d):
-                ref_dir = d
-                break
+    # 참고 그림은 여러 폴더에서 찾는다 (내보낸 최신 참고 그림 sprites-ref 가 우선)
+    ref_dirs = [args.ref] if args.ref else [f"sprites-ref/{args.char}", f"docs/design/reference/{args.char}"]
+    ref_dirs = [d for d in ref_dirs if os.path.isdir(d)]
+    ref_dir = ", ".join(ref_dirs) if ref_dirs else None
+
+    def ref_file(name):
+        for d in ref_dirs:
+            f = f"{d}/{name}"
+            if os.path.exists(f):
+                return f
+        return None
 
     errors, warns = [], []
     try:
@@ -75,8 +81,10 @@ def main():
             kb = os.path.getsize(path) / 1024
             if kb > MAX_KB:
                 warns.append(f"{name}: {kb:.0f}KB (목표 {MAX_KB}KB 이하)")
-            ref_path = f"{ref_dir}/{name.replace('_p2.png', '.png')}" if ref_dir else None
-            if ref_path and os.path.exists(ref_path):
+            ref_path = ref_file(name.replace("_p2.png", ".png"))
+            if not ref_path:
+                warns.append(f"{name}: 비교할 참고 그림이 없습니다 (node scripts/export-sprites.mjs {args.char} <동작> 으로 내보내기)")
+            else:
                 a, b = bbox(img), bbox(Image.open(ref_path).convert("RGBA"))
                 if a and b:
                     dy = a[3] - b[3]
@@ -94,12 +102,13 @@ def main():
                         more = "더 멀리 뻗음" if reach > 0 else "덜 뻗음"
                         warns.append(f"{name}: 앞쪽 끝이 참고 그림보다 {abs(reach)}px {more} (공격 판정과 어긋날 수 있음)")
 
-    # 동작 일부만 교체되었는지
-    ref_manifest = f"{ref_dir}/manifest.json" if ref_dir else None
-    if ref_manifest and not os.path.exists(ref_manifest):
-        ref_manifest = f"{ref_dir}/manifest.example.json"
-    if ref_manifest and os.path.exists(ref_manifest):
-        ref_frames = json.load(open(ref_manifest))["frames"]
+    # 동작 일부만 교체되었는지 (참고 그림 목록들을 합쳐서 비교)
+    ref_frames = {}
+    for d in ref_dirs:
+        for mf in ("manifest.json", "manifest.example.json"):
+            if os.path.exists(f"{d}/{mf}"):
+                ref_frames.update(json.load(open(f"{d}/{mf}"))["frames"])
+    if ref_frames:
         anims = {k.rsplit("_", 1)[0] for k in frames}
         for anim in sorted(anims):
             need = {k for k in ref_frames if k.rsplit("_", 1)[0] == anim}

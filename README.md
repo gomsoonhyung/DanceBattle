@@ -79,6 +79,7 @@ npm run dev        # 브라우저에서 http://localhost:5173
 | [CONTRIBUTING.md](CONTRIBUTING.md)                         | 처음 설정, 작업 흐름(브랜치 → PR → 리뷰), 커밋 규칙, 코드 규칙           |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)               | 폴더 구조, 한 프레임에 일어나는 일, 타격 처리 순서, 결정론 규칙          |
 | [docs/CHARACTER_GUIDE.md](docs/CHARACTER_GUIDE.md)         | 캐릭터·기술·포즈 만드는 법, 기술 데이터 필드, 프레임 데이터 기준표       |
+| [docs/design/TASKS.md](docs/design/TASKS.md)               | 디자인 작업 목록 (순서, 범위, 확인 방법, 완료 기준)                      |
 | [docs/design/DESIGN_BRIEF.md](docs/design/DESIGN_BRIEF.md) | 디자인 작업 지시서: 캐릭터 설정, 시범 작업, 무대·UI 에셋 규격, 검수 기준 |
 | [docs/SPRITES.md](docs/SPRITES.md)                         | 스프라이트(그림) 만들기: 참고 그림 내보내기, 규격, 게임에 넣는 법        |
 | [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)               | 저장소 관리자용 GitHub 설정                                              |
