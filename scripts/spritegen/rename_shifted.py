@@ -41,12 +41,13 @@ for c in new:
                 return 0
             return min(ofs, key=lambda of: abs(of - (nf - shift)))
 
+        ext = os.path.splitext(fr[f"{an}_{ofs[0]}"]["p1"])[1]
         imgs = {of: open(f"{d}/{fr[f'{an}_{of}']['p1']}", "rb").read() for of in ofs}
         for of in ofs:
             os.remove(f"{d}/{fr[f'{an}_{of}']['p1']}")
             del fr[f"{an}_{of}"]
         for nf in nfs:
-            name = f"{an}_{nf}.png"
+            name = f"{an}_{nf}{ext}"
             open(f"{d}/{name}", "wb").write(imgs[src(nf)])
             fr[f"{an}_{nf}"] = {"p1": name}
         moved += 1

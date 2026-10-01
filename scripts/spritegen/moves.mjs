@@ -13,7 +13,19 @@ const data = await page.evaluate(async () => {
       moves[id] = JSON.parse(JSON.stringify(rest, (k, v) => (typeof v === 'function' ? undefined : v)));
       moves[id].animLen = anim?.length ?? anim?.duration ?? null;
     }
-    out[c.id] = { name: c.name, genre: c.genre ?? c.profile?.genre ?? null, moves, keys: Object.keys(c) };
+    out[c.id] = {
+      name: c.name,
+      title: c.profile.title,
+      maxHealth: c.maxHealth,
+      walkF: c.walkF,
+      walkB: c.walkB,
+      dash: c.dash ?? null,
+      backdash: c.backdash ?? null,
+      normals: c.normals,
+      specials: c.specials,
+      super: c.super,
+      moves,
+    };
   }
   return out;
 });

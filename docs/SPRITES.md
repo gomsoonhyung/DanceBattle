@@ -94,6 +94,7 @@ python3 scripts/contact_sheet.py <id> --all --dir sprites-work/sg/<id>   # 꼭 �
 python3 scripts/spritegen/publish.py <id>            # public/sprites/<id>/ 로 옮기고 manifest 에 추가
 ```
 
+- 게임에는 **WebP**(품질 90)로 넣습니다. `publish.py`가 자동으로 바꾸고, 예전 PNG는 `python3 scripts/spritegen/to_webp.py`로 바꿉니다.
 - `import_all.py`는 실행 이름 폴더(`sprites-work/sg/<실행 이름>/`)에 씁니다. `publish.py <id> <실행 이름>`으로 그 폴더만 옮기세요.
 - 기술의 발생을 바꾸면(`tune` 등) 키 포즈 번호가 바뀝니다. 바꾸기 전 `anims.json`을 복사해 두고, 바꾼 뒤 `list.mjs` → `rename_shifted.py <복사본>`으로 있던 그림 이름을 옮깁니다.
 - 참고 그림 시트를 볼 때: 동작 방향(대공기는 위로, 점프 공격은 아래로)이 맞는지, 모델·옷이 대기 그림과 같은지 확인합니다.

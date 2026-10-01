@@ -140,7 +140,8 @@ def main():
             kb = os.path.getsize(path) / 1024
             if kb > MAX_KB:
                 warns.append(f"{name}: {kb:.0f}KB (목표 {MAX_KB}KB 이하)")
-            ref_path = ref_file(name.replace("_p2.png", ".png"))
+            # 참고 그림은 늘 PNG (게임 그림은 WebP 일 수 있다)
+            ref_path = ref_file(os.path.splitext(name)[0].removesuffix("_p2") + ".png")
             if not ref_path:
                 warns.append(f"{name}: 비교할 참고 그림이 없습니다 (node scripts/export-sprites.mjs {args.char} <동작> 으로 내보내기)")
             else:

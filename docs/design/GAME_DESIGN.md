@@ -2,6 +2,7 @@
 
 > 목적: 스트리트 파이터식 2D 격투 게임의 기본 시스템을 갖추고, **춤 동작이 공격이 되는** 이 게임만의 규칙과 8명의 개성을 정한다.
 > 장르별 실제 기본기와 기술의 정확한 동작은 [DANCE_REFERENCE.md](DANCE_REFERENCE.md)가 기준이다.
+> 캐릭터별 운영·기본 콤보·상성과 **직접 아는 춤 동작을 넣는 방법**은 [CHARACTER_PLAYBOOK.md](CHARACTER_PLAYBOOK.md), 숫자는 [FRAME_DATA.md](FRAME_DATA.md).
 > 밸런스 수치는 시작값이다. 실제로 해 보며 조정한다.
 
 ## 목차
