@@ -447,3 +447,21 @@ describe('특수기 · 새 필살기', () => {
     expect(m.projectiles.length).toBe(0);
   });
 });
+
+describe('연습 모드 유불리 프레임', () => {
+  it('약P를 맞히면 유불리가 표시되고, 막혔을 때보다 맞았을 때가 더 유리하다', () => {
+    const measure = (guard: boolean) => {
+      const m = new Match('training', [BBOY, BBOY]);
+      if (guard) (m.cycleDummyMode(), m.cycleDummyMode(), m.cycleDummyMode()); // 자동 가드
+      closeIn(m);
+      m.update(I({ buttons: BTN.LP }), I());
+      for (let i = 0; i < 60 && !m.advantage; i++) m.update(I(), I());
+      return m.advantage;
+    };
+    const onHit = measure(false);
+    const onBlock = measure(true);
+    expect(onHit).not.toBeNull();
+    expect(onBlock).not.toBeNull();
+    expect(onHit!.value).toBeGreaterThan(onBlock!.value);
+  });
+});

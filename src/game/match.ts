@@ -50,6 +50,12 @@ export class Match {
   ];
   dummyMode: DummyMode = 'stand';
   private dummyIdle = 0;
+  /**
+   * 연습 모드 유불리: P1 공격이 맞거나 막힌 뒤, 누가 몇 프레임 먼저 움직일 수 있는지.
+   * value > 0 이면 P1이 먼저 움직인다(유리). knockdown = 다운시켜서 잴 수 없음
+   */
+  advantage: { value: number; knockdown: boolean; timer: number } | null = null;
+  private advMeasure: { frame: number; p1Free: number | null; p2Free: number | null } | null = null;
   events: GameEvent[] = [];
   projectiles: Projectile[] = [];
 
@@ -197,8 +203,40 @@ export class Match {
     }
   }
 
+  /** 기술·경직 없이 바로 움직일 수 있는 상태인지 */
+  private static actionable(s: string): boolean {
+    return s === 'idle' || s === 'walkF' || s === 'walkB' || s === 'crouch';
+  }
+
+  private measureAdvantage(): void {
+    const [p1, p2] = this.fighters;
+    const stunned = p2.state === 'hitstun' || p2.state === 'blockstun';
+    // P1 공격으로 새로 경직에 들어가면(콤보 중 다음 타격 포함) 처음부터 다시 잰다
+    if (stunned && p1.state === 'move' && p2.hitstop > 0) {
+      this.advMeasure = { frame: 0, p1Free: null, p2Free: null };
+    }
+    const m = this.advMeasure;
+    if (!m) return;
+    if (p2.state === 'airHit' || p2.state === 'knockdown') {
+      this.advantage = { value: 0, knockdown: true, timer: 120 };
+      this.advMeasure = null;
+      return;
+    }
+    m.frame++;
+    if (m.p1Free === null && Match.actionable(p1.state)) m.p1Free = m.frame;
+    if (m.p2Free === null && Match.actionable(p2.state)) m.p2Free = m.frame;
+    if (m.p1Free !== null && m.p2Free !== null) {
+      this.advantage = { value: m.p2Free - m.p1Free, knockdown: false, timer: 120 };
+      this.advMeasure = null;
+    } else if (m.frame > 180) {
+      this.advMeasure = null;
+    }
+  }
+
   private updateTraining(): void {
     const [p1, p2] = this.fighters;
+    this.measureAdvantage();
+    if (this.advantage && --this.advantage.timer <= 0) this.advantage = null;
     // 더미가 콤보에서 풀려나고 잠시 지나면 체력 회복
     const hurt =
       p2.state === 'hitstun' || p2.state === 'airHit' || p2.state === 'knockdown' || p2.state === 'blockstun';

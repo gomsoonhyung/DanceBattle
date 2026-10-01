@@ -98,6 +98,14 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
       SCREEN_W / 2,
       100,
     );
+    const adv = m.advantage;
+    if (adv) {
+      // 유불리: + 는 내가 먼저 움직임(초록), - 는 상대가 먼저(빨강)
+      const text = adv.knockdown ? '다운' : `${adv.value > 0 ? '+' : ''}${adv.value}F`;
+      g.font = `900 22px ${FONT_TITLE}`;
+      g.fillStyle = adv.knockdown ? '#ffd23f' : adv.value >= 0 ? '#7cffb2' : '#ff5c5c';
+      g.fillText(`유불리 ${text}`, SCREEN_W / 2, 128);
+    }
   }
 
   drawBanner(g, m);

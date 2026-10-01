@@ -41,9 +41,10 @@ const sHP: MoveDef = {
   anim: {
     keys: [
       { f: 0, p: STAND },
-      { f: 7, p: pose(STAND, { torso: -10, head: 0, aF: [-60, 40], aB: [70, 80] }) },
-      { f: 11, p: pose(STAND, { torso: 38, aF: [100, -10], aB: [20, 90], lF: [45, -45] }) },
-      { f: 15, p: pose(STAND, { torso: 45, aF: [60, 0], aB: [15, 90], lF: [45, -45] }) },
+      // 배트를 휘두르듯: 팔을 뒤로 크게 젖힘 → 가슴 높이로 옆에서 앞으로 → 몸 반대편까지 감김
+      { f: 7, p: pose(STAND, { torso: -25, head: 0, aF: [-110, 25], aB: [60, 90] }) },
+      { f: 11, p: pose(STAND, { torso: 30, aF: [92, 5], aB: [-20, 80], lF: [45, -45] }) },
+      { f: 15, p: pose(STAND, { torso: 45, aF: [40, 40], aB: [-30, 80], lF: [45, -45] }) },
       { f: 32, p: STAND },
     ],
   },

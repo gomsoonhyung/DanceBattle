@@ -22,8 +22,9 @@ const sHP = strike({
   id: 'sHP',
   name: '튜팅 암',
   base: STAND,
-  windup: pose(STAND, { aF: [180, 0] }),
-  hit: pose(STAND, { torso: 10, aF: [95, 0], aB: [0, 90] }),
+  // 튜팅: 팔을 직각으로 접어 상자 모양을 만든 뒤, 각을 유지한 채 앞으로 밀어낸다
+  windup: pose(STAND, { aF: [0, 90], aB: [90, 90] }),
+  hit: pose(STAND, { torso: 10, aF: [90, 90], aB: [0, 90] }),
   startup: 9,
   active: 4,
   recovery: 15,

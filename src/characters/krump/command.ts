@@ -11,8 +11,9 @@ export const KRUMP_COMMAND: MoveDef[] = [
     name: '피치 스윙',
     desc: '공을 던지듯 팔을 위에서 내리꽂는 중단. 느리지만 아머로 버틴다',
     base: STAND,
-    windup: pose(STAND, { torso: -12, head: -5, aF: [175, 15], aB: [165, 20] }),
-    hit: pose(STAND, { torso: 42, head: 10, aF: [70, 5], aB: [60, 10], lF: [45, -45] }),
+    // 한 팔을 머리 뒤로 젖혔다가 (공 던지기 자세) 위에서 아래로 내리꽂는다
+    windup: pose(STAND, { torso: -15, head: -5, aF: [-150, 40], aB: [70, 80], lF: [40, -30] }),
+    hit: pose(STAND, { torso: 45, head: 10, aF: [55, 0], aB: [-25, 60], lF: [48, -48] }),
     startup: 18,
     active: 3,
     recovery: 18,

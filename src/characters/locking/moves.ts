@@ -303,15 +303,19 @@ const capThrow: MoveDef = {
 const jumpLock: MoveDef = {
   id: 'jumpLock',
   name: '업 락',
-  desc: '대공기. 무릎을 모아 뛰어오르며 락. 발동 직후 무적',
+  desc: '대공기. 두 팔을 어깨 위로 끌어올린 머슬맨 업 락으로 뛰어오른다. 발동 직후 무적',
   kind: 'special',
   total: 46,
   invuln: [1, 7],
   anim: {
     keys: [
       { f: 0, p: CROUCH },
-      { f: 4, p: pose(STAND, { lift: 30, torso: 0, lF: [100, -120], lB: [80, -120], aF: [150, 0], aB: [130, 20] }) },
-      { f: 10, p: pose(STAND, { lift: 60, torso: 0, lF: [100, -120], lB: [80, -120], aF: [175, 0], aB: [160, 10] }) },
+      // 업 락(머슬맨): 두 팔을 어깨 위로 끌어올려 팔꿈치를 굽힌 마초 자세로 뛰어오른다
+      { f: 4, p: pose(STAND, { lift: 30, torso: -5, lF: [100, -120], lB: [80, -120], aF: [150, 70], aB: [140, 70] }) },
+      {
+        f: 10,
+        p: pose(STAND, { lift: 60, torso: -8, head: 8, lF: [100, -120], lB: [80, -120], aF: [160, 80], aB: [150, 80] }),
+      },
       { f: 18, p: pose(STAND, { lift: 20, lF: [30, -40], lB: [0, -30], aF: [100, -5], aB: [85, 10] }) },
       { f: 26, p: CROUCH },
       { f: 46, p: STAND },
