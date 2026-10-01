@@ -101,6 +101,450 @@
     },
     "crouch_36": {
       "p1": "crouch_36.png"
+    },
+    "prejump_0": {
+      "p1": "prejump_0.png"
+    },
+    "prejump_3": {
+      "p1": "prejump_3.png"
+    },
+    "jump_0": {
+      "p1": "jump_0.png"
+    },
+    "jump_9": {
+      "p1": "jump_9.png"
+    },
+    "jump_18": {
+      "p1": "jump_18.png"
+    },
+    "jump_26": {
+      "p1": "jump_26.png"
+    },
+    "jump_34": {
+      "p1": "jump_34.png"
+    },
+    "land_0": {
+      "p1": "land_0.png"
+    },
+    "land_4": {
+      "p1": "land_4.png"
+    },
+    "hitStand_0": {
+      "p1": "hitStand_0.png"
+    },
+    "hitStand_3": {
+      "p1": "hitStand_3.png"
+    },
+    "hitStand_10": {
+      "p1": "hitStand_10.png"
+    },
+    "hitStand_16": {
+      "p1": "hitStand_16.png"
+    },
+    "hitCrouch_0": {
+      "p1": "hitCrouch_0.png"
+    },
+    "hitCrouch_3": {
+      "p1": "hitCrouch_3.png"
+    },
+    "hitCrouch_10": {
+      "p1": "hitCrouch_10.png"
+    },
+    "hitCrouch_16": {
+      "p1": "hitCrouch_16.png"
+    },
+    "blockStand_0": {
+      "p1": "blockStand_0.png"
+    },
+    "blockCrouch_0": {
+      "p1": "blockCrouch_0.png"
+    },
+    "airHit_0": {
+      "p1": "airHit_0.png"
+    },
+    "airHit_12": {
+      "p1": "airHit_12.png"
+    },
+    "airHit_24": {
+      "p1": "airHit_24.png"
+    },
+    "knockdown_0": {
+      "p1": "knockdown_0.png"
+    },
+    "knockdown_4": {
+      "p1": "knockdown_4.png"
+    },
+    "knockdown_8": {
+      "p1": "knockdown_8.png"
+    },
+    "getup_0": {
+      "p1": "getup_0.png"
+    },
+    "getup_4": {
+      "p1": "getup_4.png"
+    },
+    "getup_8": {
+      "p1": "getup_8.png"
+    },
+    "getup_12": {
+      "p1": "getup_12.png"
+    },
+    "getup_16": {
+      "p1": "getup_16.png"
+    },
+    "getup_21": {
+      "p1": "getup_21.png"
+    },
+    "getup_26": {
+      "p1": "getup_26.png"
+    },
+    "win_0": {
+      "p1": "win_0.png"
+    },
+    "win_4": {
+      "p1": "win_4.png"
+    },
+    "win_8": {
+      "p1": "win_8.png"
+    },
+    "win_13": {
+      "p1": "win_13.png"
+    },
+    "win_18": {
+      "p1": "win_18.png"
+    },
+    "hairFlip_0": {
+      "p1": "hairFlip_0.png"
+    },
+    "hairFlip_4": {
+      "p1": "hairFlip_4.png"
+    },
+    "hairFlip_6": {
+      "p1": "hairFlip_6.png"
+    },
+    "hairFlip_10": {
+      "p1": "hairFlip_10.png"
+    },
+    "hairFlip_13": {
+      "p1": "hairFlip_13.png"
+    },
+    "hairFlip_17": {
+      "p1": "hairFlip_17.png"
+    },
+    "hairFlip_26": {
+      "p1": "hairFlip_26.png"
+    },
+    "hipBump_0": {
+      "p1": "hipBump_0.png"
+    },
+    "hipBump_3": {
+      "p1": "hipBump_3.png"
+    },
+    "hipBump_6": {
+      "p1": "hipBump_6.png"
+    },
+    "hipBump_10": {
+      "p1": "hipBump_10.png"
+    },
+    "hipBump_14": {
+      "p1": "hipBump_14.png"
+    },
+    "hipBump_24": {
+      "p1": "hipBump_24.png"
+    },
+    "blowKiss_0": {
+      "p1": "blowKiss_0.png"
+    },
+    "blowKiss_4": {
+      "p1": "blowKiss_4.png"
+    },
+    "blowKiss_8": {
+      "p1": "blowKiss_8.png"
+    },
+    "blowKiss_11": {
+      "p1": "blowKiss_11.png"
+    },
+    "blowKiss_14": {
+      "p1": "blowKiss_14.png"
+    },
+    "blowKiss_20": {
+      "p1": "blowKiss_20.png"
+    },
+    "blowKiss_25": {
+      "p1": "blowKiss_25.png"
+    },
+    "blowKiss_34": {
+      "p1": "blowKiss_34.png"
+    },
+    "turnKick_0": {
+      "p1": "turnKick_0.png"
+    },
+    "turnKick_5": {
+      "p1": "turnKick_5.png"
+    },
+    "turnKick_8": {
+      "p1": "turnKick_8.png"
+    },
+    "turnKick_11": {
+      "p1": "turnKick_11.png"
+    },
+    "turnKick_23": {
+      "p1": "turnKick_23.png"
+    },
+    "spotlight_0": {
+      "p1": "spotlight_0.png"
+    },
+    "spotlight_5": {
+      "p1": "spotlight_5.png"
+    },
+    "spotlight_7": {
+      "p1": "spotlight_7.png"
+    },
+    "spotlight_10": {
+      "p1": "spotlight_10.png"
+    },
+    "spotlight_13": {
+      "p1": "spotlight_13.png"
+    },
+    "spotlight_16": {
+      "p1": "spotlight_16.png"
+    },
+    "spotlight_19": {
+      "p1": "spotlight_19.png"
+    },
+    "spotlight_22": {
+      "p1": "spotlight_22.png"
+    },
+    "spotlight_25": {
+      "p1": "spotlight_25.png"
+    },
+    "spotlight_28": {
+      "p1": "spotlight_28.png"
+    },
+    "spotlight_31": {
+      "p1": "spotlight_31.png"
+    },
+    "spotlight_36": {
+      "p1": "spotlight_36.png"
+    },
+    "spotlight_40": {
+      "p1": "spotlight_40.png"
+    },
+    "spotlight_44": {
+      "p1": "spotlight_44.png"
+    },
+    "spotlight_57": {
+      "p1": "spotlight_57.png"
+    },
+    "sLP_0": {
+      "p1": "sLP_0.png"
+    },
+    "sLP_3": {
+      "p1": "sLP_3.png"
+    },
+    "sLP_6": {
+      "p1": "sLP_6.png"
+    },
+    "sLP_10": {
+      "p1": "sLP_10.png"
+    },
+    "sHP_0": {
+      "p1": "sHP_0.png"
+    },
+    "sHP_3": {
+      "p1": "sHP_3.png"
+    },
+    "sHP_7": {
+      "p1": "sHP_7.png"
+    },
+    "sHP_11": {
+      "p1": "sHP_11.png"
+    },
+    "sHP_19": {
+      "p1": "sHP_19.png"
+    },
+    "sLK_0": {
+      "p1": "sLK_0.png"
+    },
+    "sLK_4": {
+      "p1": "sLK_4.png"
+    },
+    "sLK_7": {
+      "p1": "sLK_7.png"
+    },
+    "sLK_12": {
+      "p1": "sLK_12.png"
+    },
+    "sHK_0": {
+      "p1": "sHK_0.png"
+    },
+    "sHK_4": {
+      "p1": "sHK_4.png"
+    },
+    "sHK_8": {
+      "p1": "sHK_8.png"
+    },
+    "sHK_12": {
+      "p1": "sHK_12.png"
+    },
+    "sHK_20": {
+      "p1": "sHK_20.png"
+    },
+    "cLP_0": {
+      "p1": "cLP_0.png"
+    },
+    "cLP_2": {
+      "p1": "cLP_2.png"
+    },
+    "cLP_4": {
+      "p1": "cLP_4.png"
+    },
+    "cLP_8": {
+      "p1": "cLP_8.png"
+    },
+    "cHP_0": {
+      "p1": "cHP_0.png"
+    },
+    "cHP_3": {
+      "p1": "cHP_3.png"
+    },
+    "cHP_6": {
+      "p1": "cHP_6.png"
+    },
+    "cHP_11": {
+      "p1": "cHP_11.png"
+    },
+    "cHP_20": {
+      "p1": "cHP_20.png"
+    },
+    "cLK_0": {
+      "p1": "cLK_0.png"
+    },
+    "cLK_3": {
+      "p1": "cLK_3.png"
+    },
+    "cLK_6": {
+      "p1": "cLK_6.png"
+    },
+    "cLK_10": {
+      "p1": "cLK_10.png"
+    },
+    "cHK_0": {
+      "p1": "cHK_0.png"
+    },
+    "cHK_4": {
+      "p1": "cHK_4.png"
+    },
+    "cHK_7": {
+      "p1": "cHK_7.png"
+    },
+    "cHK_12": {
+      "p1": "cHK_12.png"
+    },
+    "cHK_22": {
+      "p1": "cHK_22.png"
+    },
+    "jL_0": {
+      "p1": "jL_0.png"
+    },
+    "jL_2": {
+      "p1": "jL_2.png"
+    },
+    "jL_6": {
+      "p1": "jL_6.png"
+    },
+    "jL_10": {
+      "p1": "jL_10.png"
+    },
+    "jL_15": {
+      "p1": "jL_15.png"
+    },
+    "jL_20": {
+      "p1": "jL_20.png"
+    },
+    "jH_0": {
+      "p1": "jH_0.png"
+    },
+    "jH_5": {
+      "p1": "jH_5.png"
+    },
+    "jH_9": {
+      "p1": "jH_9.png"
+    },
+    "jH_13": {
+      "p1": "jH_13.png"
+    },
+    "jH_18": {
+      "p1": "jH_18.png"
+    },
+    "jH_23": {
+      "p1": "jH_23.png"
+    },
+    "dash_0": {
+      "p1": "dash_0.png"
+    },
+    "dash_4": {
+      "p1": "dash_4.png"
+    },
+    "dash_9": {
+      "p1": "dash_9.png"
+    },
+    "dash_14": {
+      "p1": "dash_14.png"
+    },
+    "backdash_0": {
+      "p1": "backdash_0.png"
+    },
+    "backdash_3": {
+      "p1": "backdash_3.png"
+    },
+    "backdash_6": {
+      "p1": "backdash_6.png"
+    },
+    "backdash_12": {
+      "p1": "backdash_12.png"
+    },
+    "backdash_18": {
+      "p1": "backdash_18.png"
+    },
+    "heelDrop_0": {
+      "p1": "heelDrop_0.png"
+    },
+    "heelDrop_5": {
+      "p1": "heelDrop_5.png"
+    },
+    "heelDrop_10": {
+      "p1": "heelDrop_10.png"
+    },
+    "heelDrop_15": {
+      "p1": "heelDrop_15.png"
+    },
+    "heelDrop_19": {
+      "p1": "heelDrop_19.png"
+    },
+    "heelDrop_22": {
+      "p1": "heelDrop_22.png"
+    },
+    "heelDrop_29": {
+      "p1": "heelDrop_29.png"
+    },
+    "throw_0": {
+      "p1": "throw_0.png"
+    },
+    "throw_4": {
+      "p1": "throw_4.png"
+    },
+    "throw_8": {
+      "p1": "throw_8.png"
+    },
+    "throw_11": {
+      "p1": "throw_11.png"
+    },
+    "throw_14": {
+      "p1": "throw_14.png"
+    },
+    "throw_22": {
+      "p1": "throw_22.png"
     }
   }
 }

@@ -225,153 +225,6 @@
     "win_16": {
       "p1": "win_16.png"
     },
-    "sLP_0": {
-      "p1": "sLP_0.png"
-    },
-    "sLP_4": {
-      "p1": "sLP_4.png"
-    },
-    "sLP_7": {
-      "p1": "sLP_7.png"
-    },
-    "sLP_12": {
-      "p1": "sLP_12.png"
-    },
-    "sLK_0": {
-      "p1": "sLK_0.png"
-    },
-    "sLK_4": {
-      "p1": "sLK_4.png"
-    },
-    "sLK_7": {
-      "p1": "sLK_7.png"
-    },
-    "sLK_10": {
-      "p1": "sLK_10.png"
-    },
-    "sLK_15": {
-      "p1": "sLK_15.png"
-    },
-    "sHK_0": {
-      "p1": "sHK_0.png"
-    },
-    "sHK_4": {
-      "p1": "sHK_4.png"
-    },
-    "sHK_7": {
-      "p1": "sHK_7.png"
-    },
-    "sHK_12": {
-      "p1": "sHK_12.png"
-    },
-    "sHK_16": {
-      "p1": "sHK_16.png"
-    },
-    "sHK_25": {
-      "p1": "sHK_25.png"
-    },
-    "cLP_0": {
-      "p1": "cLP_0.png"
-    },
-    "cLP_4": {
-      "p1": "cLP_4.png"
-    },
-    "cLP_6": {
-      "p1": "cLP_6.png"
-    },
-    "cLP_10": {
-      "p1": "cLP_10.png"
-    },
-    "cHP_0": {
-      "p1": "cHP_0.png"
-    },
-    "cHP_5": {
-      "p1": "cHP_5.png"
-    },
-    "cHP_9": {
-      "p1": "cHP_9.png"
-    },
-    "cHP_14": {
-      "p1": "cHP_14.png"
-    },
-    "cHP_24": {
-      "p1": "cHP_24.png"
-    },
-    "cLK_0": {
-      "p1": "cLK_0.png"
-    },
-    "cLK_4": {
-      "p1": "cLK_4.png"
-    },
-    "cLK_7": {
-      "p1": "cLK_7.png"
-    },
-    "cLK_10": {
-      "p1": "cLK_10.png"
-    },
-    "cLK_14": {
-      "p1": "cLK_14.png"
-    },
-    "cHK_0": {
-      "p1": "cHK_0.png"
-    },
-    "cHK_4": {
-      "p1": "cHK_4.png"
-    },
-    "cHK_7": {
-      "p1": "cHK_7.png"
-    },
-    "cHK_12": {
-      "p1": "cHK_12.png"
-    },
-    "cHK_16": {
-      "p1": "cHK_16.png"
-    },
-    "cHK_27": {
-      "p1": "cHK_27.png"
-    },
-    "jL_0": {
-      "p1": "jL_0.png"
-    },
-    "jL_4": {
-      "p1": "jL_4.png"
-    },
-    "jL_9": {
-      "p1": "jL_9.png"
-    },
-    "jL_14": {
-      "p1": "jL_14.png"
-    },
-    "jL_19": {
-      "p1": "jL_19.png"
-    },
-    "jL_24": {
-      "p1": "jL_24.png"
-    },
-    "jH_0": {
-      "p1": "jH_0.png"
-    },
-    "jH_3": {
-      "p1": "jH_3.png"
-    },
-    "jH_6": {
-      "p1": "jH_6.png"
-    },
-    "jH_9": {
-      "p1": "jH_9.png"
-    },
-    "jH_13": {
-      "p1": "jH_13.png"
-    },
-    "jH_17": {
-      "p1": "jH_17.png"
-    },
-    "jH_22": {
-      "p1": "jH_22.png"
-    },
-    "jH_27": {
-      "p1": "jH_27.png"
-    },
     "stompWave_0": {
       "p1": "stompWave_0.png"
     },
@@ -531,23 +384,269 @@
     "killOff_77": {
       "p1": "killOff_77.png"
     },
+    "sLP_0": {
+      "p1": "sLP_0.png"
+    },
+    "sLP_5": {
+      "p1": "sLP_5.png"
+    },
+    "sLP_8": {
+      "p1": "sLP_8.png"
+    },
+    "sLP_13": {
+      "p1": "sLP_13.png"
+    },
     "sHP_0": {
       "p1": "sHP_0.png"
     },
     "sHP_4": {
       "p1": "sHP_4.png"
     },
-    "sHP_7": {
-      "p1": "sHP_7.png"
+    "sHP_8": {
+      "p1": "sHP_8.png"
     },
-    "sHP_11": {
-      "p1": "sHP_11.png"
+    "sHP_12": {
+      "p1": "sHP_12.png"
     },
-    "sHP_15": {
-      "p1": "sHP_15.png"
+    "sHP_16": {
+      "p1": "sHP_16.png"
     },
-    "sHP_24": {
-      "p1": "sHP_24.png"
+    "sHP_25": {
+      "p1": "sHP_25.png"
+    },
+    "sLK_0": {
+      "p1": "sLK_0.png"
+    },
+    "sLK_5": {
+      "p1": "sLK_5.png"
+    },
+    "sLK_8": {
+      "p1": "sLK_8.png"
+    },
+    "sLK_11": {
+      "p1": "sLK_11.png"
+    },
+    "sLK_16": {
+      "p1": "sLK_16.png"
+    },
+    "sHK_0": {
+      "p1": "sHK_0.png"
+    },
+    "sHK_4": {
+      "p1": "sHK_4.png"
+    },
+    "sHK_8": {
+      "p1": "sHK_8.png"
+    },
+    "sHK_13": {
+      "p1": "sHK_13.png"
+    },
+    "sHK_17": {
+      "p1": "sHK_17.png"
+    },
+    "sHK_26": {
+      "p1": "sHK_26.png"
+    },
+    "cLP_0": {
+      "p1": "cLP_0.png"
+    },
+    "cLP_5": {
+      "p1": "cLP_5.png"
+    },
+    "cLP_7": {
+      "p1": "cLP_7.png"
+    },
+    "cLP_11": {
+      "p1": "cLP_11.png"
+    },
+    "cHP_0": {
+      "p1": "cHP_0.png"
+    },
+    "cHP_3": {
+      "p1": "cHP_3.png"
+    },
+    "cHP_6": {
+      "p1": "cHP_6.png"
+    },
+    "cHP_10": {
+      "p1": "cHP_10.png"
+    },
+    "cHP_15": {
+      "p1": "cHP_15.png"
+    },
+    "cHP_25": {
+      "p1": "cHP_25.png"
+    },
+    "cLK_0": {
+      "p1": "cLK_0.png"
+    },
+    "cLK_5": {
+      "p1": "cLK_5.png"
+    },
+    "cLK_8": {
+      "p1": "cLK_8.png"
+    },
+    "cLK_11": {
+      "p1": "cLK_11.png"
+    },
+    "cLK_15": {
+      "p1": "cLK_15.png"
+    },
+    "cHK_0": {
+      "p1": "cHK_0.png"
+    },
+    "cHK_4": {
+      "p1": "cHK_4.png"
+    },
+    "cHK_8": {
+      "p1": "cHK_8.png"
+    },
+    "cHK_13": {
+      "p1": "cHK_13.png"
+    },
+    "cHK_17": {
+      "p1": "cHK_17.png"
+    },
+    "cHK_28": {
+      "p1": "cHK_28.png"
+    },
+    "jL_0": {
+      "p1": "jL_0.png"
+    },
+    "jL_5": {
+      "p1": "jL_5.png"
+    },
+    "jL_10": {
+      "p1": "jL_10.png"
+    },
+    "jL_15": {
+      "p1": "jL_15.png"
+    },
+    "jL_20": {
+      "p1": "jL_20.png"
+    },
+    "jL_25": {
+      "p1": "jL_25.png"
+    },
+    "jH_0": {
+      "p1": "jH_0.png"
+    },
+    "jH_4": {
+      "p1": "jH_4.png"
+    },
+    "jH_7": {
+      "p1": "jH_7.png"
+    },
+    "jH_10": {
+      "p1": "jH_10.png"
+    },
+    "jH_14": {
+      "p1": "jH_14.png"
+    },
+    "jH_18": {
+      "p1": "jH_18.png"
+    },
+    "jH_23": {
+      "p1": "jH_23.png"
+    },
+    "jH_28": {
+      "p1": "jH_28.png"
+    },
+    "dash_0": {
+      "p1": "dash_0.png"
+    },
+    "dash_4": {
+      "p1": "dash_4.png"
+    },
+    "dash_9": {
+      "p1": "dash_9.png"
+    },
+    "dash_14": {
+      "p1": "dash_14.png"
+    },
+    "backdash_0": {
+      "p1": "backdash_0.png"
+    },
+    "backdash_3": {
+      "p1": "backdash_3.png"
+    },
+    "backdash_6": {
+      "p1": "backdash_6.png"
+    },
+    "backdash_12": {
+      "p1": "backdash_12.png"
+    },
+    "backdash_18": {
+      "p1": "backdash_18.png"
+    },
+    "hammerSwing_0": {
+      "p1": "hammerSwing_0.png"
+    },
+    "hammerSwing_5": {
+      "p1": "hammerSwing_5.png"
+    },
+    "hammerSwing_9": {
+      "p1": "hammerSwing_9.png"
+    },
+    "hammerSwing_13": {
+      "p1": "hammerSwing_13.png"
+    },
+    "hammerSwing_17": {
+      "p1": "hammerSwing_17.png"
+    },
+    "hammerSwing_20": {
+      "p1": "hammerSwing_20.png"
+    },
+    "hammerSwing_29": {
+      "p1": "hammerSwing_29.png"
+    },
+    "throw_0": {
+      "p1": "throw_0.png"
+    },
+    "throw_4": {
+      "p1": "throw_4.png"
+    },
+    "throw_8": {
+      "p1": "throw_8.png"
+    },
+    "throw_11": {
+      "p1": "throw_11.png"
+    },
+    "throw_14": {
+      "p1": "throw_14.png"
+    },
+    "throw_22": {
+      "p1": "throw_22.png"
+    },
+    "jumpStomp_0": {
+      "p1": "jumpStomp_0.png"
+    },
+    "jumpStomp_4": {
+      "p1": "jumpStomp_4.png"
+    },
+    "jumpStomp_7": {
+      "p1": "jumpStomp_7.png"
+    },
+    "jumpStomp_10": {
+      "p1": "jumpStomp_10.png"
+    },
+    "jumpStomp_13": {
+      "p1": "jumpStomp_13.png"
+    },
+    "jumpStomp_16": {
+      "p1": "jumpStomp_16.png"
+    },
+    "jumpStomp_19": {
+      "p1": "jumpStomp_19.png"
+    },
+    "jumpStomp_23": {
+      "p1": "jumpStomp_23.png"
+    },
+    "jumpStomp_26": {
+      "p1": "jumpStomp_26.png"
+    },
+    "jumpStomp_36": {
+      "p1": "jumpStomp_36.png"
     }
   }
 }

@@ -110,6 +110,666 @@
     },
     "crouch_36": {
       "p1": "crouch_36.png"
+    },
+    "prejump_0": {
+      "p1": "prejump_0.png"
+    },
+    "prejump_3": {
+      "p1": "prejump_3.png"
+    },
+    "jump_0": {
+      "p1": "jump_0.png"
+    },
+    "jump_9": {
+      "p1": "jump_9.png"
+    },
+    "jump_18": {
+      "p1": "jump_18.png"
+    },
+    "jump_26": {
+      "p1": "jump_26.png"
+    },
+    "jump_34": {
+      "p1": "jump_34.png"
+    },
+    "land_0": {
+      "p1": "land_0.png"
+    },
+    "land_4": {
+      "p1": "land_4.png"
+    },
+    "hitStand_0": {
+      "p1": "hitStand_0.png"
+    },
+    "hitStand_3": {
+      "p1": "hitStand_3.png"
+    },
+    "hitStand_10": {
+      "p1": "hitStand_10.png"
+    },
+    "hitStand_16": {
+      "p1": "hitStand_16.png"
+    },
+    "hitCrouch_0": {
+      "p1": "hitCrouch_0.png"
+    },
+    "hitCrouch_3": {
+      "p1": "hitCrouch_3.png"
+    },
+    "hitCrouch_10": {
+      "p1": "hitCrouch_10.png"
+    },
+    "hitCrouch_16": {
+      "p1": "hitCrouch_16.png"
+    },
+    "blockStand_0": {
+      "p1": "blockStand_0.png"
+    },
+    "blockCrouch_0": {
+      "p1": "blockCrouch_0.png"
+    },
+    "airHit_0": {
+      "p1": "airHit_0.png"
+    },
+    "airHit_12": {
+      "p1": "airHit_12.png"
+    },
+    "airHit_24": {
+      "p1": "airHit_24.png"
+    },
+    "knockdown_0": {
+      "p1": "knockdown_0.png"
+    },
+    "knockdown_4": {
+      "p1": "knockdown_4.png"
+    },
+    "knockdown_8": {
+      "p1": "knockdown_8.png"
+    },
+    "getup_0": {
+      "p1": "getup_0.png"
+    },
+    "getup_5": {
+      "p1": "getup_5.png"
+    },
+    "getup_9": {
+      "p1": "getup_9.png"
+    },
+    "getup_12": {
+      "p1": "getup_12.png"
+    },
+    "getup_15": {
+      "p1": "getup_15.png"
+    },
+    "getup_20": {
+      "p1": "getup_20.png"
+    },
+    "getup_23": {
+      "p1": "getup_23.png"
+    },
+    "getup_26": {
+      "p1": "getup_26.png"
+    },
+    "win_0": {
+      "p1": "win_0.png"
+    },
+    "win_5": {
+      "p1": "win_5.png"
+    },
+    "win_10": {
+      "p1": "win_10.png"
+    },
+    "win_15": {
+      "p1": "win_15.png"
+    },
+    "win_20": {
+      "p1": "win_20.png"
+    },
+    "sLP_0": {
+      "p1": "sLP_0.png"
+    },
+    "sLP_4": {
+      "p1": "sLP_4.png"
+    },
+    "sLP_7": {
+      "p1": "sLP_7.png"
+    },
+    "sLP_11": {
+      "p1": "sLP_11.png"
+    },
+    "sHP_0": {
+      "p1": "sHP_0.png"
+    },
+    "sHP_3": {
+      "p1": "sHP_3.png"
+    },
+    "sHP_6": {
+      "p1": "sHP_6.png"
+    },
+    "sHP_10": {
+      "p1": "sHP_10.png"
+    },
+    "sHP_13": {
+      "p1": "sHP_13.png"
+    },
+    "sHP_21": {
+      "p1": "sHP_21.png"
+    },
+    "sLK_0": {
+      "p1": "sLK_0.png"
+    },
+    "sLK_4": {
+      "p1": "sLK_4.png"
+    },
+    "sLK_7": {
+      "p1": "sLK_7.png"
+    },
+    "sLK_10": {
+      "p1": "sLK_10.png"
+    },
+    "sLK_15": {
+      "p1": "sLK_15.png"
+    },
+    "sHK_0": {
+      "p1": "sHK_0.png"
+    },
+    "sHK_3": {
+      "p1": "sHK_3.png"
+    },
+    "sHK_6": {
+      "p1": "sHK_6.png"
+    },
+    "sHK_11": {
+      "p1": "sHK_11.png"
+    },
+    "sHK_15": {
+      "p1": "sHK_15.png"
+    },
+    "sHK_24": {
+      "p1": "sHK_24.png"
+    },
+    "cLP_0": {
+      "p1": "cLP_0.png"
+    },
+    "cLP_4": {
+      "p1": "cLP_4.png"
+    },
+    "cLP_6": {
+      "p1": "cLP_6.png"
+    },
+    "cLP_10": {
+      "p1": "cLP_10.png"
+    },
+    "cHP_0": {
+      "p1": "cHP_0.png"
+    },
+    "cHP_5": {
+      "p1": "cHP_5.png"
+    },
+    "cHP_9": {
+      "p1": "cHP_9.png"
+    },
+    "cHP_13": {
+      "p1": "cHP_13.png"
+    },
+    "cHP_23": {
+      "p1": "cHP_23.png"
+    },
+    "cLK_0": {
+      "p1": "cLK_0.png"
+    },
+    "cLK_4": {
+      "p1": "cLK_4.png"
+    },
+    "cLK_6": {
+      "p1": "cLK_6.png"
+    },
+    "cLK_9": {
+      "p1": "cLK_9.png"
+    },
+    "cLK_13": {
+      "p1": "cLK_13.png"
+    },
+    "cHK_0": {
+      "p1": "cHK_0.png"
+    },
+    "cHK_3": {
+      "p1": "cHK_3.png"
+    },
+    "cHK_6": {
+      "p1": "cHK_6.png"
+    },
+    "cHK_10": {
+      "p1": "cHK_10.png"
+    },
+    "cHK_15": {
+      "p1": "cHK_15.png"
+    },
+    "cHK_26": {
+      "p1": "cHK_26.png"
+    },
+    "jL_0": {
+      "p1": "jL_0.png"
+    },
+    "jL_4": {
+      "p1": "jL_4.png"
+    },
+    "jL_9": {
+      "p1": "jL_9.png"
+    },
+    "jL_14": {
+      "p1": "jL_14.png"
+    },
+    "jL_19": {
+      "p1": "jL_19.png"
+    },
+    "jL_24": {
+      "p1": "jL_24.png"
+    },
+    "jH_0": {
+      "p1": "jH_0.png"
+    },
+    "jH_3": {
+      "p1": "jH_3.png"
+    },
+    "jH_6": {
+      "p1": "jH_6.png"
+    },
+    "jH_11": {
+      "p1": "jH_11.png"
+    },
+    "jH_16": {
+      "p1": "jH_16.png"
+    },
+    "jH_21": {
+      "p1": "jH_21.png"
+    },
+    "jH_26": {
+      "p1": "jH_26.png"
+    },
+    "windmill_0": {
+      "p1": "windmill_0.png"
+    },
+    "windmill_5": {
+      "p1": "windmill_5.png"
+    },
+    "windmill_7": {
+      "p1": "windmill_7.png"
+    },
+    "windmill_10": {
+      "p1": "windmill_10.png"
+    },
+    "windmill_13": {
+      "p1": "windmill_13.png"
+    },
+    "windmill_16": {
+      "p1": "windmill_16.png"
+    },
+    "windmill_19": {
+      "p1": "windmill_19.png"
+    },
+    "windmill_22": {
+      "p1": "windmill_22.png"
+    },
+    "windmill_25": {
+      "p1": "windmill_25.png"
+    },
+    "windmill_28": {
+      "p1": "windmill_28.png"
+    },
+    "windmill_31": {
+      "p1": "windmill_31.png"
+    },
+    "windmill_34": {
+      "p1": "windmill_34.png"
+    },
+    "windmill_37": {
+      "p1": "windmill_37.png"
+    },
+    "windmill_43": {
+      "p1": "windmill_43.png"
+    },
+    "headspin_0": {
+      "p1": "headspin_0.png"
+    },
+    "headspin_4": {
+      "p1": "headspin_4.png"
+    },
+    "headspin_6": {
+      "p1": "headspin_6.png"
+    },
+    "headspin_8": {
+      "p1": "headspin_8.png"
+    },
+    "headspin_10": {
+      "p1": "headspin_10.png"
+    },
+    "headspin_12": {
+      "p1": "headspin_12.png"
+    },
+    "headspin_14": {
+      "p1": "headspin_14.png"
+    },
+    "headspin_16": {
+      "p1": "headspin_16.png"
+    },
+    "headspin_18": {
+      "p1": "headspin_18.png"
+    },
+    "headspin_20": {
+      "p1": "headspin_20.png"
+    },
+    "headspin_22": {
+      "p1": "headspin_22.png"
+    },
+    "headspin_24": {
+      "p1": "headspin_24.png"
+    },
+    "headspin_26": {
+      "p1": "headspin_26.png"
+    },
+    "headspin_28": {
+      "p1": "headspin_28.png"
+    },
+    "headspin_30": {
+      "p1": "headspin_30.png"
+    },
+    "headspin_32": {
+      "p1": "headspin_32.png"
+    },
+    "headspin_34": {
+      "p1": "headspin_34.png"
+    },
+    "headspin_38": {
+      "p1": "headspin_38.png"
+    },
+    "headspin_42": {
+      "p1": "headspin_42.png"
+    },
+    "headspin_46": {
+      "p1": "headspin_46.png"
+    },
+    "swipe_0": {
+      "p1": "swipe_0.png"
+    },
+    "swipe_4": {
+      "p1": "swipe_4.png"
+    },
+    "swipe_7": {
+      "p1": "swipe_7.png"
+    },
+    "swipe_10": {
+      "p1": "swipe_10.png"
+    },
+    "swipe_13": {
+      "p1": "swipe_13.png"
+    },
+    "swipe_18": {
+      "p1": "swipe_18.png"
+    },
+    "swipe_22": {
+      "p1": "swipe_22.png"
+    },
+    "swipe_25": {
+      "p1": "swipe_25.png"
+    },
+    "swipe_28": {
+      "p1": "swipe_28.png"
+    },
+    "swipe_35": {
+      "p1": "swipe_35.png"
+    },
+    "freeze_0": {
+      "p1": "freeze_0.png"
+    },
+    "freeze_4": {
+      "p1": "freeze_4.png"
+    },
+    "freeze_14": {
+      "p1": "freeze_14.png"
+    },
+    "freeze_24": {
+      "p1": "freeze_24.png"
+    },
+    "freeze_28": {
+      "p1": "freeze_28.png"
+    },
+    "freeze_32": {
+      "p1": "freeze_32.png"
+    },
+    "freeze_35": {
+      "p1": "freeze_35.png"
+    },
+    "freezeKick_0": {
+      "p1": "freezeKick_0.png"
+    },
+    "freezeKick_4": {
+      "p1": "freezeKick_4.png"
+    },
+    "freezeKick_9": {
+      "p1": "freezeKick_9.png"
+    },
+    "freezeKick_15": {
+      "p1": "freezeKick_15.png"
+    },
+    "freezeKick_20": {
+      "p1": "freezeKick_20.png"
+    },
+    "freezeKick_26": {
+      "p1": "freezeKick_26.png"
+    },
+    "powerCombo_0": {
+      "p1": "powerCombo_0.png"
+    },
+    "powerCombo_3": {
+      "p1": "powerCombo_3.png"
+    },
+    "powerCombo_6": {
+      "p1": "powerCombo_6.png"
+    },
+    "powerCombo_8": {
+      "p1": "powerCombo_8.png"
+    },
+    "powerCombo_10": {
+      "p1": "powerCombo_10.png"
+    },
+    "powerCombo_12": {
+      "p1": "powerCombo_12.png"
+    },
+    "powerCombo_14": {
+      "p1": "powerCombo_14.png"
+    },
+    "powerCombo_16": {
+      "p1": "powerCombo_16.png"
+    },
+    "powerCombo_18": {
+      "p1": "powerCombo_18.png"
+    },
+    "powerCombo_20": {
+      "p1": "powerCombo_20.png"
+    },
+    "powerCombo_22": {
+      "p1": "powerCombo_22.png"
+    },
+    "powerCombo_24": {
+      "p1": "powerCombo_24.png"
+    },
+    "powerCombo_26": {
+      "p1": "powerCombo_26.png"
+    },
+    "powerCombo_28": {
+      "p1": "powerCombo_28.png"
+    },
+    "powerCombo_30": {
+      "p1": "powerCombo_30.png"
+    },
+    "powerCombo_32": {
+      "p1": "powerCombo_32.png"
+    },
+    "powerCombo_34": {
+      "p1": "powerCombo_34.png"
+    },
+    "powerCombo_36": {
+      "p1": "powerCombo_36.png"
+    },
+    "powerCombo_38": {
+      "p1": "powerCombo_38.png"
+    },
+    "powerCombo_40": {
+      "p1": "powerCombo_40.png"
+    },
+    "powerCombo_42": {
+      "p1": "powerCombo_42.png"
+    },
+    "powerCombo_44": {
+      "p1": "powerCombo_44.png"
+    },
+    "powerCombo_46": {
+      "p1": "powerCombo_46.png"
+    },
+    "powerCombo_48": {
+      "p1": "powerCombo_48.png"
+    },
+    "powerCombo_50": {
+      "p1": "powerCombo_50.png"
+    },
+    "powerCombo_52": {
+      "p1": "powerCombo_52.png"
+    },
+    "powerCombo_54": {
+      "p1": "powerCombo_54.png"
+    },
+    "powerCombo_56": {
+      "p1": "powerCombo_56.png"
+    },
+    "powerCombo_58": {
+      "p1": "powerCombo_58.png"
+    },
+    "powerCombo_60": {
+      "p1": "powerCombo_60.png"
+    },
+    "powerCombo_62": {
+      "p1": "powerCombo_62.png"
+    },
+    "powerCombo_64": {
+      "p1": "powerCombo_64.png"
+    },
+    "powerCombo_68": {
+      "p1": "powerCombo_68.png"
+    },
+    "powerCombo_72": {
+      "p1": "powerCombo_72.png"
+    },
+    "powerCombo_81": {
+      "p1": "powerCombo_81.png"
+    },
+    "powerCombo_90": {
+      "p1": "powerCombo_90.png"
+    },
+    "powerCombo_95": {
+      "p1": "powerCombo_95.png"
+    },
+    "dash_0": {
+      "p1": "dash_0.png"
+    },
+    "dash_4": {
+      "p1": "dash_4.png"
+    },
+    "dash_9": {
+      "p1": "dash_9.png"
+    },
+    "dash_14": {
+      "p1": "dash_14.png"
+    },
+    "backdash_0": {
+      "p1": "backdash_0.png"
+    },
+    "backdash_3": {
+      "p1": "backdash_3.png"
+    },
+    "backdash_6": {
+      "p1": "backdash_6.png"
+    },
+    "backdash_12": {
+      "p1": "backdash_12.png"
+    },
+    "backdash_18": {
+      "p1": "backdash_18.png"
+    },
+    "sixStepSweep_0": {
+      "p1": "sixStepSweep_0.png"
+    },
+    "sixStepSweep_5": {
+      "p1": "sixStepSweep_5.png"
+    },
+    "sixStepSweep_9": {
+      "p1": "sixStepSweep_9.png"
+    },
+    "sixStepSweep_12": {
+      "p1": "sixStepSweep_12.png"
+    },
+    "sixStepSweep_15": {
+      "p1": "sixStepSweep_15.png"
+    },
+    "sixStepSweep_24": {
+      "p1": "sixStepSweep_24.png"
+    },
+    "throw_0": {
+      "p1": "throw_0.png"
+    },
+    "throw_4": {
+      "p1": "throw_4.png"
+    },
+    "throw_8": {
+      "p1": "throw_8.png"
+    },
+    "throw_11": {
+      "p1": "throw_11.png"
+    },
+    "throw_14": {
+      "p1": "throw_14.png"
+    },
+    "throw_22": {
+      "p1": "throw_22.png"
+    },
+    "footworkRush_0": {
+      "p1": "footworkRush_0.png"
+    },
+    "footworkRush_4": {
+      "p1": "footworkRush_4.png"
+    },
+    "footworkRush_7": {
+      "p1": "footworkRush_7.png"
+    },
+    "footworkRush_10": {
+      "p1": "footworkRush_10.png"
+    },
+    "footworkRush_13": {
+      "p1": "footworkRush_13.png"
+    },
+    "footworkRush_16": {
+      "p1": "footworkRush_16.png"
+    },
+    "footworkRush_19": {
+      "p1": "footworkRush_19.png"
+    },
+    "footworkRush_22": {
+      "p1": "footworkRush_22.png"
+    },
+    "footworkRush_25": {
+      "p1": "footworkRush_25.png"
+    },
+    "footworkRush_28": {
+      "p1": "footworkRush_28.png"
+    },
+    "footworkRush_31": {
+      "p1": "footworkRush_31.png"
+    },
+    "footworkRush_36": {
+      "p1": "footworkRush_36.png"
+    },
+    "footworkRush_43": {
+      "p1": "footworkRush_43.png"
     }
   }
 }
