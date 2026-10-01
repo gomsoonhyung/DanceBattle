@@ -143,16 +143,23 @@ const jH = airStrike({
 const hairFlip = combo({
   id: 'hairFlip',
   name: '헤어 플립',
-  desc: '머리를 앞뒤로 크게 휘두르는 2연타. 두 번째에 다운',
+  desc: '포니테일을 크게 휘두르는 2연타. 머리카락 끝까지 닿고, 두 번째는 중단(서서 막기)',
   base: STAND,
   windup: HAIR_FLIP_B,
   poses: [HAIR_FLIP_A],
   start: 7,
   interval: 7,
   count: 1,
-  box: { x: 10, y: 105, w: 85, h: 75 },
+  // 머리카락 끝까지 판정 (팔보다 길게)
+  box: { x: 10, y: 105, w: 120, h: 75 },
   damage: 40,
-  finish: { pose: pose(HAIR_FLIP_B, { torso: -20 }), delay: 7, damage: 60 },
+  finish: {
+    pose: pose(HAIR_FLIP_B, { torso: -20 }),
+    delay: 7,
+    damage: 60,
+    box: { x: 10, y: 60, w: 115, h: 120 },
+    extra: { level: 'overhead' },
+  },
   recovery: 18,
 });
 

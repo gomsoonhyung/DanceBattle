@@ -88,6 +88,7 @@ export function spriteFor(
 /**
  * 스프라이트를 캐릭터 위치(발밑)에 맞춰 그린다. 왼쪽을 보면 좌우 반전.
  * glow: P2 전용 그림이 없을 때 P1 그림에 두르는 구분용 테두리 빛 색
+ * bright: 맞은 순간 하얗게 번쩍이게
  * (색상 전체를 돌리면 피부색까지 바뀌어 어색하므로, 색은 그대로 두고 테두리로만 구분한다)
  */
 export function drawSprite(
@@ -97,11 +98,15 @@ export function drawSprite(
   y: number,
   facing: 1 | -1,
   glow: string | null,
+  bright = false,
 ): void {
   g.save();
   g.translate(x, GROUND_SCREEN_Y - y);
   g.scale(facing, 1);
-  if (glow) g.filter = `drop-shadow(0 0 2px ${glow}) drop-shadow(0 0 4px ${glow})`;
+  const filters: string[] = [];
+  if (glow) filters.push(`drop-shadow(0 0 2px ${glow}) drop-shadow(0 0 4px ${glow})`);
+  if (bright) filters.push('brightness(2.2)'); // 맞은 순간 하얗게 번쩍
+  if (filters.length) g.filter = filters.join(' ');
   g.drawImage(img, -SPRITE.anchorX, -SPRITE.anchorY, SPRITE.width, SPRITE.height);
   g.restore();
 }

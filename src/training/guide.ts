@@ -1,13 +1,16 @@
 import type { CharacterDef, MoveDef } from '../fighter/types';
 import type { Match } from '../game/match';
-import { BTN, type Dir, type RawInput } from '../input/types';
+import { BTN, type Button, type Dir, type RawInput } from '../input/types';
 
 /** 가이드에 나오는 기술 하나 */
 export interface GuideEntry {
   move: MoveDef;
-  /** 커맨드 방향 (캐릭터가 보는 방향 기준: 6 = 앞) */
+  /** 커맨드 방향 (캐릭터가 보는 방향 기준: 6 = 앞). 잡기처럼 방향이 없으면 빈 배열 */
   dirs: Dir[];
-  button: 'P' | 'K';
+  /** 화면에 보이는 버튼 이름 (P, K, 강P, 약P+약K ...) */
+  button: string;
+  /** 시범에서 실제로 누르는 버튼 */
+  buttons: number;
   isSuper: boolean;
   successes: number;
 }
@@ -31,6 +34,7 @@ export function dirToRaw(d: Dir, facing: 1 | -1, buttons = 0): RawInput {
 
 /** 시범에서 연습 상대를 세울 거리: 장풍은 멀리, 돌진기는 중간, 나머지는 가까이 */
 function demoGap(m: MoveDef): number {
+  if (m.grab) return 60;
   if (m.projectile) return 320;
   if (m.velocity?.some((v) => v.vx < 0)) return 110;
   if (m.velocity?.some((v) => v.vx > 0)) return 190;
@@ -82,7 +86,7 @@ export class TrainingGuide {
     match.placeForDemo(demoGap(e.move));
     const p1 = match.fighters[0];
     const facing = p1.facing;
-    const btn = e.button === 'P' ? BTN.LP : BTN.LK;
+    const btn = e.buttons;
     const frames: DemoFrame[] = [];
     const neutral = (n: number, step: number) => {
       for (let i = 0; i < n; i++) frames.push({ raw: dirToRaw(5, facing), step });
@@ -93,6 +97,7 @@ export class TrainingGuide {
       for (let i = 0; i < FRAMES_PER_DIR; i++) frames.push({ raw: dirToRaw(d, facing), step: k });
       if (last) frames.push({ raw: dirToRaw(d, facing, btn), step: e.dirs.length });
     });
+    if (!e.dirs.length) frames.push({ raw: dirToRaw(5, facing, btn), step: 0 });
     neutral(16, e.dirs.length);
     neutral(e.move.total + (e.move.superFreeze ?? 0) + 30, -1);
     this.demo = frames;
@@ -132,15 +137,25 @@ export class TrainingGuide {
   }
 }
 
-/** 캐릭터의 필살기 + 초필살기 → 가이드 항목 */
+const BUTTON_LABEL: Record<Button, string> = { LP: '약P', HP: '강P', LK: '약K', HK: '강K' };
+
+/** 캐릭터의 필살기 + 초필살기 + 특수기 + 잡기 → 가이드 항목 */
 function buildEntries(char: CharacterDef): GuideEntry[] {
-  const list: GuideEntry[] = char.specials.map((s) => ({
-    move: char.moves[s.move],
-    dirs: MOTION_DIRS[s.motion],
-    button: s.button,
-    isSuper: false,
+  const entry = (move: MoveDef, dirs: Dir[], button: string, buttons: number, isSuper = false): GuideEntry => ({
+    move,
+    dirs,
+    button,
+    buttons,
+    isSuper,
     successes: 0,
-  }));
-  list.push({ move: char.moves[char.super], dirs: SUPER_DIRS, button: 'P', isSuper: true, successes: 0 });
+  });
+  const list = char.specials.map((s) =>
+    entry(char.moves[s.move], MOTION_DIRS[s.motion], s.button, s.button === 'P' ? BTN.LP : BTN.LK),
+  );
+  list.push(entry(char.moves[char.super], SUPER_DIRS, 'P', BTN.LP, true));
+  for (const c of char.normals.command ?? []) {
+    list.push(entry(char.moves[c.move], [c.dir], BUTTON_LABEL[c.button], BTN[c.button]));
+  }
+  if (char.normals.throw) list.push(entry(char.moves[char.normals.throw], [], '약P+약K', BTN.LP | BTN.LK));
   return list;
 }

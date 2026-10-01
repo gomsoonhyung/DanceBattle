@@ -1,5 +1,8 @@
 import type { CharacterDef } from '../../fighter/types';
+import { moveTable, grab, tune } from '../builders';
+import { NORMAL_IDS } from '../common';
 import { POPPING_MOVES } from './moves';
+import { POPPING_COMMAND } from './command';
 import * as A from './poses';
 
 export const POPPER: CharacterDef = {
@@ -38,23 +41,43 @@ export const POPPER: CharacterDef = {
     speed: 3,
     range: 5,
   },
-  anims: { ...A.common, idle: A.idle, walkF: A.walkF, walkB: A.walkB, crouch: A.crouch, win: A.win },
-  moves: POPPING_MOVES,
+  anims: {
+    ...A.common,
+    backdash: A.backdash,
+    idle: A.idle,
+    walkF: A.walkF,
+    walkB: A.walkB,
+    crouch: A.crouch,
+    win: A.win,
+  },
+  moves: tune(
+    tune(
+      { ...POPPING_MOVES, ...moveTable(POPPING_COMMAND), throw: grab({ id: 'throw', name: '팝 쇼크', base: A.STAND }) },
+      ['sHP', 'sHK', 'cHP', 'cHK', 'jH'],
+      { startup: 1 },
+    ),
+    NORMAL_IDS,
+    { reach: 1.15 },
+  ),
   normals: {
     stand: { LP: 'sLP', HP: 'sHP', LK: 'sLK', HK: 'sHK' },
     crouch: { LP: 'cLP', HP: 'cHP', LK: 'cLK', HK: 'cHK' },
     airLight: 'jL',
     airHeavy: 'jH',
+    throw: 'throw',
+    command: [{ dir: 6, button: 'HP', move: 'electricPop' }],
   },
   specials: [
     { motion: 'dp', button: 'P', move: 'popUpper' },
-    { motion: 'qcf', button: 'P', move: 'wave' },
-    { motion: 'qcf', button: 'K', move: 'animationDash' },
+    { motion: 'qcf', button: 'P', move: 'popShot' },
+    { motion: 'qcf', button: 'K', move: 'wave' },
+    { motion: 'qcb', button: 'K', move: 'slowWave' },
     { motion: 'qcb', button: 'P', move: 'robot' },
   ],
   super: 'electricBoogaloo',
-  walkF: 3.2,
-  walkB: 2.7,
+  walkF: 3.0,
+  walkB: 3.0,
   jumpV: 15.5,
   jumpVX: 4.0,
+  dash: { frames: 16, speed: 8.5, invuln: 12, trail: true },
 };

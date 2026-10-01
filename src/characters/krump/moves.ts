@@ -35,7 +35,7 @@ const sLP: MoveDef = {
 
 const sHP: MoveDef = {
   id: 'sHP',
-  name: '암 스윙',
+  name: '배트 스윙',
   kind: 'normal',
   total: 32,
   anim: {
@@ -65,19 +65,20 @@ const sHP: MoveDef = {
 
 const sLK: MoveDef = {
   id: 'sLK',
-  name: '스톰프 킥',
+  name: '프론트 스톰프',
   kind: 'normal',
   total: 20,
+  // 무릎을 높이 들었다가 상대 발등을 내리찍는다 (서서 쓰는 하단)
   anim: {
     keys: [
       { f: 0, p: STAND },
-      { f: 4, p: pose(STAND, { torso: 10, lF: [75, -100] }) },
-      { f: 7, p: pose(STAND, { torso: 5, lF: [80, -10] }) },
-      { f: 10, p: pose(STAND, { torso: 5, lF: [78, -12] }) },
+      { f: 4, p: KNEE_UP },
+      { f: 7, p: pose(STAND, { torso: 22, head: -18, lF: [38, -6], lB: [-18, -30], aF: [40, 60], aB: [20, 70] }) },
+      { f: 10, p: pose(STAND, { torso: 22, head: -18, lF: [38, -6], lB: [-18, -30], aF: [40, 60], aB: [20, 70] }) },
       { f: 20, p: STAND },
     ],
   },
-  hits: [{ frames: [7, 9], box: { x: 25, y: 45, w: 75, h: 35 }, damage: 45, hitstun: 15, blockstun: 11, level: 'mid' }],
+  hits: [{ frames: [7, 9], box: { x: 25, y: 0, w: 70, h: 32 }, damage: 45, hitstun: 15, blockstun: 11, level: 'low' }],
   cancelWindow: [7, 13],
 };
 
@@ -239,17 +240,18 @@ const jL: MoveDef = {
 
 const jH: MoveDef = {
   id: 'jH',
-  name: '해머 스톰프',
+  name: '점프 스톰프',
   kind: 'normal',
   total: 40,
   air: true,
+  // 공중에서 무릎을 끌어올렸다가 두 발로 아래를 내리찍는다
   anim: {
     snap: false,
     keys: [
       { f: 0, p: JUMP_TUCK },
-      { f: 6, p: pose(JUMP_TUCK, { torso: 25, aF: [150, 60], aB: [160, 50] }) },
-      { f: 9, p: pose(JUMP_TUCK, { torso: 40, aF: [40, 0], aB: [35, 0], lF: [40, -60], lB: [10, -50] }) },
-      { f: 17, p: pose(JUMP_TUCK, { torso: 40, aF: [38, 0], aB: [33, 0], lF: [40, -60], lB: [10, -50] }) },
+      { f: 6, p: pose(JUMP_TUCK, { torso: 10, aF: [120, 40], aB: [130, 40], lF: [100, -120], lB: [80, -120] }) },
+      { f: 9, p: pose(JUMP_TUCK, { torso: 20, aF: [60, 20], aB: [50, 30], lF: [25, -10], lB: [5, -20] }) },
+      { f: 17, p: pose(JUMP_TUCK, { torso: 20, aF: [60, 20], aB: [50, 30], lF: [25, -10], lB: [5, -20] }) },
       { f: 27, p: JUMP_FALL },
     ],
   },
@@ -299,8 +301,8 @@ const stompWave: MoveDef = {
 
 const burstUpper: MoveDef = {
   id: 'burstUpper',
-  name: '버스트 어퍼',
-  desc: '대공기. 양팔을 크게 올려친다. 발동 직후 무적',
+  name: '체스트 팝 어퍼',
+  desc: '대공기. 가슴을 위로 터뜨리며 두 팔이 튀어 오른다. 발동 직후 무적',
   kind: 'special',
   total: 52,
   invuln: [1, 8],
@@ -376,8 +378,8 @@ const RUSH_IMPACT = pose(STAND, {
 
 const burstRush: MoveDef = {
   id: 'burstRush',
-  name: '버스트 러시',
-  desc: '어깨를 앞세워 돌진해 팔뚝으로 들이받는다. 한 번은 맞아도 멈추지 않는다(아머)',
+  name: '벅 러시',
+  desc: '웅크린 채 벅 홉으로 연달아 뛰며 돌진해 어깨로 들이받는다. 한 번은 맞아도 멈추지 않는다(아머)',
   kind: 'special',
   total: 46,
   armor: [3, 22],
@@ -410,17 +412,18 @@ const burstRush: MoveDef = {
 
 const chestPop: MoveDef = {
   id: 'chestPop',
-  name: '체스트 팝',
-  desc: '가슴을 튕겨 밀쳐낸다. 가드 불가지만 느려서 점프로 피할 수 있다',
+  name: '찢기',
+  desc: '가슴을 움켜쥐었다가 바깥으로 찢어 젖히며 터뜨린다. 가드 불가지만 느려서 점프로 피할 수 있다',
   kind: 'special',
   total: 50,
+  // 두 손으로 가슴을 움켜쥐고 웅크림 → 힘을 모음 → 두 팔을 앞뒤로 찢어 젖히며 가슴을 내민다
   anim: {
     keys: [
       { f: 0, p: STAND },
-      { f: 10, p: pose(STAND, { torso: -20, head: -25, aF: [-50, 40], aB: [-60, 30] }) },
-      { f: 18, p: pose(STAND, { torso: -25, head: -28, aF: [-55, 40], aB: [-65, 30] }) },
-      { f: 21, p: pose(STAND, { torso: 30, head: 0, aF: [40, 60], aB: [30, 70], lF: [40, -40] }) },
-      { f: 26, p: pose(STAND, { torso: 30, head: 0, aF: [40, 60], aB: [30, 70], lF: [40, -40] }) },
+      { f: 10, p: pose(STAND, { torso: 30, head: -30, aF: [70, 150], aB: [60, 150], lF: [35, -55] }) },
+      { f: 18, p: pose(STAND, { torso: 35, head: -32, aF: [72, 152], aB: [62, 152], lF: [38, -58] }) },
+      { f: 21, p: pose(STAND, { torso: -18, head: 15, aF: [100, 5], aB: [-90, 10], lF: [40, -40] }) },
+      { f: 26, p: pose(STAND, { torso: -18, head: 15, aF: [100, 5], aB: [-90, 10], lF: [40, -40] }) },
       { f: 50, p: STAND },
     ],
   },
@@ -439,6 +442,53 @@ const chestPop: MoveDef = {
       heavy: true,
     },
   ],
+};
+
+/** 점프 스톰프: 뛰어올라 두 발로 내리찍고, 바닥에 충격파가 퍼진다 (중단) */
+const jumpStomp: MoveDef = {
+  id: 'jumpStomp',
+  name: '점프 스톰프',
+  desc: '뛰어올라 두 발로 내리찍는 중단. 바닥에 짧은 충격파가 퍼진다',
+  kind: 'special',
+  total: 46,
+  velocity: [{ from: 4, to: 17, vx: 5 }],
+  anim: {
+    snap: false,
+    keys: [
+      { f: 0, p: STAND },
+      { f: 4, p: pose(CROUCH, { torso: 30 }) },
+      { f: 10, p: pose(KNEE_UP, { y: 150, lB: [80, -120] }) },
+      { f: 16, p: pose(KNEE_UP, { y: 130, lB: [80, -120] }) },
+      { f: 19, p: STOMP },
+      { f: 26, p: STOMP },
+      { f: 46, p: STAND },
+    ],
+  },
+  hits: [
+    {
+      frames: [18, 21],
+      box: { x: 5, y: 0, w: 90, h: 100 },
+      damage: 100,
+      hitstun: 22,
+      blockstun: 16,
+      level: 'overhead',
+      knockdown: true,
+      push: 8,
+      chip: 8,
+      hitstop: 14,
+      heavy: true,
+    },
+  ],
+  projectile: {
+    frame: 20,
+    x: 60,
+    y: 0,
+    vx: 6,
+    life: 24,
+    box: { x: -22, y: 0, w: 44, h: 36 },
+    kind: 'shockwave',
+    hit: { damage: 40, hitstun: 18, blockstun: 12, level: 'low', chip: 4 },
+  },
 };
 
 // ── 초필살기 ───────────────────────────────────────────────────────
@@ -497,8 +547,7 @@ const killOff: MoveDef = {
 };
 
 export const KRUMP_MOVES: Record<string, MoveDef> = Object.fromEntries(
-  [sLP, sHP, sLK, sHK, cLP, cHP, cLK, cHK, jL, jH, stompWave, burstUpper, burstRush, chestPop, killOff].map((m) => [
-    m.id,
-    m,
-  ]),
+  [sLP, sHP, sLK, sHK, cLP, cHP, cLK, cHK, jL, jH, stompWave, burstUpper, burstRush, chestPop, jumpStomp, killOff].map(
+    (m) => [m.id, m],
+  ),
 );

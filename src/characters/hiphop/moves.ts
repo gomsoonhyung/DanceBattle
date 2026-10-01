@@ -1,7 +1,7 @@
 import { pose } from '../../anim/pose';
 import type { MoveDef } from '../../fighter/types';
 import { airStrike, combo, hit, moveTable, strike } from '../builders';
-import { COOL, CRIP_A, CRIP_B, CROUCH, DOWN, ROGER, RUN_A, RUN_B, STAND } from './poses';
+import { COOL, CROUCH, DOWN, ROGER, RUN_A, RUN_B, STAND } from './poses';
 
 // ── 기본기: 바운스를 타며 내지르는 스트리트 스타일 ─────────────────────
 
@@ -159,38 +159,52 @@ const runningManRush = combo({
   more: { velocity: [{ from: 3, to: 20, vx: 6 }] },
 });
 
-const cripWalk = combo({
-  id: 'cripWalk',
-  name: '크립 워크',
-  desc: '발을 비틀며 미끄러지듯 전진하는 하단 5연타',
-  base: STAND,
-  poses: [CRIP_A, CRIP_B],
-  start: 8,
-  interval: 6,
-  count: 4,
-  box: { x: 15, y: 0, w: 85, h: 32 },
-  damage: 18,
-  extra: { level: 'low' },
-  finish: { pose: pose(CRIP_A, { lF: [80, -5] }), delay: 7, damage: 35, extra: { level: 'low' } },
-  recovery: 16,
-  more: { velocity: [{ from: 4, to: 30, vx: 3 }] },
-});
-
-const jumpUp = strike({
-  id: 'jumpUp',
-  name: '점프 업',
+/** 크리스크로스: 다리를 꼬며 깡충 두 번 뛰어 들어간다. 착지할 때마다 타격, 두 번째는 중단 */
+const CROSS = pose(STAND, { torso: 10, lF: [-12, -12], lB: [18, -10], aF: [60, 80], aB: [40, 80] });
+const OPEN = pose(STAND, { torso: 10, lF: [35, -25], lB: [-25, -20], aF: [150, 40], aB: [130, 40] });
+const crissCross: MoveDef = {
+  id: 'crissCross',
+  name: '크리스크로스',
+  desc: '다리를 꼬며 깡충 두 번 뛰어 들어간다. 두 번째 착지는 중단(서서 막기)',
   kind: 'special',
-  desc: '대공기. 뛰어오르며 주먹을 치켜든다. 발동 직후 무적',
-  base: CROUCH,
-  hit: pose(STAND, { lift: 40, torso: -10, aF: [175, -5], aB: [60, 90], lF: [20, -40], lB: [-10, -70] }),
-  end: CROUCH,
+  total: 44,
+  velocity: [{ from: 3, to: 26, vx: 3.5 }],
+  anim: {
+    snap: false,
+    keys: [
+      { f: 0, p: STAND },
+      { f: 4, p: DOWN },
+      { f: 8, p: pose(OPEN, { y: 120 }) },
+      { f: 12, p: CROSS },
+      { f: 16, p: DOWN },
+      { f: 21, p: pose(OPEN, { y: 125 }) },
+      { f: 25, p: pose(CROSS, { torso: 25, aF: [80, 20], aB: [60, 30] }) },
+      { f: 30, p: DOWN },
+      { f: 44, p: STAND },
+    ],
+  },
+  hits: [
+    hit([12, 14], { x: 10, y: 0, w: 80, h: 110 }, 40, { push: 2, hitstun: 20, chip: 4 }),
+    hit([25, 28], { x: 10, y: 0, w: 85, h: 120 }, 60, { level: 'overhead', knockdown: true, push: 10, chip: 6 }),
+  ],
+};
+
+/** 더기: 몸을 뒤로 젖히며 머리 위로 손을 쓸어 올린다 (대공) */
+const dougie = strike({
+  id: 'dougie',
+  name: '더기',
+  kind: 'special',
+  desc: '대공기. 몸을 뒤로 젖히며 머리 위로 손을 쓸어 올린다. 발동 직후 무적',
+  base: STAND,
+  windup: pose(STAND, { torso: -22, head: 18, aF: [60, 120], aB: [-30, 60], lF: [30, -40] }),
+  hit: pose(STAND, { torso: -30, head: 20, aF: [172, 20], aB: [-40, 60], lF: [35, -45], lB: [-10, -30] }),
   startup: 5,
-  active: 7,
-  recovery: 24,
-  box: { x: -10, y: 100, w: 90, h: 130 },
+  active: 8,
+  recovery: 22,
+  box: { x: -10, y: 100, w: 85, h: 125 },
   damage: 95,
   extra: { launch: { vx: 1.5, vy: 12 }, knockdown: true, chip: 8 },
-  more: { invuln: [1, 7] },
+  more: { invuln: [1, 8] },
 });
 
 const rogerRabbit: MoveDef = {
@@ -243,6 +257,8 @@ const cypherSwag = combo({
 
 export const HIPHOP_MOVES = moveTable([
   sLP,
+  crissCross,
+  dougie,
   sHP,
   sLK,
   sHK,
@@ -253,8 +269,6 @@ export const HIPHOP_MOVES = moveTable([
   jL,
   jH,
   runningManRush,
-  cripWalk,
-  jumpUp,
   rogerRabbit,
   cypherSwag,
 ]);

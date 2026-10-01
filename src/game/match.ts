@@ -20,6 +20,7 @@ export const DUMMY_LABEL: Record<DummyMode, string> = {
 
 const INTRO_FRAMES = 100;
 const KO_FRAMES = 150;
+const KO_SLOW_FRAMES = 45;
 const ROUND_END_FRAMES = 120;
 
 export interface ComboDisplay {
@@ -126,6 +127,9 @@ export class Match {
       return;
     }
 
+    // K.O. 직후 슬로모션: 처음 잠깐은 3프레임에 한 번만 움직인다
+    if (this.phase === 'ko' && this.phaseFrame < KO_SLOW_FRAMES && this.phaseFrame % 3 !== 0) return;
+
     const canAct = this.phase === 'fight';
     p1.update(canAct);
     p2.update(canAct);
@@ -134,6 +138,10 @@ export class Match {
       if (f.pendingProjectile) {
         this.projectiles.push(spawnProjectile(f, f.pendingProjectile));
         f.pendingProjectile = null;
+      }
+      if (f.pendingDust) {
+        f.pendingDust = false;
+        this.events.push({ type: 'dust', x: f.x, big: f.state === 'knockdown' });
       }
       if (f.pendingTaunt) {
         f.pendingTaunt = false;

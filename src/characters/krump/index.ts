@@ -1,11 +1,14 @@
 import type { CharacterDef } from '../../fighter/types';
+import { moveTable, grab, tune } from '../builders';
+import { NORMAL_IDS } from '../common';
 import { KRUMP_MOVES } from './moves';
+import { KRUMP_COMMAND } from './command';
 import * as A from './poses';
 
 export const KRUMP: CharacterDef = {
   id: 'krump',
   name: 'KRUMPER',
-  maxHealth: 1100,
+  maxHealth: 1150,
   look: {
     headwear: 'headband',
     build: 1.25,
@@ -46,22 +49,35 @@ export const KRUMP: CharacterDef = {
     crouch: A.crouch,
     win: A.win,
   },
-  moves: KRUMP_MOVES,
+  moves: tune(
+    { ...KRUMP_MOVES, ...moveTable(KRUMP_COMMAND), throw: grab({ id: 'throw', name: '체스트 범프', base: A.STAND }) },
+    NORMAL_IDS,
+    {
+      startup: 1,
+      reach: 0.9,
+      damage: 1.15,
+    },
+  ),
   normals: {
     stand: { LP: 'sLP', HP: 'sHP', LK: 'sLK', HK: 'sHK' },
     crouch: { LP: 'cLP', HP: 'cHP', LK: 'cLK', HK: 'cHK' },
     airLight: 'jL',
     airHeavy: 'jH',
+    throw: 'throw',
+    command: [{ dir: 6, button: 'HP', move: 'hammerSwing' }],
   },
   specials: [
     { motion: 'dp', button: 'P', move: 'burstUpper' },
     { motion: 'qcf', button: 'P', move: 'stompWave' },
     { motion: 'qcf', button: 'K', move: 'burstRush' },
     { motion: 'qcb', button: 'P', move: 'chestPop' },
+    { motion: 'qcb', button: 'K', move: 'jumpStomp' },
   ],
   super: 'killOff',
-  walkF: 2.7,
-  walkB: 2.2,
+  walkF: 2.5,
+  walkB: 2.0,
   jumpV: 15,
   jumpVX: 3.8,
+  dash: { frames: 18, speed: 6 },
+  backdash: { frames: 18, speed: 5, invuln: 6 },
 };

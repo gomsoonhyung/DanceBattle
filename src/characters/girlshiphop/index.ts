@@ -1,5 +1,8 @@
 import type { CharacterDef } from '../../fighter/types';
+import { moveTable, grab, tune } from '../builders';
+import { NORMAL_IDS } from '../common';
 import { GIRLS_HIPHOP_MOVES } from './moves';
+import { GIRLS_HIPHOP_COMMAND } from './command';
 import * as A from './poses';
 
 export const HIPHOP_GIRL: CharacterDef = {
@@ -39,12 +42,25 @@ export const HIPHOP_GIRL: CharacterDef = {
     range: 3,
   },
   anims: { ...A.common, idle: A.idle, walkF: A.walkF, walkB: A.walkB, crouch: A.crouch, win: A.win },
-  moves: GIRLS_HIPHOP_MOVES,
+  moves: tune(
+    {
+      ...GIRLS_HIPHOP_MOVES,
+      ...moveTable(GIRLS_HIPHOP_COMMAND),
+      throw: grab({ id: 'throw', name: '힙 토스', base: A.STAND }),
+    },
+    NORMAL_IDS,
+    {
+      startup: -1,
+      damage: 0.95,
+    },
+  ),
   normals: {
     stand: { LP: 'sLP', HP: 'sHP', LK: 'sLK', HK: 'sHK' },
     crouch: { LP: 'cLP', HP: 'cHP', LK: 'cLK', HK: 'cHK' },
     airLight: 'jL',
     airHeavy: 'jH',
+    throw: 'throw',
+    command: [{ dir: 6, button: 'HK', move: 'heelDrop' }],
   },
   specials: [
     { motion: 'dp', button: 'K', move: 'turnKick' },
@@ -57,4 +73,5 @@ export const HIPHOP_GIRL: CharacterDef = {
   walkB: 3.0,
   jumpV: 16.5,
   jumpVX: 4.5,
+  dash: { frames: 14, speed: 8 },
 };

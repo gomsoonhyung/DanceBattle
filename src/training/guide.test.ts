@@ -50,7 +50,7 @@ describe('성공 판정', () => {
       m.update(raw, I());
       guide.observe(m);
     }
-    const storm = guide.entries.find((e) => e.move.id === 'whipStorm')!;
+    const storm = guide.entries.find((e) => e.move.id === 'poseWave')!;
     expect(storm.successes).toBe(1);
     expect(guide.successFlash).toBeGreaterThan(0);
   });

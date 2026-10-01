@@ -23,6 +23,17 @@ interface Spark {
   rays: number[];
 }
 
+/** 바닥 먼지 한 알갱이 */
+interface Puff {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  r: number;
+  life: number;
+  max: number;
+}
+
 interface FloatText {
   x: number;
   y: number;
@@ -35,7 +46,11 @@ interface FloatText {
 export class Effects {
   private sparks: Spark[] = [];
   private texts: FloatText[] = [];
+  private puffs: Puff[] = [];
   shake = 0;
+  /** 화면 전체 섬광 (KO 등). 0~1 */
+  flash = 0;
+  private flashColor = '#fff';
 
   spark(wx: number, wy: number, kind: SparkKind): void {
     const color =
@@ -57,6 +72,29 @@ export class Effects {
     if (kind === 'heavy' || kind === 'counter') this.shake = Math.max(this.shake, 8);
   }
 
+  /** 발밑 먼지: 대시 출발·착지·넘어짐 */
+  dust(wx: number, big: boolean): void {
+    const n = big ? 10 : 6;
+    for (let i = 0; i < n; i++) {
+      const side = i % 2 ? 1 : -1;
+      const sp = (0.6 + Math.random() * 1.6) * (big ? 1.6 : 1);
+      this.puffs.push({
+        x: wx + side * Math.random() * 14,
+        y: GROUND_SCREEN_Y - 2,
+        vx: side * sp,
+        vy: -(0.3 + Math.random() * (big ? 1.4 : 0.8)),
+        r: (big ? 9 : 6) + Math.random() * 5,
+        life: 0,
+        max: 22 + Math.floor(Math.random() * 10),
+      });
+    }
+  }
+
+  screenFlash(color: string, amount = 1): void {
+    this.flash = Math.max(this.flash, amount);
+    this.flashColor = color;
+  }
+
   text(wx: number, wy: number, text: string, color: string): void {
     this.texts.push({ x: wx, y: GROUND_SCREEN_Y - wy, text, color, life: 50 });
   }
@@ -69,12 +107,31 @@ export class Effects {
       t.y -= 0.8;
     }
     this.texts = this.texts.filter((t) => t.life > 0);
+    for (const p of this.puffs) {
+      p.life++;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vx *= 0.9;
+      p.vy *= 0.92;
+      p.r += 0.35;
+    }
+    this.puffs = this.puffs.filter((p) => p.life < p.max);
+    this.flash *= 0.86;
+    if (this.flash < 0.02) this.flash = 0;
     this.shake *= 0.85;
     if (this.shake < 0.3) this.shake = 0;
   }
 
   draw(g: CanvasRenderingContext2D): void {
     g.save();
+    for (const p of this.puffs) {
+      g.globalAlpha = 0.28 * (1 - p.life / p.max);
+      g.fillStyle = '#d9cbb8';
+      g.beginPath();
+      g.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      g.fill();
+    }
+    g.globalAlpha = 1;
     g.lineCap = 'round';
     for (const s of this.sparks) {
       const t = s.life / s.max;
@@ -119,6 +176,16 @@ export class Effects {
       g.fillStyle = t.color;
       g.fillText(t.text, t.x, t.y);
     }
+    g.restore();
+  }
+
+  /** 화면 전체 섬광 (HUD 위에 그린다) */
+  drawFlash(g: CanvasRenderingContext2D, w: number, h: number): void {
+    if (this.flash <= 0) return;
+    g.save();
+    g.globalAlpha = this.flash;
+    g.fillStyle = this.flashColor;
+    g.fillRect(0, 0, w, h);
     g.restore();
   }
 }

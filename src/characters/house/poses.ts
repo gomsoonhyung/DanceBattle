@@ -69,20 +69,20 @@ export const idle: Anim = {
 export const walkF: Anim = {
   loop: 24,
   keys: [
-    { f: 0, p: STAND },
-    { f: 6, p: SHUF_A },
-    { f: 12, p: JACK_A },
-    { f: 18, p: SHUF_B },
+    { f: 0, p: JACK_B },
+    { f: 6, p: pose(SHUF_A, { torso: 22, head: -12 }) },
+    { f: 12, p: JACK_B },
+    { f: 18, p: pose(SHUF_B, { torso: 22, head: -12 }) },
   ],
 };
 
 export const walkB: Anim = {
   loop: 24,
   keys: [
-    { f: 0, p: STAND },
-    { f: 6, p: pose(STAND, { lB: [-35, -10], lF: [10, -20] }) },
+    { f: 0, p: JACK_B },
+    { f: 6, p: pose(JACK_A, { lB: [-35, -10], lF: [10, -20] }) },
     { f: 12, p: JACK_B },
-    { f: 18, p: pose(STAND, { lF: [-25, -10] }) },
+    { f: 18, p: pose(JACK_A, { lF: [-25, -10] }) },
   ],
 };
 

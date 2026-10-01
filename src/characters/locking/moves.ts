@@ -1,7 +1,7 @@
 import { genKeys, pose } from '../../anim/pose';
 import type { HitDef, MoveDef } from '../../fighter/types';
 import { JUMP_FALL, JUMP_TUCK } from '../common';
-import { CROUCH, KNEEL, LOCK, POINT, ROLL_A, ROLL_B, SPLIT, STAND, STEP_B, STEP_F } from './poses';
+import { CROUCH, LOCK, POINT, ROLL_A, ROLL_B, SPLIT, STAND, STEP_B, STEP_F } from './poses';
 
 // ── 기본기 ─────────────────────────────────────────────────────────
 
@@ -10,9 +10,11 @@ const sLP: MoveDef = {
   name: '포인트',
   kind: 'normal',
   total: 14,
+  // 손이 반대쪽 어깨 앞에서 출발해 앞으로 빠르게 뻗어 가리킨다 (돈 캠벨의 포인트)
   anim: {
     keys: [
       { f: 0, p: STAND },
+      { f: 2, p: pose(STAND, { torso: -5, head: 5, aF: [35, 150], aB: [20, 110] }) },
       { f: 4, p: pose(STAND, { torso: 10, aF: [92, 0], aB: [20, 110], lF: [20, -15] }) },
       { f: 7, p: pose(STAND, { torso: 10, aF: [90, 3], aB: [20, 110], lF: [20, -15] }) },
       { f: 14, p: STAND },
@@ -239,7 +241,7 @@ const jL: MoveDef = {
 
 const jH: MoveDef = {
   id: 'jH',
-  name: '에어 킥 락',
+  name: '스쿠비 홉 킥',
   kind: 'normal',
   total: 40,
   air: true,
@@ -268,38 +270,39 @@ const jH: MoveDef = {
 
 // ── 필살기 ─────────────────────────────────────────────────────────
 
-const unclePoint: MoveDef = {
-  id: 'unclePoint',
-  name: '엉클 샘 포인트',
-  desc: '상대를 가리키며 별빛 장풍을 쏜다. 높게 날아가서 앉으면 피할 수 있다',
+/** 캡 스로: 빅 애플 캡을 던진다. 날아갔다가 돌아오며, 가는 길·오는 길 모두 맞는다 */
+const capThrow: MoveDef = {
+  id: 'capThrow',
+  name: '캡 스로',
+  desc: '모자를 던진다. 날아갔다가 돌아오고, 오는 길에도 맞는다. 앉으면 피할 수 있다',
   kind: 'special',
-  total: 40,
+  total: 38,
   anim: {
     keys: [
       { f: 0, p: STAND },
-      { f: 6, p: pose(STAND, { torso: -10, aF: [140, 40], aB: [20, 110] }) },
-      { f: 11, p: POINT },
-      { f: 24, p: POINT },
-      { f: 40, p: STAND },
+      { f: 6, p: pose(STAND, { torso: -12, aF: [170, 60], aB: [20, 110] }) },
+      { f: 11, p: pose(STAND, { torso: 20, aF: [100, 10], aB: [10, 100], lF: [40, -30] }) },
+      { f: 22, p: pose(STAND, { torso: 20, aF: [100, 10], aB: [10, 100], lF: [40, -30] }) },
+      { f: 38, p: STAND },
     ],
   },
   hits: [],
-  // 높이 날아가서 앉은 상대에게는 맞지 않는다
   projectile: {
     frame: 12,
-    x: 75,
+    x: 60,
     y: 128,
     vx: 9,
-    life: 60,
-    box: { x: -14, y: -12, w: 28, h: 24 },
-    kind: 'spark',
-    hit: { damage: 50, hitstun: 18, blockstun: 14, level: 'mid', chip: 5 },
+    life: 100,
+    returnAfter: 40,
+    box: { x: -18, y: -10, w: 36, h: 20 },
+    kind: 'cap',
+    hit: { damage: 45, hitstun: 18, blockstun: 14, level: 'mid', chip: 4 },
   },
 };
 
 const jumpLock: MoveDef = {
   id: 'jumpLock',
-  name: '점프 락',
+  name: '업 락',
   desc: '대공기. 무릎을 모아 뛰어오르며 락. 발동 직후 무적',
   kind: 'special',
   total: 46,
@@ -331,78 +334,112 @@ const jumpLock: MoveDef = {
   ],
 };
 
-const scoobyRush: MoveDef = {
-  id: 'scoobyRush',
-  name: '스쿠비 두 러시',
-  desc: '스쿠비 두 스텝으로 달려들어 2연타 후 다운',
+/** 머슬맨 업락 자세 (두 팔을 어깨 위로) */
+const MUSCLE = pose(STAND, { torso: -8, head: 8, aF: [150, 70], aB: [140, 70] });
+
+/** 스쿠봇: 머슬맨 락으로 돌면서 스쿠 비 두 킥을 번갈아 찬다. 도는 다리가 앞뒤를 친다 */
+const scoobot: MoveDef = {
+  id: 'scoobot',
+  name: '스쿠봇',
+  desc: '머슬맨 락으로 돌면서 스쿠 비 두 킥을 번갈아 찬다. 앞뒤 모두 맞는 다단',
   kind: 'special',
-  total: 42,
+  total: 46,
+  velocity: [{ from: 4, to: 30, vx: 2 }],
   anim: {
     keys: [
       { f: 0, p: STAND },
-      { f: 4, p: STEP_F },
-      { f: 8, p: STEP_B },
-      { f: 12, p: STEP_F },
-      { f: 16, p: pose(STAND, { torso: -15, lF: [92, 0], aF: [-20, 70], aB: [-40, 60] }) },
-      { f: 20, p: pose(STAND, { torso: -15, lF: [90, -3], aF: [-20, 70], aB: [-40, 60] }) },
-      { f: 42, p: STAND },
+      { f: 5, p: MUSCLE },
+      { f: 8, p: pose(MUSCLE, { lF: [92, -5], lB: [-10, -20] }) },
+      { f: 12, p: MUSCLE },
+      { f: 15, p: pose(MUSCLE, { torso: 5, lF: [-15, -15], lB: [-95, -5] }) },
+      { f: 19, p: MUSCLE },
+      { f: 22, p: pose(MUSCLE, { lF: [95, -5], lB: [-10, -20] }) },
+      { f: 26, p: LOCK },
+      { f: 30, p: pose(LOCK, { lF: [100, 0], aF: [120, 0] }) },
+      { f: 46, p: STAND },
     ],
   },
-  velocity: [{ from: 3, to: 18, vx: 8 }],
   hits: [
     {
       frames: [8, 10],
-      box: { x: 15, y: 40, w: 75, h: 90 },
-      damage: 30,
-      hitstun: 20,
+      box: { x: 15, y: 40, w: 90, h: 50 },
+      damage: 25,
+      hitstun: 22,
       blockstun: 12,
       level: 'mid',
-      push: 2,
-      chip: 4,
+      push: 1,
+      chip: 3,
+      hitstop: 5,
     },
     {
-      frames: [15, 19],
-      box: { x: 15, y: 40, w: 80, h: 90 },
-      damage: 60,
+      frames: [15, 17],
+      box: { x: -100, y: 40, w: 90, h: 50 },
+      damage: 25,
+      hitstun: 22,
+      blockstun: 12,
+      level: 'mid',
+      push: 1,
+      chip: 3,
+      hitstop: 5,
+    },
+    {
+      frames: [22, 24],
+      box: { x: 15, y: 40, w: 90, h: 50 },
+      damage: 25,
+      hitstun: 22,
+      blockstun: 12,
+      level: 'mid',
+      push: 1,
+      chip: 3,
+      hitstop: 5,
+    },
+    {
+      frames: [30, 33],
+      box: { x: 15, y: 40, w: 100, h: 60 },
+      damage: 45,
       hitstun: 22,
       blockstun: 14,
       level: 'mid',
       knockdown: true,
       push: 10,
-      chip: 6,
+      chip: 5,
+      hitstop: 10,
       heavy: true,
     },
   ],
 };
 
-const kneeDrop: MoveDef = {
-  id: 'kneeDrop',
-  name: '니 드롭',
-  desc: '뛰어올라 무릎으로 내려앉는 중단. 서서 막아야 한다',
+/** 스쿠비 홉: 머슬맨 자세로 깡충 뛰어올라 공중에서 앞으로 찬다 (중단) */
+const scoobyHop: MoveDef = {
+  id: 'scoobyHop',
+  name: '스쿠비 홉',
+  desc: '머슬맨 자세로 깡충 뛰어 공중에서 앞으로 차는 중단. 서서 막아야 한다',
   kind: 'special',
-  total: 42,
+  total: 40,
+  velocity: [{ from: 3, to: 18, vx: 4 }],
   anim: {
+    snap: false,
     keys: [
       { f: 0, p: STAND },
-      { f: 6, p: pose(CROUCH, { torso: 30 }) },
-      { f: 12, p: pose(STAND, { lift: 55, lF: [100, -130], lB: [60, -130], aF: [160, 0], aB: [150, 0] }) },
-      { f: 19, p: KNEEL },
-      { f: 28, p: KNEEL },
-      { f: 42, p: STAND },
+      { f: 4, p: pose(CROUCH, { torso: 20 }) },
+      { f: 9, p: pose(MUSCLE, { y: 150, lF: [90, -110], lB: [40, -100] }) },
+      { f: 13, p: pose(MUSCLE, { y: 140, lF: [100, -5], lB: [40, -100] }) },
+      { f: 18, p: pose(MUSCLE, { y: 120, lF: [100, -5], lB: [40, -100] }) },
+      { f: 22, p: pose(CROUCH, { torso: 20 }) },
+      { f: 40, p: STAND },
     ],
   },
-  velocity: [{ from: 6, to: 18, vx: 4.5 }],
   hits: [
     {
-      frames: [16, 20],
-      box: { x: 10, y: 20, w: 80, h: 130 },
+      frames: [13, 17],
+      box: { x: 15, y: 50, w: 90, h: 80 },
       damage: 80,
-      hitstun: 22,
-      blockstun: 12,
+      hitstun: 20,
+      blockstun: 14,
       level: 'overhead',
       push: 8,
       chip: 6,
-      hitstop: 12,
+      hitstop: 11,
       heavy: true,
     },
   ],
@@ -505,10 +542,10 @@ export const LOCKING_MOVES: Record<string, MoveDef> = Object.fromEntries(
     cHK,
     jL,
     jH,
-    unclePoint,
+    scoobot,
+    scoobyHop,
+    capThrow,
     jumpLock,
-    scoobyRush,
-    kneeDrop,
     wristTwirl,
     lockAndPoint,
   ].map((m) => [m.id, m]),

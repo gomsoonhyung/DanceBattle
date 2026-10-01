@@ -1,6 +1,6 @@
 import { pose } from '../../anim/pose';
 import { airStrike, combo, moveTable, shooter, strike } from '../builders';
-import { CROUCH, GLIDE, POP, ROBO_A, ROBO_B, STAND, TUT_C, WAVE_1, WAVE_RELEASE, WIN } from './poses';
+import { CROUCH, POP, ROBO_A, ROBO_B, STAND, TUT_C, WAVE_1, WAVE_RELEASE, WIN } from './poses';
 
 // ── 기본기: 뻣뻣한 로봇 동작과 순간적인 팝 ──────────────────────────────
 
@@ -20,16 +20,18 @@ const sLP = strike({
 
 const sHP = strike({
   id: 'sHP',
-  name: '로봇 암',
+  name: '튜팅 암',
   base: STAND,
   windup: pose(STAND, { aF: [180, 0] }),
   hit: pose(STAND, { torso: 10, aF: [95, 0], aB: [0, 90] }),
   startup: 9,
   active: 4,
   recovery: 15,
-  box: { x: 20, y: 105, w: 90, h: 50 },
+  // 팔을 뻗는 끝에서 팝 → 팔 끝에서 전기가 튀어 나가 멀리까지 닿는다
+  box: { x: 20, y: 105, w: 120, h: 50 },
   damage: 78,
   cancel: true,
+  more: { hitFx: 'electric' },
 });
 
 const sLK = strike({
@@ -160,21 +162,46 @@ const wave = shooter({
   },
 });
 
-const animationDash = strike({
-  id: 'animationDash',
-  name: '애니메이션 대시',
-  kind: 'special',
-  desc: '잔상을 남기며 순식간에 미끄러져 들어간다. 이동 중에는 무적',
+/** 팝 샷: 팔을 뻗으며 팝 하면 그 충격이 작고 빠른 전기탄이 되어 날아간다. 빈틈이 적은 기본 견제 */
+const popShot = shooter({
+  id: 'popShot',
+  name: '팝 샷',
+  desc: '팔을 뻗으며 팝 하면 작고 빠른 전기탄이 날아간다. 빈틈이 적은 기본 견제',
   base: STAND,
-  windup: pose(STAND, { torso: 10 }),
-  hit: GLIDE,
-  startup: 12,
-  active: 4,
-  recovery: 20,
-  box: { x: 10, y: 50, w: 70, h: 110 },
-  damage: 60,
-  extra: { knockdown: true, chip: 6 },
-  more: { velocity: [{ from: 3, to: 14, vx: 10 }], invuln: [3, 11], trail: true },
+  windup: pose(POP, { aF: [40, 120] }),
+  release: pose(POP, { torso: 8, aF: [92, 0], aB: [10, 100] }),
+  frame: 9,
+  recovery: 18,
+  projectile: {
+    x: 75,
+    y: 115,
+    vx: 11,
+    life: 45,
+    box: { x: -14, y: -10, w: 28, h: 20 },
+    kind: 'bolt',
+    hit: { damage: 35, hitstun: 16, blockstun: 10, level: 'mid', chip: 3 },
+  },
+});
+
+/** 슬로 웨이브: 몸 전체를 타고 흐르는 느린 웨이브. 느리게 날아가서 뒤에서 따라 들어갈 수 있다 */
+const slowWave = shooter({
+  id: 'slowWave',
+  name: '슬로 웨이브',
+  desc: '몸 전체를 타고 흐르는 느린 웨이브. 장풍 뒤를 따라 들어가기 좋다',
+  base: STAND,
+  windup: WAVE_1,
+  release: WAVE_RELEASE,
+  frame: 18,
+  recovery: 26,
+  projectile: {
+    x: 70,
+    y: 110,
+    vx: 3.5,
+    life: 160,
+    box: { x: -24, y: -18, w: 48, h: 36 },
+    kind: 'wave',
+    hit: { damage: 50, hitstun: 20, blockstun: 16, level: 'mid', chip: 5 },
+  },
 });
 
 const robot = combo({
@@ -249,7 +276,8 @@ export const POPPING_MOVES = moveTable([
   jL,
   jH,
   wave,
-  animationDash,
+  popShot,
+  slowWave,
   robot,
   popUpper,
   electricBoogaloo,

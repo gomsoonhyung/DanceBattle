@@ -1,6 +1,6 @@
 import { pose } from '../../anim/pose';
 import { airStrike, combo, moveTable, strike } from '../builders';
-import { CROUCH, JACK_A, JACK_B, LOFT_KICK, SHUF_LOW_A, SHUF_LOW_B, SLIDE, STAND, WIN } from './poses';
+import { CROUCH, JACK_A, JACK_B, LOFT_KICK, SHUF_A, SHUF_B, SHUF_LOW_A, SHUF_LOW_B, SLIDE, STAND, WIN } from './poses';
 
 // ── 기본기: 잭킹 상체와 빠른 발 ────────────────────────────────────────
 
@@ -131,8 +131,9 @@ const jL = airStrike({
 
 const jH = airStrike({
   id: 'jH',
-  name: '로프트 드롭',
-  hit: { torso: 15, lF: [45, 0], lB: [45, -10] },
+  name: '다이브',
+  // 공중에서 앞으로 몸을 날린다: 몸통을 눕히고 두 팔을 앞으로, 다리는 뒤로 (로프팅의 다이브)
+  hit: { torso: 70, head: -20, aF: [115, 0], aB: [105, 5], lF: [-35, -5], lB: [-50, -10] },
   startup: 6,
   active: 9,
   box: { x: 10, y: -15, w: 75, h: 60 },
@@ -141,38 +142,47 @@ const jH = airStrike({
 
 // ── 필살기 ─────────────────────────────────────────────────────────
 
-const shuffleStep = combo({
-  id: 'shuffleStep',
-  name: '셔플 스텝',
-  desc: '발을 쉴 새 없이 차내며 전진하는 하단 6연타',
+/** 루즈 레그: 다리를 힘 빼고 털듯 흔들다가 상대 발등을 밟는다. 밟을 때마다 하단 */
+const LOOSE_A = pose(JACK_A, { lF: [38, -4], lB: [-45, -40], aF: [50, 60], aB: [-20, 60] });
+const LOOSE_B = pose(JACK_A, { lF: [-30, -35], lB: [36, -4], aF: [-20, 60], aB: [50, 60] });
+const looseLegs = combo({
+  id: 'looseLegs',
+  name: '루즈 레그',
+  desc: '다리를 털듯 흔들며 다가가 상대 발을 밟는 하단 5연타',
   base: STAND,
-  poses: [SHUF_LOW_A, SHUF_LOW_B],
+  poses: [LOOSE_A, LOOSE_B],
   start: 6,
-  interval: 5,
-  count: 5,
-  box: { x: 15, y: 0, w: 85, h: 35 },
-  damage: 16,
+  interval: 6,
+  count: 4,
+  box: { x: 15, y: 0, w: 80, h: 32 },
+  damage: 17,
   extra: { level: 'low' },
-  finish: { pose: pose(SHUF_LOW_A, { lF: [80, 0] }), delay: 6, damage: 35, extra: { level: 'low' } },
+  finish: { pose: pose(LOOSE_A, { torso: 30, lF: [42, -2] }), delay: 6, damage: 35, extra: { level: 'low' } },
   recovery: 14,
-  more: { velocity: [{ from: 3, to: 32, vx: 3 }] },
+  more: { velocity: [{ from: 3, to: 30, vx: 3 }] },
 });
 
-const jackingWave = combo({
-  id: 'jackingWave',
-  name: '잭킹 웨이브',
-  desc: '가슴을 튕기는 반동으로 밀어붙이는 3연타',
+/** 셔플: 셔플 스텝으로 파고들다 뛰어올라 뒤꿈치로 내리찍는다. 마지막은 중단 */
+const shuffle = combo({
+  id: 'shuffle',
+  name: '셔플',
+  desc: '셔플로 파고들어 뛰어올라 뒤꿈치로 내리찍는다. 마지막은 중단(서서 막기)',
   base: STAND,
-  windup: JACK_B,
-  poses: [pose(JACK_A, { torso: 30, aF: [85, 40], aB: [75, 50] }), pose(JACK_B, { aF: [60, 90] })],
-  start: 7,
-  interval: 7,
+  poses: [pose(SHUF_A, { torso: 18 }), pose(SHUF_B, { torso: 18 })],
+  start: 6,
+  interval: 6,
   count: 2,
-  box: { x: 15, y: 80, w: 75, h: 80 },
-  damage: 25,
-  finish: { pose: pose(JACK_A, { torso: 38, aF: [90, 0], aB: [85, 5], lF: [40, -40] }), delay: 7, damage: 50 },
+  box: { x: 15, y: 30, w: 80, h: 50 },
+  damage: 22,
+  finish: {
+    pose: pose(JACK_A, { torso: 25, lF: [70, -5], lB: [-20, -40], aF: [130, 40], aB: [110, 40] }),
+    delay: 9,
+    damage: 55,
+    box: { x: 15, y: 20, w: 85, h: 110 },
+    extra: { level: 'overhead' },
+  },
   recovery: 16,
-  more: { velocity: [{ from: 5, to: 20, vx: 1.5 }] },
+  more: { velocity: [{ from: 3, to: 22, vx: 3 }] },
 });
 
 const skateSlide = strike({
@@ -239,6 +249,8 @@ const houseParty = combo({
 
 export const HOUSE_MOVES = moveTable([
   sLP,
+  looseLegs,
+  shuffle,
   sHP,
   sLK,
   sHK,
@@ -248,8 +260,6 @@ export const HOUSE_MOVES = moveTable([
   cHK,
   jL,
   jH,
-  shuffleStep,
-  jackingWave,
   skateSlide,
   loftSpin,
   houseParty,

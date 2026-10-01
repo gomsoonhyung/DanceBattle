@@ -1,11 +1,14 @@
 import type { CharacterDef } from '../../fighter/types';
+import { moveTable, grab, tune } from '../builders';
+import { NORMAL_IDS } from '../common';
 import { HOUSE_MOVES } from './moves';
+import { HOUSE_COMMAND } from './command';
 import * as A from './poses';
 
 export const HOUSE_HEAD: CharacterDef = {
   id: 'househead',
   name: 'HOUSE HEAD',
-  maxHealth: 1000,
+  maxHealth: 950,
   look: {
     headwear: 'beanie',
     build: 1,
@@ -39,17 +42,30 @@ export const HOUSE_HEAD: CharacterDef = {
     range: 3,
   },
   anims: { ...A.common, idle: A.idle, walkF: A.walkF, walkB: A.walkB, crouch: A.crouch, win: A.win },
-  moves: HOUSE_MOVES,
+  moves: tune(
+    tune(
+      { ...HOUSE_MOVES, ...moveTable(HOUSE_COMMAND), throw: grab({ id: 'throw', name: '풋 훅', base: A.STAND }) },
+      NORMAL_IDS,
+      {
+        startup: -1,
+        reach: 0.9,
+      },
+    ),
+    ['cLK', 'cHK'],
+    { damage: 1.2 },
+  ),
   normals: {
     stand: { LP: 'sLP', HP: 'sHP', LK: 'sLK', HK: 'sHK' },
     crouch: { LP: 'cLP', HP: 'cHP', LK: 'cLK', HK: 'cHK' },
     airLight: 'jL',
     airHeavy: 'jH',
+    throw: 'throw',
+    command: [{ dir: 3, button: 'LK', move: 'heelToe' }],
   },
   specials: [
     { motion: 'dp', button: 'K', move: 'loftSpin' },
-    { motion: 'qcf', button: 'P', move: 'jackingWave' },
-    { motion: 'qcf', button: 'K', move: 'shuffleStep' },
+    { motion: 'qcf', button: 'P', move: 'shuffle' },
+    { motion: 'qcf', button: 'K', move: 'looseLegs' },
     { motion: 'qcb', button: 'K', move: 'skateSlide' },
   ],
   super: 'houseParty',
@@ -57,4 +73,5 @@ export const HOUSE_HEAD: CharacterDef = {
   walkB: 3.2,
   jumpV: 15.5,
   jumpVX: 4.4,
+  dash: { frames: 12, speed: 9.5 },
 };

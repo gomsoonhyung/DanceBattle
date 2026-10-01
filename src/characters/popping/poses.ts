@@ -75,13 +75,29 @@ export const walkF: Anim = {
   ],
 };
 
+/**
+ * 백슬라이드(문워크): 한 발은 바닥에 붙여 뒤로 미끄러뜨리고, 다른 발은 뒤꿈치를 든 채 앞에 둔다.
+ * 두 발이 번갈아 바뀌며 걷는 듯한데 몸은 뒤로 미끄러진다
+ */
+const SLIDE_A = pose(STAND, { torso: -4, head: 4, lF: [18, -2], lB: [-10, -38], aF: [60, 80], aB: [-10, 70] });
+const SLIDE_B = pose(STAND, { torso: -4, head: 4, lF: [-8, -38], lB: [16, -2], aF: [-10, 70], aB: [60, 80] });
 export const walkB: Anim = {
   loop: 36,
   keys: [
-    { f: 0, p: STAND },
-    { f: 9, p: pose(STAND, { lB: [-30, -5], lF: [15, -5] }) },
-    { f: 18, p: STAND },
-    { f: 27, p: pose(STAND, { lF: [-25, -5], lB: [10, -5] }) },
+    { f: 0, p: SLIDE_A },
+    { f: 9, p: pose(SLIDE_A, { lF: [-12, -2] }) },
+    { f: 18, p: SLIDE_B },
+    { f: 27, p: pose(SLIDE_B, { lB: [-12, -2] }) },
+  ],
+};
+
+/** 백대시도 글라이드: 한 번에 크게 미끄러져 물러난다 */
+export const backdash: Anim = {
+  keys: [
+    { f: 0, p: SLIDE_A },
+    { f: 6, p: pose(SLIDE_A, { lF: [-15, -2], torso: -8 }) },
+    { f: 12, p: SLIDE_B },
+    { f: 18, p: pose(SLIDE_B, { lB: [-15, -2] }) },
   ],
 };
 

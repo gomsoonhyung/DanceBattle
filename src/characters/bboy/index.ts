@@ -1,5 +1,8 @@
 import type { CharacterDef } from '../../fighter/types';
+import { moveTable, grab } from '../builders';
+import { baseAnims } from '../common';
 import { BBOY_MOVES } from './moves';
+import { BBOY_COMMAND } from './command';
 import * as A from './poses';
 
 export const BBOY: CharacterDef = {
@@ -39,6 +42,7 @@ export const BBOY: CharacterDef = {
     range: 3,
   },
   anims: {
+    ...dashAnims(),
     idle: A.idle,
     walkF: A.walkF,
     walkB: A.walkB,
@@ -55,18 +59,20 @@ export const BBOY: CharacterDef = {
     getup: A.getup,
     win: A.win,
   },
-  moves: BBOY_MOVES,
+  moves: { ...BBOY_MOVES, ...moveTable(BBOY_COMMAND), throw: grab({ id: 'throw', name: '스핀 스로', base: A.STAND }) },
   normals: {
     stand: { LP: 'sLP', HP: 'sHP', LK: 'sLK', HK: 'sHK' },
     crouch: { LP: 'cLP', HP: 'cHP', LK: 'cLK', HK: 'cHK' },
     airLight: 'jL',
     airHeavy: 'jH',
+    throw: 'throw',
+    command: [{ dir: 3, button: 'HK', move: 'sixStepSweep' }],
   },
   // 우선순위 순서 (앞쪽이 먼저 검사됨)
   specials: [
     { motion: 'dp', button: 'P', move: 'headspin' },
     { motion: 'qcf', button: 'P', move: 'windmill' },
-    { motion: 'qcf', button: 'K', move: 'airflare' },
+    { motion: 'qcf', button: 'K', move: 'footworkRush' },
     { motion: 'qcb', button: 'P', move: 'freeze' },
     { motion: 'qcb', button: 'K', move: 'swipe' },
   ],
@@ -76,3 +82,8 @@ export const BBOY: CharacterDef = {
   jumpV: 16,
   jumpVX: 4.2,
 };
+
+function dashAnims() {
+  const { dash, backdash } = baseAnims(A.STAND, A.CROUCH).anims;
+  return { dash, backdash };
+}

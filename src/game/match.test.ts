@@ -315,3 +315,135 @@ describe('락킹', () => {
     expect(m.fighters[1].health).toBe(LOCKER.maxHealth);
   });
 });
+
+describe('기본 시스템: 대시 · 잡기 · 카운터 · 기상', () => {
+  const THROW = BTN.LP | BTN.LK;
+
+  it('→ → 를 빠르게 누르면 앞으로 대시한다', () => {
+    const m = fightingMatch();
+    const p1 = m.fighters[0];
+    m.fighters[1].x = 900;
+    const x0 = p1.x;
+    seq(m, [I({ right: true }), I(), I({ right: true })]);
+    expect(p1.state).toBe('dash');
+    run(m, 20);
+    expect(p1.x - x0).toBeGreaterThan(100);
+    expect(p1.state).toBe('idle');
+  });
+
+  it('↓↘→↓↘→ 는 대시가 되지 않는다', () => {
+    const m = fightingMatch();
+    seq(m, [I({ down: true }), I({ down: true, right: true }), I({ right: true })]);
+    seq(m, [I({ down: true }), I({ down: true, right: true }), I({ right: true })]);
+    expect(m.fighters[0].state).not.toBe('dash');
+  });
+
+  it('백대시는 처음 몇 프레임 동안 무적이다', () => {
+    const m = fightingMatch();
+    closeIn(m);
+    seq(m, [I({ left: true }), I(), I({ left: true })]);
+    expect(m.fighters[0].state).toBe('backdash');
+    expect(m.fighters[0].hurtbox()).toBeNull();
+  });
+
+  it('붙어서 약P+약K로 잡으면 가드해도 데미지를 주고 넘어뜨린다', () => {
+    const m = fightingMatch();
+    closeIn(m, 60);
+    // P2는 계속 뒤(오른쪽)를 눌러 가드
+    seq(m, [I({ buttons: THROW })], I({ right: true }));
+    run(m, 30, I(), I({ right: true }));
+    expect(m.fighters[1].health).toBe(MAX_HEALTH - 120);
+    expect(['airHit', 'knockdown']).toContain(m.fighters[1].state);
+  });
+
+  it('잡히는 순간 약P+약K를 누르면 잡기를 푼다', () => {
+    const m = fightingMatch();
+    closeIn(m, 60);
+    const events: string[] = [];
+    seq(m, [I({ buttons: THROW }), I(), I()], I());
+    m.update(I(), I({ buttons: THROW }));
+    events.push(...m.events.map((e) => e.type));
+    for (let i = 0; i < 6; i++) {
+      m.update(I(), I());
+      events.push(...m.events.map((e) => e.type));
+    }
+    expect(events).toContain('tech');
+    expect(m.fighters[1].health).toBe(MAX_HEALTH);
+  });
+
+  it('멀리서는 잡을 수 없다', () => {
+    const m = fightingMatch();
+    closeIn(m, 160);
+    seq(m, [I({ buttons: THROW })]);
+    run(m, 30);
+    expect(m.fighters[1].health).toBe(MAX_HEALTH);
+  });
+
+  it('상대가 공격을 내미는 중에 맞히면 카운터 히트 (데미지 1.2배)', () => {
+    const m = fightingMatch();
+    closeIn(m);
+    // 같은 프레임에 P1 약P(발생 5), P2 강P(발생 9) → P2가 내미는 중에 맞는다
+    m.update(I({ buttons: BTN.LP }), I({ buttons: BTN.HP }));
+    const types: string[] = [];
+    for (let i = 0; i < 10; i++) {
+      m.update(I(), I());
+      types.push(...m.events.map((e) => e.type));
+    }
+    expect(types).toContain('counterHit');
+    expect(m.fighters[1].health).toBe(MAX_HEALTH - Math.round(30 * 1.2));
+  });
+
+  it('넘어진 직후 버튼을 누르면 빨리 일어난다', () => {
+    const framesToStand = (quick: boolean) => {
+      const m = fightingMatch();
+      closeIn(m, 60);
+      seq(m, [I({ buttons: THROW })]);
+      const state = (): string => m.fighters[1].state;
+      let n = 0;
+      while (state() !== 'knockdown') {
+        m.update(I(), I());
+        n++;
+      }
+      m.update(I(), I({ buttons: quick ? BTN.LP : 0 }));
+      n++;
+      while (state() !== 'idle' && n < 300) {
+        m.update(I(), I());
+        n++;
+      }
+      return n;
+    };
+    expect(framesToStand(false) - framesToStand(true)).toBeGreaterThanOrEqual(15);
+  });
+});
+
+describe('특수기 · 새 필살기', () => {
+  it('앞+강P 로 크럼프 해머 스윙이 나간다', () => {
+    const m = fightingMatch([KRUMP, BBOY]);
+    closeIn(m, 90);
+    seq(m, [I({ right: true, buttons: BTN.HP })]);
+    expect(m.fighters[0].move?.id).toBe('hammerSwing');
+  });
+
+  it('해머 스윙은 중단이라 앉아서는 막을 수 없다', () => {
+    const m = fightingMatch([KRUMP, BBOY]);
+    closeIn(m, 90);
+    // P2는 뒤아래(오른쪽 아래)로 앉아 가드
+    const crouchGuard = I({ down: true, right: true });
+    seq(m, [I({ right: true, buttons: BTN.HP })], crouchGuard);
+    run(m, 30, I(), crouchGuard);
+    expect(m.fighters[1].health).toBeLessThan(BBOY.maxHealth);
+  });
+
+  it('락킹 모자는 날아갔다가 주인에게 돌아온다', () => {
+    const m = fightingMatch([LOCKER, BBOY]);
+    m.fighters[0].x = 100;
+    m.fighters[1].x = 900;
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LP })]);
+    run(m, 20);
+    expect(m.projectiles[0].vx).toBeGreaterThan(0);
+    run(m, 30);
+    expect(m.projectiles[0].vx).toBeLessThan(0);
+    run(m, 50);
+    expect(m.projectiles.length).toBe(0);
+  });
+});

@@ -1,5 +1,8 @@
 import type { CharacterDef } from '../../fighter/types';
+import { moveTable, grab, tune } from '../builders';
+import { NORMAL_IDS } from '../common';
 import { LOCKING_MOVES } from './moves';
+import { LOCKING_COMMAND } from './command';
 import * as A from './poses';
 
 export const LOCKER: CharacterDef = {
@@ -46,23 +49,38 @@ export const LOCKER: CharacterDef = {
     crouch: A.crouch,
     win: A.win,
   },
-  moves: LOCKING_MOVES,
+  moves: tune(
+    {
+      ...LOCKING_MOVES,
+      ...moveTable(LOCKING_COMMAND),
+      throw: grab({ id: 'throw', name: '락 앤 스핀', base: A.STAND }),
+    },
+    NORMAL_IDS,
+    {
+      startup: -1,
+      reach: 1.2,
+      damage: 0.8,
+    },
+  ),
   normals: {
     stand: { LP: 'sLP', HP: 'sHP', LK: 'sLK', HK: 'sHK' },
     crouch: { LP: 'cLP', HP: 'cHP', LK: 'cLK', HK: 'cHK' },
     airLight: 'jL',
     airHeavy: 'jH',
+    throw: 'throw',
+    command: [{ dir: 6, button: 'HP', move: 'longPoint' }],
   },
   specials: [
     { motion: 'dp', button: 'P', move: 'jumpLock' },
-    { motion: 'qcf', button: 'P', move: 'unclePoint' },
-    { motion: 'qcf', button: 'K', move: 'scoobyRush' },
+    { motion: 'qcf', button: 'P', move: 'capThrow' },
+    { motion: 'qcf', button: 'K', move: 'scoobot' },
     { motion: 'qcb', button: 'P', move: 'wristTwirl' },
-    { motion: 'qcb', button: 'K', move: 'kneeDrop' },
+    { motion: 'qcb', button: 'K', move: 'scoobyHop' },
   ],
   super: 'lockAndPoint',
   walkF: 3.9,
   walkB: 3.1,
   jumpV: 16.5,
   jumpVX: 4.6,
+  dash: { frames: 18, speed: 8.5 },
 };

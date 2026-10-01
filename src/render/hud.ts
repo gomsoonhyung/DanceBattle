@@ -103,27 +103,41 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
   drawBanner(g, m);
 }
 
-function bigText(g: CanvasRenderingContext2D, text: string, color: string, size = 90, y = SCREEN_H / 2 - 20): void {
+/** 화면 가운데 큰 글자. age(나타난 뒤 프레임)를 주면 크게 튀어 들어왔다가 제자리로 줄어든다 */
+function bigText(
+  g: CanvasRenderingContext2D,
+  text: string,
+  color: string,
+  size = 90,
+  y = SCREEN_H / 2 - 20,
+  age = 99,
+): void {
+  const pop = age < 10 ? 1 + (1 - age / 10) ** 2 * 0.8 : 1;
+  g.save();
+  g.translate(SCREEN_W / 2, y);
+  g.scale(pop, pop);
+  g.globalAlpha = Math.min(1, age / 4 + 0.25);
   g.textAlign = 'center';
   g.font = `900 ${size}px ${FONT_TITLE}`;
   g.lineJoin = 'round';
   g.lineWidth = 12;
   g.strokeStyle = '#000';
-  g.strokeText(text, SCREEN_W / 2, y);
+  g.strokeText(text, 0, 0);
   g.fillStyle = color;
-  g.fillText(text, SCREEN_W / 2, y);
+  g.fillText(text, 0, 0);
+  g.restore();
 }
 
 function drawBanner(g: CanvasRenderingContext2D, m: Match): void {
   const f = m.phaseFrame;
   switch (m.phase) {
     case 'intro':
-      if (f < 55) bigText(g, `ROUND ${m.round}`, '#fff');
-      else bigText(g, 'FIGHT!', '#ffd23f', 110);
+      if (f < 55) bigText(g, `ROUND ${m.round}`, '#fff', 90, undefined, f);
+      else bigText(g, 'DANCE!', '#ffd23f', 110, undefined, f - 55);
       break;
     case 'ko': {
       const koed = m.fighters.some((x) => x.health <= 0);
-      if (f < 90) bigText(g, koed ? 'K.O.' : 'TIME OVER', '#ff4d5e', koed ? 130 : 90);
+      if (f < 90) bigText(g, koed ? 'K.O.' : 'TIME OVER', '#ff4d5e', koed ? 130 : 90, undefined, f);
       else
         bigText(
           g,

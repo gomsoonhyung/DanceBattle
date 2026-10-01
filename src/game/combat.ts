@@ -6,6 +6,9 @@ import type { GameEvent } from './events';
 
 type HitProps = Omit<HitDef, 'frames' | 'box'>;
 
+const COUNTER_DAMAGE = 1.2;
+const TECH_STUN = 14;
+
 /** 날아가는 중인 장풍 */
 export interface Projectile {
   owner: 0 | 1;
@@ -61,7 +64,7 @@ function applyContact(c: Contact, events: GameEvent[]): void {
     att.hitIds.add(c.idx!);
     att.moveConnected = true;
   }
-  const dir = c.projectile ? c.projectile.facing : att.facing;
+  const dir: 1 | -1 = c.projectile ? (c.projectile.vx >= 0 ? 1 : -1) : att.facing;
   const hitstop = hit.hitstop ?? 8;
   const isSuper = melee && att.move?.kind === 'super';
 
@@ -88,8 +91,10 @@ function applyContact(c: Contact, events: GameEvent[]): void {
     return;
   }
 
+  // 카운터 히트: 상대가 공격을 내미는 중에 맞히면 데미지·경직 증가
+  const counterHit = def.inAttackStartup();
   // 콤보 보정: 히트 수가 늘수록 데미지 감소 (최소 30%)
-  const scale = Math.max(0.3, 1 - def.comboHits * 0.1);
+  const scale = Math.max(0.3, 1 - def.comboHits * 0.1) * (counterHit ? COUNTER_DAMAGE : 1);
   const dmg = Math.max(1, Math.round(hit.damage * scale));
 
   // 슈퍼아머: 데미지만 받고 기술은 계속된다 (초필살기에는 깨짐)
@@ -113,16 +118,50 @@ function applyContact(c: Contact, events: GameEvent[]): void {
     const l = hit.launch ?? (hit.knockdown ? { vx: 4, vy: 7 } : { vx: 2.5, vy: 6 });
     def.enterAirHit(l.vx * dir, l.vy);
   } else {
-    def.enterHitstun(hit.hitstun);
+    def.enterHitstun(hit.hitstun + (counterHit ? (hit.heavy ? 8 : 4) : 0));
     applyPush(att, def, hit.push ?? 6, dir, melee);
   }
-  def.hitstop = hitstop;
-  if (melee) att.hitstop = hitstop;
+  def.hitstop = hitstop + (counterHit ? 4 : 0);
+  if (melee) att.hitstop = def.hitstop;
   events.push({ type: 'hit', x: c.at.x, y: c.at.y, heavy: !!hit.heavy, attacker: att.index });
+  if (counterHit) events.push({ type: 'counterHit', x: c.at.x, y: c.at.y });
+}
+
+/** 잡기 판정: 잡기 기술이 잡는 프레임에 상대가 사거리 안에 있으면 잡는다 (가드 불가, 잡기 풀기 가능) */
+function tryGrab(att: Fighter, def: Fighter, events: GameEvent[]): void {
+  const g = att.move?.grab;
+  if (att.state !== 'move' || !g || att.moveFrame !== g.frame || att.hitstop > 0) return;
+  if (!def.canBeGrabbed() || Math.abs(def.x - att.x) > g.range) return;
+  const at = { x: (att.x + def.x) / 2, y: 110 };
+  // 잡기 풀기: 둘 다 튕겨 나오고 데미지 없음
+  if (def.techsGrab()) {
+    att.enterBlockstun(TECH_STUN, 'stand');
+    def.enterBlockstun(TECH_STUN, 'stand');
+    att.pushVel = -att.facing * 7;
+    def.pushVel = att.facing * 7;
+    events.push({ type: 'tech', x: at.x, y: at.y });
+    return;
+  }
+  let dir = att.facing;
+  if (att.grabBack) {
+    // 뒤로 던지기: 상대를 내 뒤로 넘긴다
+    def.x = att.x - att.facing * 40;
+    dir = -att.facing as 1 | -1;
+  }
+  def.health = Math.max(0, def.health - g.damage);
+  def.comboHits++;
+  def.comboDamage += g.damage;
+  att.addMeter(g.damage / 8);
+  def.addMeter(g.damage / 16);
+  def.enterAirHit(g.launch.vx * dir, g.launch.vy);
+  att.hitstop = def.hitstop = 10;
+  events.push({ type: 'throw', x: at.x, y: at.y });
 }
 
 /** 양쪽 공격 판정을 먼저 모두 찾은 뒤 적용한다 (동시 타격 = 상쇄 없이 둘 다 맞음). */
 export function resolveHits(a: Fighter, b: Fighter, events: GameEvent[]): void {
+  tryGrab(a, b, events);
+  tryGrab(b, a, events);
   const c1 = findContact(a, b);
   const c2 = findContact(b, a);
   if (c1) applyContact(c1, events);
@@ -160,6 +199,13 @@ export function updateProjectiles(
     p.x += p.vx;
     p.age++;
     if (--p.life <= 0 || p.x < STAGE_LEFT - 60 || p.x > STAGE_RIGHT + 60) p.dead = true;
+    // 되돌아오는 장풍: 방향을 바꾸고, 주인에게 닿으면 사라진다
+    const back = p.def.returnAfter;
+    if (back !== undefined) {
+      if (p.age === back) p.vx = -p.vx;
+      const owner = fighters[p.owner];
+      if (p.age > back && Math.sign(owner.x - p.x) !== Math.sign(p.vx)) p.dead = true;
+    }
   }
   for (const p of list) {
     for (const q of list) {

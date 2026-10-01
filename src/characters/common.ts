@@ -75,8 +75,41 @@ export function baseAnims(stand: Pose, crouch: Pose) {
     lB: [-18, -10],
   });
   const blockCrouchPose = pose(crouch, { torso: 25, head: 0, aF: [75, 120], aB: [65, 125] });
+  // 대시: 몸을 앞으로 숙이고 달려 나간다 / 백대시: 몸을 젖히며 뒤로 뛴다
+  const dashPose = pose(stand, {
+    torso: stand.torso + 25,
+    head: -10,
+    aF: [-30, 80],
+    aB: [60, 70],
+    lF: [70, -80],
+    lB: [-40, -30],
+  });
+  const backdashPose = pose(stand, {
+    y: stand.y + 18,
+    torso: -15,
+    head: 10,
+    aF: [40, 60],
+    aB: [-20, 50],
+    lF: [35, -70],
+    lB: [-5, -60],
+  });
 
   const anims = {
+    dash: {
+      keys: [
+        { f: 0, p: prejumpPose },
+        { f: 4, p: dashPose },
+        { f: 14, p: pose(dashPose, { lF: [-20, -40], lB: [60, -90] }) },
+      ],
+    } as Anim,
+    backdash: {
+      snap: false,
+      keys: [
+        { f: 0, p: prejumpPose },
+        { f: 6, p: backdashPose },
+        { f: 18, p: prejumpPose },
+      ],
+    } as Anim,
     prejump: {
       keys: [
         { f: 0, p: stand },
@@ -132,3 +165,6 @@ export function baseAnims(stand: Pose, crouch: Pose) {
   };
   return { poses: { prejump: prejumpPose, hitStand: hitStandPose }, anims };
 }
+
+/** 일반기 id (서서·앉아·점프). 캐릭터 유형별 수치 조정(tune)에 쓴다 */
+export const NORMAL_IDS = ['sLP', 'sHP', 'sLK', 'sHK', 'cLP', 'cHP', 'cLK', 'cHK', 'jL', 'jH'];

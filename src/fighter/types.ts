@@ -1,5 +1,6 @@
 import type { Anim } from '../anim/pose';
 import type { Rect } from '../core/math';
+import type { Button, Dir } from '../input/types';
 
 /** mid = 서서/앉아서 모두 가드 가능, low = 앉아서만, overhead = 서서만 */
 export type HitLevel = 'mid' | 'low' | 'overhead';
@@ -22,7 +23,7 @@ export interface HitDef {
   unblockable?: boolean; // 가드 불가
 }
 
-export type ProjectileKind = 'shockwave' | 'spark' | 'wave' | 'heart';
+export type ProjectileKind = 'shockwave' | 'spark' | 'wave' | 'heart' | 'cap' | 'arc' | 'bolt';
 
 /** 기술에서 발사되는 장풍. 캐릭터 기준 위치에서 생성되어 직진한다. */
 export interface ProjectileDef {
@@ -34,6 +35,8 @@ export interface ProjectileDef {
   box: Rect; // 장풍 중심 기준 판정
   hit: Omit<HitDef, 'frames' | 'box'>;
   kind: ProjectileKind;
+  /** 이 프레임이 지나면 방향을 바꿔 주인에게 돌아온다 (락킹 모자). 돌아오는 길에도 맞는다 */
+  returnAfter?: number;
 }
 
 export type MoveKind = 'normal' | 'special' | 'super';
@@ -69,8 +72,22 @@ export interface MoveDef {
   meterGain?: { frame: number; amount: number };
   /** 잔상 연출 (팝핑 애니메이션 대시 등) */
   trail?: boolean;
+  /** 판정이 나와 있는 동안 판정 위치에 그리는 궤적 (휩·전기). 보이는 만큼 맞는다 */
+  hitFx?: 'whip' | 'electric';
   /** 연습 모드 가이드에 나오는 한 줄 설명 */
   desc?: string;
+  /** 잡기: frame 프레임에 몸 앞 range 안의 상대를 잡는다 (가드 불가, 잡기 풀기 가능) */
+  grab?: { frame: number; range: number; damage: number; launch: { vx: number; vy: number } };
+}
+
+/** 대시·백대시 */
+export interface DashDef {
+  frames: number;
+  speed: number;
+  /** 무적 프레임 수 (처음부터) */
+  invuln?: number;
+  /** 잔상 연출 (팝핑 애니메이션 대시) */
+  trail?: boolean;
 }
 
 /** 캐릭터 색상 */
@@ -132,6 +149,8 @@ export interface CharacterDef {
   maxHealth: number;
   anims: {
     idle: Anim;
+    dash: Anim;
+    backdash: Anim;
     walkF: Anim;
     walkB: Anim;
     crouch: Anim;
@@ -154,6 +173,10 @@ export interface CharacterDef {
     crouch: Record<'LP' | 'HP' | 'LK' | 'HK', string>;
     airLight: string;
     airHeavy: string;
+    /** 특수기 (방향 + 버튼): 6HP 등. 일반기보다 먼저 확인한다 */
+    command?: { dir: Dir; button: Button; move: string }[];
+    /** 잡기 (약P+약K) */
+    throw?: string;
   };
   specials: { motion: 'qcf' | 'qcb' | 'dp'; button: 'P' | 'K'; move: string }[];
   super: string;
@@ -161,4 +184,6 @@ export interface CharacterDef {
   walkB: number;
   jumpV: number;
   jumpVX: number;
+  dash?: DashDef;
+  backdash?: DashDef;
 }

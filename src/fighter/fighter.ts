@@ -3,12 +3,14 @@ import { GRAVITY, MAX_METER, STAGE_LEFT, STAGE_RIGHT } from '../core/constants';
 import { clamp, type Rect } from '../core/math';
 import { InputBuffer } from '../input/inputBuffer';
 import { BTN, KICKS, PUNCHES, type Button, type Dir, type RawInput } from '../input/types';
-import type { CharacterDef, HitLevel, MoveDef, ProjectileDef } from './types';
+import type { CharacterDef, DashDef, HitLevel, MoveDef, ProjectileDef } from './types';
 
 export type FighterState =
   | 'idle'
   | 'walkF'
   | 'walkB'
+  | 'dash'
+  | 'backdash'
   | 'crouch'
   | 'prejump'
   | 'jump'
@@ -39,6 +41,11 @@ const KNOCKDOWN_FRAMES = 40;
 const GETUP_FRAMES = 26;
 const PREJUMP_FRAMES = 4;
 const LAND_FRAMES = 4;
+const QUICK_RISE_FRAMES = 20; // 빠른 기상: 바닥에 닿고 버튼을 누르면 이만큼만 누워 있는다
+const DASH_WINDOW = 12; // 66 / 44 두 번 누르기 허용 간격
+const THROW_TECH_WINDOW = 7; // 잡힌 쪽이 약P+약K로 풀 수 있는 선입력 프레임
+const DEFAULT_DASH: DashDef = { frames: 16, speed: 7 };
+const DEFAULT_BACKDASH: DashDef = { frames: 20, speed: 6, invuln: 8 };
 
 export type GuardType = 'stand' | 'crouch';
 
@@ -85,6 +92,11 @@ export class Fighter {
   pendingProjectile: ProjectileDef | null = null;
   /** 슈퍼아머로 버틸 수 있는 남은 횟수 */
   private armorHits = 0;
+  /** 먼지 연출이 필요한 순간 (대시 출발, 착지, 넘어짐). Match가 읽어서 이벤트를 보낸다 */
+  pendingDust = false;
+  /** 뒤로 던지기 (4 + 약P+약K) */
+  grabBack = false;
+  private quickRise = false;
 
   constructor(
     readonly def: CharacterDef,
@@ -142,6 +154,13 @@ export class Fighter {
       case 'crouch':
         this.updateNeutral(canAct);
         break;
+      case 'dash':
+      case 'backdash': {
+        const d = this.dashDef();
+        this.x += (this.state === 'dash' ? d.speed : -d.speed) * this.facing;
+        if (this.stateFrame >= d.frames) this.setState(canAct && this.input.dir <= 3 ? 'crouch' : 'idle');
+        break;
+      }
       case 'prejump':
         if (this.stateFrame >= PREJUMP_FRAMES) {
           this.vy = this.def.jumpV;
@@ -171,11 +190,18 @@ export class Fighter {
         if (this.airPhysics()) {
           this.juggle = 0;
           this.vx = 0;
+          this.quickRise = false;
+          this.pendingDust = true;
           this.setState('knockdown');
         }
         break;
       case 'knockdown':
-        if (this.stateFrame >= KNOCKDOWN_FRAMES && this.health > 0) {
+        // 빠른 기상: 바닥에 닿고 잠깐 안에 아무 버튼
+        if (canAct && this.health > 0 && this.stateFrame <= 15 && this.input.pressedWithin(PUNCHES | KICKS, 3)) {
+          this.quickRise = true;
+          this.input.consume();
+        }
+        if (this.stateFrame >= (this.quickRise ? QUICK_RISE_FRAMES : KNOCKDOWN_FRAMES) && this.health > 0) {
           this.endCombo();
           this.setState('getup');
         } else if (this.health <= 0 && this.stateFrame >= 20) {
@@ -212,6 +238,8 @@ export class Fighter {
 
   private updateNeutral(canAct: boolean): void {
     if (canAct && this.tryGroundAttack()) return;
+    if (canAct && this.input.doubleTap(6, DASH_WINDOW)) return this.startDash('dash');
+    if (canAct && this.input.doubleTap(4, DASH_WINDOW)) return this.startDash('backdash');
     const d = canAct ? this.input.dir : 5;
     this.vx = 0;
     if (d >= 7) {
@@ -230,6 +258,19 @@ export class Fighter {
     }
   }
 
+  dashDef(): DashDef {
+    return (
+      (this.state === 'backdash' ? this.def.backdash : this.def.dash) ??
+      (this.state === 'backdash' ? DEFAULT_BACKDASH : DEFAULT_DASH)
+    );
+  }
+
+  private startDash(s: 'dash' | 'backdash'): void {
+    this.setState(s);
+    this.vx = 0;
+    this.pendingDust = true;
+  }
+
   /** 공중 물리. 착지하면 true */
   private airPhysics(): boolean {
     this.vy -= GRAVITY;
@@ -245,6 +286,7 @@ export class Fighter {
 
   private landFromAir(): void {
     this.vx = 0;
+    this.pendingDust = true;
     this.setState('land');
   }
 
@@ -317,7 +359,7 @@ export class Fighter {
   }
 
   private tryGroundAttack(): boolean {
-    const m = this.matchSuper() ?? this.matchSpecial() ?? this.matchNormal();
+    const m = this.matchSuper() ?? this.matchSpecial() ?? this.matchThrow() ?? this.matchNormal();
     if (!m) return false;
     this.startMove(m);
     return true;
@@ -352,9 +394,20 @@ export class Fighter {
     return null;
   }
 
+  /** 약P+약K = 잡기. 뒤(4·1·7)를 누르고 있으면 뒤로 던진다 */
+  private matchThrow(): MoveDef | null {
+    const id = this.def.normals.throw;
+    if (!id || !this.input.allPressedWithin(BTN.LP | BTN.LK, 3)) return null;
+    const d = this.input.dir;
+    this.grabBack = d === 4 || d === 1 || d === 7;
+    return this.def.moves[id];
+  }
+
   private matchNormal(): MoveDef | null {
     const btn = this.pickButton(this.input.pressedWithin(PUNCHES | KICKS, 3));
     if (!btn) return null;
+    const cmd = this.def.normals.command?.find((c) => c.dir === this.input.dir && c.button === btn);
+    if (cmd) return this.def.moves[cmd.move];
     const table = this.input.dir <= 3 ? this.def.normals.crouch : this.def.normals.stand;
     return this.def.moves[table[btn]];
   }
@@ -451,6 +504,10 @@ export class Fighter {
   isInvulnerable(): boolean {
     if (this.state === 'knockdown' || this.state === 'getup' || this.state === 'ko' || this.state === 'win')
       return true;
+    if (this.state === 'dash' || this.state === 'backdash') {
+      const inv = this.dashDef().invuln ?? 0;
+      if (this.stateFrame < inv) return true;
+    }
     if (this.state === 'airHit' && this.juggle >= JUGGLE_LIMIT) return true;
     const inv = this.move?.invuln;
     return !!(this.state === 'move' && inv && this.moveFrame >= inv[0] && this.moveFrame <= inv[1]);
@@ -463,6 +520,35 @@ export class Fighter {
     if (this.moveFrame < a[0] || this.moveFrame > a[1]) return false;
     this.armorHits--;
     return true;
+  }
+
+  /** 공격을 내미는 중(발생~지속)인지. 이때 맞으면 카운터 히트 */
+  inAttackStartup(): boolean {
+    const m = this.move;
+    if (this.state !== 'move' || !m) return false;
+    const last = Math.max(0, ...m.hits.map((h) => h.frames[1]), m.grab?.frame ?? 0, m.projectile?.frame ?? 0);
+    return this.moveFrame <= last;
+  }
+
+  /** 잡을 수 있는 상태인지 (땅에 있고, 맞거나 막는 중이 아니고, 무적이 아님) */
+  canBeGrabbed(): boolean {
+    if (this.y > 0 || this.airborne || this.isInvulnerable()) return false;
+    return (
+      this.state === 'idle' ||
+      this.state === 'walkF' ||
+      this.state === 'walkB' ||
+      this.state === 'crouch' ||
+      this.state === 'land' ||
+      this.state === 'dash' ||
+      this.state === 'move'
+    );
+  }
+
+  /** 잡기를 풀었는지: 같이 잡으려 했거나, 최근에 약P+약K를 눌렀다 */
+  techsGrab(): boolean {
+    const g = this.move?.grab;
+    if (this.state === 'move' && g && this.moveFrame <= g.frame) return true;
+    return this.input.allPressedWithin(BTN.LP | BTN.LK, THROW_TECH_WINDOW);
   }
 
   /** 반격기(프리즈)의 반격 구간인지 */
@@ -514,6 +600,8 @@ export class Fighter {
         return { id: this.move!.id, anim: this.move!.anim, frame: this.moveFrame - 1 };
       case 'walkF':
       case 'walkB':
+      case 'dash':
+      case 'backdash':
       case 'crouch':
       case 'prejump':
       case 'jump':

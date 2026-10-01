@@ -82,6 +82,21 @@ export class InputBuffer {
   }
 
   /**
+   * 같은 방향을 빠르게 두 번 (대시 66, 백대시 44).
+   * 이번 프레임에 d를 새로 눌렀고, 바로 앞이 손을 뗀 상태(5)뿐이며 그 앞이 d면 true.
+   * (↓↘→↓↘→ 처럼 대각선을 거쳐 다시 →가 되는 커맨드는 대시가 아니다)
+   */
+  doubleTap(d: Dir, window: number): boolean {
+    const n = this.frames.length;
+    if (n < 3 || this.frames[n - 1].dir !== d) return false;
+    let i = n - 2;
+    const min = Math.max(0, n - 1 - window);
+    if (this.frames[i].dir !== 5) return false;
+    while (i >= min && this.frames[i].dir === 5) i--;
+    return i >= min && this.frames[i].dir === d;
+  }
+
+  /**
    * 방향 커맨드 인식. seq 순서대로 방향이 입력되었는지를 최근 window 프레임에서 확인한다.
    * 예: [2, 3, 6] = 앞으로 반원 (↓↘→)
    */

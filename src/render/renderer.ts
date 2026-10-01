@@ -12,6 +12,7 @@ import { drawStage } from './stage';
 import { drawDancer, fighterPalette, headFrame, tailAnchor } from './dancer';
 import { TailChain, type Smear } from './dynamics';
 import { drawSprite, spriteFor } from './sprites';
+import { ASSET, image } from './assets';
 import { drawCrowd } from './stage';
 
 export class Renderer {
@@ -27,6 +28,8 @@ export class Renderer {
   private smears: Smear[] = [];
   private lastEnds: (Vec2[] | null)[] = [null, null];
   private frame = 0;
+  /** 맞은 순간 하얗게 번쩍이는 남은 프레임 */
+  private hitFlash = [0, 0];
 
   constructor(private readonly g: CanvasRenderingContext2D) {}
 
@@ -36,7 +39,28 @@ export class Renderer {
       switch (e.type) {
         case 'hit':
           this.fx.spark(e.x, e.y, e.heavy ? 'heavy' : 'hit');
+          this.hitFlash[1 - e.attacker] = 3;
           sfx.hit(e.heavy);
+          break;
+        case 'counterHit':
+          this.fx.spark(e.x, e.y, 'counter');
+          this.fx.text(e.x, e.y + 46, 'COUNTER', '#ffe14d');
+          sfx.counter();
+          break;
+        case 'throw':
+          this.fx.spark(e.x, e.y, 'heavy');
+          this.fx.text(e.x, e.y + 50, 'THROW', '#ff8a5c');
+          this.fx.shake = Math.max(this.fx.shake, 10);
+          sfx.hit(true);
+          break;
+        case 'tech':
+          this.fx.spark(e.x, e.y, 'block');
+          this.fx.text(e.x, e.y + 50, 'TECH!', '#7fe3ff');
+          this.fx.screenFlash('#bfefff', 0.25);
+          sfx.block();
+          break;
+        case 'dust':
+          this.fx.dust(e.x, e.big);
           break;
         case 'block':
           this.fx.spark(e.x, e.y, 'block');
@@ -44,7 +68,7 @@ export class Renderer {
           break;
         case 'counter':
           this.fx.spark(e.x, e.y, 'counter');
-          this.fx.text(e.x, e.y + 40, 'COUNTER!', '#ffe14d');
+          this.fx.text(e.x, e.y + 40, 'REVERSAL!', '#ffe14d');
           sfx.counter();
           break;
         case 'taunt':
@@ -63,6 +87,7 @@ export class Renderer {
           break;
         case 'ko':
           this.fx.shake = 14;
+          this.fx.screenFlash('#ffffff', 0.9);
           sfx.ko();
           break;
         case 'announce':
@@ -71,6 +96,7 @@ export class Renderer {
       }
     }
     this.fx.update();
+    for (const i of [0, 1]) if (this.hitFlash[i] > 0) this.hitFlash[i]--;
     if (this.superText && --this.superText.life <= 0) this.superText = null;
   }
 
@@ -108,7 +134,16 @@ export class Renderer {
       // 교체 그림(스프라이트)이 있으면 그 그림을, 없으면 코드로 그린 캐릭터를
       const key = f.displayKey();
       const sprite = spriteFor(f.def.id, key.id, key.frame, f.index);
-      if (sprite) drawSprite(g, sprite.img, f.x, f.y, f.facing, sprite.recolor ? fighterPalette(f).main : null);
+      if (sprite)
+        drawSprite(
+          g,
+          sprite.img,
+          f.x,
+          f.y,
+          f.facing,
+          sprite.recolor ? fighterPalette(f).main : null,
+          this.hitFlash[f.index] > 0,
+        );
       else
         drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), {
           tail: this.updateTail(f, sk),
@@ -117,8 +152,9 @@ export class Renderer {
       this.trackSmears(f, sk, freeze);
     }
     this.drawSmears();
+    for (const f of m.fighters) this.drawHitFx(f);
 
-    for (const p of m.projectiles) this.drawProjectile(p, fighterPalette(m.fighters[p.owner]).main);
+    for (const p of m.projectiles) this.drawProjectile(p, fighterPalette(m.fighters[p.owner]));
     if (this.showBoxes) {
       for (const f of m.fighters) this.drawBoxes(f);
       for (const p of m.projectiles) this.drawRect(projectileBox(p), '#ff3c3c', 'rgba(255,60,60,0.3)');
@@ -127,7 +163,59 @@ export class Renderer {
     g.restore();
 
     drawHud(g, m);
-    if (this.superText) this.drawSuperText();
+    if (this.superText) this.drawSuperText(m);
+    this.fx.drawFlash(g, SCREEN_W, SCREEN_H);
+  }
+
+  /** 휩·전기처럼 몸보다 멀리 닿는 기술: 판정이 나와 있는 곳에 궤적을 그린다 (보이는 만큼 맞는다) */
+  private drawHitFx(f: Fighter): void {
+    const kind = f.state === 'move' ? f.move?.hitFx : undefined;
+    if (!kind) return;
+    const g = this.g;
+    const color = fighterPalette(f).main;
+    for (const { box } of f.activeHits()) {
+      const y = GROUND_SCREEN_Y - (box.y + box.h / 2);
+      const near = f.facing > 0 ? box.x : box.x + box.w;
+      const far = f.facing > 0 ? box.x + box.w : box.x;
+      g.save();
+      g.lineCap = 'round';
+      g.lineJoin = 'round';
+      if (kind === 'whip') {
+        // 휘어진 채찍 궤적 (바깥은 캐릭터 색, 안은 흰색)
+        for (const [w, c, a] of [
+          [14, color, 0.35],
+          [5, '#ffffff', 0.9],
+        ] as const) {
+          g.globalAlpha = a;
+          g.strokeStyle = c;
+          g.lineWidth = w;
+          g.beginPath();
+          g.moveTo(near, y + 18);
+          g.quadraticCurveTo((near + far) / 2, y - 26, far, y);
+          g.stroke();
+        }
+      } else {
+        // 지그재그 전기
+        for (const [w, c, a] of [
+          [10, '#5fd7ff', 0.4],
+          [3, '#ffffff', 1],
+        ] as const) {
+          g.globalAlpha = a;
+          g.strokeStyle = c;
+          g.lineWidth = w;
+          g.beginPath();
+          const n = 7;
+          for (let i = 0; i <= n; i++) {
+            const x = near + ((far - near) * i) / n;
+            const jy = i === 0 || i === n ? 0 : (Math.random() - 0.5) * box.h;
+            if (i) g.lineTo(x, y + jy);
+            else g.moveTo(x, y + jy);
+          }
+          g.stroke();
+        }
+      }
+      g.restore();
+    }
   }
 
   /** 포니테일·머리띠 끈 흔들림 계산 */
@@ -175,7 +263,8 @@ export class Renderer {
   /** 잔상이 있는 기술(trail) 중이면 지나온 모습을 반투명하게 그린다 */
   private drawTrail(f: Fighter, sk: Skeleton, frozen: boolean): void {
     const list = this.trails[f.index];
-    if (f.state !== 'move' || !f.move?.trail) {
+    const dashTrail = (f.state === 'dash' || f.state === 'backdash') && f.dashDef().trail;
+    if (!dashTrail && (f.state !== 'move' || !f.move?.trail)) {
       list.length = 0;
       return;
     }
@@ -202,24 +291,67 @@ export class Renderer {
     g.fillRect(cx - 170, cy - 170, 340, 340);
   }
 
-  private drawSuperText(): void {
+  /** 초필살기 컷인: 방사형 줄무늬 띠 위로 초상화가 미끄러져 들어오고 기술 이름이 뜬다 */
+  private drawSuperText(m: Match): void {
     const g = this.g;
     const st = this.superText!;
     const t = 1 - st.life / 40;
     const slide = Math.min(1, t * 4);
     const left = st.player === 0;
+    const bandY = SCREEN_H / 2 + 40;
+    const bandH = 120;
     g.save();
-    g.globalAlpha = Math.min(1, st.life / 10);
+    g.globalAlpha = Math.min(1, st.life / 8);
+    // 띠 + 속도선
     g.fillStyle = this.superColor;
-    const bandY = SCREEN_H / 2 + 60;
-    g.fillRect(0, bandY - 36, SCREEN_W, 56);
-    g.font = `900 40px ${FONT_KR}`;
-    g.textAlign = left ? 'left' : 'right';
+    g.fillRect(0, bandY - bandH / 2, SCREEN_W, bandH);
+    g.save();
+    g.beginPath();
+    g.rect(0, bandY - bandH / 2, SCREEN_W, bandH);
+    g.clip();
+    g.strokeStyle = 'rgba(255,255,255,0.35)';
+    g.lineWidth = 3;
+    for (let i = 0; i < 18; i++) {
+      const y = bandY - bandH / 2 + ((i * 37 + this.frame * 11) % bandH);
+      const len = 80 + ((i * 53) % 160);
+      const x = ((i * 97 + this.frame * (left ? 34 : -34)) % (SCREEN_W + len)) - len / 2;
+      g.beginPath();
+      g.moveTo(x, y);
+      g.lineTo(x + len, y);
+      g.stroke();
+    }
+    // 초상화
+    const portrait = image(ASSET.portrait(m.fighters[st.player].def.id));
+    if (portrait) {
+      const ph = bandH + 60;
+      const pw = (ph * portrait.width) / portrait.height;
+      // 왼쪽(P1)은 왼쪽 밖에서, 오른쪽(P2)은 오른쪽 밖에서 들어와 화면 가장자리에서 멈춘다
+      const px = left ? -pw + slide * (pw + 20) : SCREEN_W - slide * (pw + 20);
+      g.save();
+      g.translate(px, bandY + bandH / 2 - ph + 30);
+      if (!left) {
+        g.translate(pw, 0);
+        g.scale(-1, 1);
+      }
+      g.drawImage(portrait, 0, 0, pw, ph);
+      g.restore();
+    }
+    g.restore();
+    g.strokeStyle = '#000';
+    g.lineWidth = 4;
+    g.strokeRect(-4, bandY - bandH / 2, SCREEN_W + 8, bandH);
+    // 기술 이름
+    g.font = `900 44px ${FONT_KR}`;
+    g.textAlign = left ? 'right' : 'left';
+    g.lineJoin = 'round';
+    g.lineWidth = 8;
+    const x = left ? SCREEN_W + 300 - slide * 340 : -300 + slide * 340;
+    g.strokeText(st.name + '!', x, bandY + 16);
     g.fillStyle = '#fff';
-    const x = left ? -300 + slide * 360 : SCREEN_W + 300 - slide * 360;
-    g.fillText(st.name + '!', x, bandY + 6);
-    g.font = `900 16px ${FONT_TITLE}`;
-    g.fillText('SUPER', x, bandY - 42);
+    g.fillText(st.name + '!', x, bandY + 16);
+    g.font = `900 18px ${FONT_TITLE}`;
+    g.fillStyle = '#ffd23f';
+    g.fillText('SUPER', x, bandY - 26);
     g.restore();
   }
 
@@ -233,11 +365,76 @@ export class Renderer {
     g.strokeRect(r.x, y, r.w, r.h);
   }
 
-  private drawProjectile(p: Projectile, color: string): void {
+  private drawProjectile(p: Projectile, pal: { main: string; cap: string }): void {
     const g = this.g;
+    const color = pal.main;
     const sy = GROUND_SCREEN_Y - p.y;
     g.save();
-    if (p.def.kind === 'shockwave') {
+    if (p.def.kind === 'cap') {
+      // 락킹 모자: 빙글빙글 돌며 날아갔다 돌아온다 (뒤에 잔상)
+      for (let i = 3; i >= 0; i--) {
+        g.save();
+        g.globalAlpha = i ? 0.18 * (4 - i) : 1;
+        g.translate(p.x - p.vx * i * 2, sy);
+        g.rotate(p.age * 0.45 - i * 0.3);
+        g.fillStyle = pal.cap;
+        g.strokeStyle = '#111';
+        g.lineWidth = 2.5;
+        g.beginPath();
+        g.ellipse(0, 4, 24, 7, 0, 0, Math.PI * 2);
+        g.fill();
+        g.stroke();
+        g.beginPath();
+        g.ellipse(0, -2, 15, 13, 0, Math.PI, Math.PI * 2);
+        g.fill();
+        g.stroke();
+        g.restore();
+      }
+    } else if (p.def.kind === 'arc') {
+      // 왁 포즈 웨이브: 휩의 기세가 날아가는 초승달 파동 (뒤에 잔상)
+      const dir = Math.sign(p.vx) || 1;
+      for (let i = 3; i >= 0; i--) {
+        g.save();
+        g.globalAlpha = i ? 0.15 * (4 - i) : 1;
+        g.translate(p.x - p.vx * i * 2.5, sy);
+        g.scale(dir, 1);
+        g.lineCap = 'round';
+        g.strokeStyle = i ? color : '#ffffff';
+        g.lineWidth = i ? 12 : 5;
+        g.beginPath();
+        g.arc(-14, 0, 34, -1.1, 1.1);
+        g.stroke();
+        if (!i) {
+          g.strokeStyle = color;
+          g.lineWidth = 3;
+          g.beginPath();
+          g.arc(-22, 0, 30, -1, 1);
+          g.stroke();
+        }
+        g.restore();
+      }
+    } else if (p.def.kind === 'bolt') {
+      // 팝 샷: 작고 빠른 전기탄 (지글거리는 꼬리)
+      const dir = Math.sign(p.vx) || 1;
+      const glow = g.createRadialGradient(p.x, sy, 1, p.x, sy, 20);
+      glow.addColorStop(0, 'rgba(255,255,255,0.95)');
+      glow.addColorStop(1, 'rgba(95,215,255,0)');
+      g.fillStyle = glow;
+      g.fillRect(p.x - 20, sy - 20, 40, 40);
+      g.strokeStyle = '#9fe9ff';
+      g.lineWidth = 2.5;
+      g.lineJoin = 'round';
+      for (let k = 0; k < 2; k++) {
+        g.beginPath();
+        g.moveTo(p.x, sy);
+        for (let i = 1; i <= 5; i++) g.lineTo(p.x - dir * i * 9, sy + (Math.random() - 0.5) * 14);
+        g.stroke();
+      }
+      g.fillStyle = '#ffffff';
+      g.beginPath();
+      g.arc(p.x, sy, 6, 0, Math.PI * 2);
+      g.fill();
+    } else if (p.def.kind === 'shockwave') {
       // 바닥을 타고 가는 충격파: 겹친 아치 + 튀는 파편
       g.lineCap = 'round';
       for (let i = 0; i < 3; i++) {

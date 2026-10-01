@@ -239,7 +239,7 @@ const cLK: MoveDef = {
 
 const cHK: MoveDef = {
   id: 'cHK',
-  name: '백 스윕',
+  name: '커피 그라인더',
   kind: 'normal',
   total: 36,
   anim: {
@@ -324,7 +324,8 @@ const jH: MoveDef = {
 
 const windmillHit = (from: number, to: number, last = false) => ({
   frames: [from, to] as [number, number],
-  box: { x: -20, y: 0, w: last ? 120 : 115, h: last ? 80 : 70 },
+  // 도는 다리가 앞뒤를 모두 쓴다 (뒤로 넘어온 상대도 맞는다)
+  box: { x: -75, y: 0, w: last ? 175 : 170, h: last ? 80 : 70 },
   damage: last ? 50 : 30,
   hitstun: 20,
   blockstun: last ? 14 : 12,
@@ -408,48 +409,6 @@ const headspin: MoveDef = {
     },
   ],
   hurtbox: { x: -30, y: 0, w: 60, h: 90 },
-};
-
-const airflare: MoveDef = {
-  id: 'airflare',
-  name: '에어플레어',
-  desc: '손으로 몸을 받치고 공중에서 돌며 빠르게 돌진하는 2연타',
-  kind: 'special',
-  total: 50,
-  anim: {
-    pivot: 'neck',
-    keys: [
-      { f: 0, p: STAND },
-      { f: 6, p: DIVE },
-      ...genKeys(8, 38, 2, (f) => spinPose((f - 8) * 24, { tilt: 55, spread: 150, arms: 'plant' })),
-      { f: 50, p: CROUCH },
-    ],
-  },
-  velocity: [{ from: 7, to: 38, vx: 6 }],
-  hits: [
-    {
-      frames: [15, 19],
-      box: { x: -10, y: 30, w: 115, h: 120 },
-      damage: 50,
-      hitstun: 24,
-      blockstun: 14,
-      level: 'mid',
-      push: 3,
-      chip: 6,
-    },
-    {
-      frames: [29, 33],
-      box: { x: -10, y: 30, w: 115, h: 120 },
-      damage: 70,
-      hitstun: 24,
-      blockstun: 16,
-      level: 'mid',
-      knockdown: true,
-      push: 10,
-      chip: 8,
-      heavy: true,
-    },
-  ],
 };
 
 const swipe: MoveDef = {
@@ -628,9 +587,67 @@ const powerCombo: MoveDef = {
   ],
 };
 
+/** 풋워크 러시: 손을 짚고 식스스텝 → CC → 킥아웃으로 이어지는 풋워크로 파고드는 하단 연타 */
+const FW_A = pose(CROUCH_HAND, { lF: [90, -10], lB: [-20, -100] });
+const FW_B = pose(CROUCH_HAND, { lF: [-30, -90], lB: [80, -10] });
+const FW_CC = pose(CROUCH_HAND, { lF: [60, -110], lB: [95, -5] });
+const footworkHit = (f: number): MoveDef['hits'][number] => ({
+  frames: [f, f + 1],
+  box: { x: -40, y: 0, w: 150, h: 32 },
+  damage: 16,
+  hitstun: 20,
+  blockstun: 11,
+  level: 'low',
+  push: 1,
+  chip: 3,
+  hitstop: 5,
+});
+const footworkRush: MoveDef = {
+  id: 'footworkRush',
+  name: '풋워크 러시',
+  desc: '손을 짚고 식스스텝 → CC → 킥아웃으로 파고드는 하단 5연타. 몸이 낮아 높은 공격을 피한다',
+  kind: 'special',
+  total: 50,
+  hurtbox: { x: -35, y: 0, w: 70, h: 80 },
+  velocity: [{ from: 4, to: 30, vx: 2.5 }],
+  anim: {
+    keys: [
+      { f: 0, p: STAND },
+      { f: 4, p: CROUCH_HAND },
+      { f: 7, p: FW_A },
+      { f: 13, p: FW_B },
+      { f: 19, p: FW_CC },
+      { f: 25, p: FW_A },
+      { f: 31, p: pose(CROUCH_HAND, { torso: 70, lF: [95, 0], lB: [88, 0] }) },
+      { f: 36, p: pose(CROUCH_HAND, { torso: 70, lF: [95, 0], lB: [88, 0] }) },
+      { f: 50, p: CROUCH },
+    ],
+  },
+  hits: [
+    footworkHit(8),
+    footworkHit(14),
+    footworkHit(20),
+    footworkHit(26),
+    {
+      frames: [31, 34],
+      box: { x: 10, y: 0, w: 110, h: 40 },
+      damage: 40,
+      hitstun: 22,
+      blockstun: 14,
+      level: 'low',
+      knockdown: true,
+      push: 10,
+      chip: 5,
+      hitstop: 10,
+      heavy: true,
+    },
+  ],
+};
+
 export const BBOY_MOVES: Record<string, MoveDef> = Object.fromEntries(
   [
     sLP,
+    footworkRush,
     sHP,
     sLK,
     sHK,
@@ -642,7 +659,6 @@ export const BBOY_MOVES: Record<string, MoveDef> = Object.fromEntries(
     jH,
     windmill,
     headspin,
-    airflare,
     swipe,
     freeze,
     freezeKick,

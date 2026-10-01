@@ -1,6 +1,6 @@
 import { pose } from '../../anim/pose';
 import type { MoveDef } from '../../fighter/types';
-import { airStrike, combo, moveTable, strike } from '../builders';
+import { airStrike, combo, moveTable, shooter, strike } from '../builders';
 import { armW } from '../common';
 import { CROUCH, POSE, ROLL_A, ROLL_B, STAND, WHIP_A, WHIP_B } from './poses';
 
@@ -23,7 +23,7 @@ const sLP = strike({
 
 const sHP = strike({
   id: 'sHP',
-  name: '더블 휩',
+  name: '오버헤드 왁',
   base: STAND,
   windup: pose(STAND, { torso: -8, aF: [172, -40], aB: [165, -40] }),
   hit: pose(STAND, { torso: 20, aF: [95, 0], aB: [80, 10] }),
@@ -50,9 +50,10 @@ const sLK = strike({
 
 const sHK = strike({
   id: 'sHK',
-  name: '하이 휩 킥',
+  name: '트월 킥',
   base: STAND,
-  windup: pose(STAND, { lF: [100, -110], aF: [175, 0] }),
+  // 두 팔을 펴고 한 바퀴 돈 뒤(트월) 다리를 높이 뻗는다
+  windup: pose(STAND, { torso: -10, aF: [90, 0], aB: [-90, 0], lF: [60, -90] }),
   hit: pose(STAND, { torso: -30, head: 15, lF: [122, 0], aF: [-40, 0], aB: [-60, 10] }),
   startup: 10,
   active: 4,
@@ -79,7 +80,7 @@ const cLP = strike({
 
 const cHP = strike({
   id: 'cHP',
-  name: '업 휩',
+  name: '언더헤드 왁',
   base: CROUCH,
   windup: pose(CROUCH, { aF: [40, 60] }),
   hit: pose(STAND, { torso: -10, head: 15, aF: [178, 0], aB: [-25, 85] }),
@@ -144,26 +145,9 @@ const jH = airStrike({
 
 // ── 필살기 ─────────────────────────────────────────────────────────
 
-const whipStorm = combo({
-  id: 'whipStorm',
-  name: '휩 스톰',
-  desc: '양팔을 번갈아 휘두르는 5연타. 마지막 타격에 다운',
-  base: STAND,
-  windup: ROLL_A,
-  poses: [WHIP_A, WHIP_B],
-  start: 7,
-  interval: 5,
-  count: 5,
-  box: { x: 15, y: 90, w: 95, h: 70 },
-  damage: 20,
-  finish: { pose: pose(WHIP_A, { torso: 25, aF: [90, 0], aB: [80, 0] }), delay: 6, damage: 40 },
-  recovery: 16,
-  more: { velocity: [{ from: 6, to: 28, vx: 1.5 }] },
-});
-
 const highWhip = strike({
   id: 'highWhip',
-  name: '하이 휩',
+  name: '오버헤드 롤',
   kind: 'special',
   desc: '대공기. 양팔을 머리 위로 휘감아 올린다. 발동 직후 무적',
   base: CROUCH,
@@ -175,22 +159,6 @@ const highWhip = strike({
   damage: 95,
   extra: { launch: { vx: 1.5, vy: 12 }, knockdown: true, chip: 8 },
   more: { invuln: [1, 7] },
-});
-
-const waackWalk = combo({
-  id: 'waackWalk',
-  name: '왁킹 워크',
-  desc: '팔을 휘두르며 빠르게 걸어 들어간다. 2연타 후 다운',
-  base: STAND,
-  poses: [pose(WHIP_A, { lF: [35, -20], lB: [-15, -5] }), pose(WHIP_B, { lB: [30, -30], lF: [-5, -5] })],
-  start: 8,
-  interval: 7,
-  count: 1,
-  box: { x: 15, y: 80, w: 85, h: 80 },
-  damage: 30,
-  finish: { pose: pose(WHIP_B, { torso: 20, lB: [30, -30] }), delay: 7, damage: 50 },
-  recovery: 18,
-  more: { velocity: [{ from: 3, to: 18, vx: 7 }] },
 });
 
 const strikeAPose: MoveDef = {
@@ -212,6 +180,48 @@ const strikeAPose: MoveDef = {
 };
 
 // ── 초필살기 ───────────────────────────────────────────────────────
+
+/** 왁 포즈 웨이브: 팔을 휩으로 휘두르다 포즈로 딱 멈추는 순간, 그 기세가 파동이 되어 날아간다 */
+const poseWave = shooter({
+  id: 'poseWave',
+  name: '왁 포즈 웨이브',
+  desc: '휩을 휘두르다 포즈로 멈추는 순간 파동이 날아간다',
+  base: STAND,
+  windup: WHIP_B,
+  release: pose(STAND, { torso: -6, head: 15, aF: [100, 0], aB: [175, -150], lF: [25, -5], lB: [-8, -20] }),
+  frame: 14,
+  recovery: 24,
+  projectile: {
+    x: 70,
+    y: 120,
+    vx: 7.5,
+    life: 70,
+    box: { x: -18, y: -30, w: 36, h: 60 },
+    kind: 'arc',
+    hit: { damage: 55, hitstun: 19, blockstun: 15, level: 'mid', chip: 6 },
+  },
+});
+
+/** 트월: 두 팔을 펴고 빙글빙글 돌며 전진한다. 펼친 팔이 앞뒤를 모두 친다 */
+const twirl = combo({
+  id: 'twirl',
+  name: '트월',
+  desc: '두 팔을 펴고 돌며 전진하는 다단. 펼친 팔이 앞뒤를 모두 친다',
+  base: STAND,
+  windup: pose(STAND, { torso: -5, aF: [140, 20], aB: [-60, 20] }),
+  poses: [
+    pose(STAND, { torso: 0, head: 10, aF: [90, 0], aB: [-90, 0], lF: [10, -5], lB: [-5, -30] }),
+    pose(STAND, { torso: 0, head: -10, aF: [-90, 0], aB: [90, 0], lF: [-5, -30], lB: [10, -5] }),
+  ],
+  start: 8,
+  interval: 6,
+  count: 3,
+  box: { x: -70, y: 90, w: 170, h: 60 },
+  damage: 25,
+  finish: { pose: POSE, delay: 8, damage: 45, box: { x: 10, y: 90, w: 100, h: 70 } },
+  recovery: 18,
+  more: { velocity: [{ from: 4, to: 26, vx: 2.5 }] },
+});
 
 const divaFinale = combo({
   id: 'divaFinale',
@@ -239,6 +249,8 @@ const divaFinale = combo({
 
 export const WAACKING_MOVES = moveTable([
   sLP,
+  poseWave,
+  twirl,
   sHP,
   sLK,
   sHK,
@@ -248,9 +260,7 @@ export const WAACKING_MOVES = moveTable([
   cHK,
   jL,
   jH,
-  whipStorm,
   highWhip,
-  waackWalk,
   strikeAPose,
   divaFinale,
 ]);

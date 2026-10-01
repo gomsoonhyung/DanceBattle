@@ -1,4 +1,4 @@
-import type { Keyframe, Pose } from '../anim/pose';
+import { pose, type Keyframe, type Pose } from '../anim/pose';
 import type { Rect } from '../core/math';
 import type { HitDef, MoveDef, MoveKind, ProjectileDef } from '../fighter/types';
 import { JUMP_FALL, JUMP_TUCK } from './common';
@@ -199,4 +199,91 @@ export function shooter(o: ShooterOpts): MoveDef {
 /** 기술 배열 → id로 찾는 사전 */
 export function moveTable(moves: MoveDef[]): Record<string, MoveDef> {
   return Object.fromEntries(moves.map((m) => [m.id, m]));
+}
+
+export interface GrabOpts extends Common {
+  base: Pose; // 서기 자세
+  damage?: number;
+  range?: number;
+  launch?: { vx: number; vy: number };
+}
+
+/** 잡기 (약P+약K): 5프레임에 붙잡아 30프레임에 걸쳐 던진다. 헛잡으면 그대로 빈틈 */
+export function grab(o: GrabOpts): MoveDef {
+  const b = o.base;
+  const reach = pose(b, { torso: b.torso + 18, head: -8, aF: [100, 15], aB: [85, 30] });
+  const hold = pose(b, { torso: b.torso + 5, aF: [70, 60], aB: [60, 70] });
+  const toss = pose(b, { torso: b.torso - 15, head: 10, aF: [140, 20], aB: [120, 30] });
+  return {
+    id: o.id,
+    name: o.name,
+    kind: 'normal',
+    desc: o.desc,
+    total: 30,
+    anim: {
+      keys: [
+        { f: 0, p: b },
+        { f: 4, p: reach },
+        { f: 8, p: hold },
+        { f: 14, p: toss },
+        { f: 30, p: b },
+      ],
+    },
+    hits: [],
+    grab: { frame: 5, range: o.range ?? 75, damage: o.damage ?? 120, launch: o.launch ?? { vx: 5, vy: 8 } },
+    ...o.more,
+  };
+}
+
+export interface Tuning {
+  /** 발생을 이만큼 늦춘다 (음수 = 빠르게). 판정·캔슬·애니메이션이 함께 밀린다 */
+  startup?: number;
+  /** 리치 배율 (몸 중심에서 판정 끝까지의 거리) */
+  reach?: number;
+  /** 데미지 배율 */
+  damage?: number;
+}
+
+/**
+ * 캐릭터 유형에 맞춰 기술 수치를 한꺼번에 바꾼다 (docs/design/GAME_DESIGN.md 3-0-1).
+ * ids에 든 기술만 바꾸고 나머지는 그대로 돌려준다.
+ */
+export function tune(moves: Record<string, MoveDef>, ids: string[], t: Tuning): Record<string, MoveDef> {
+  const out = { ...moves };
+  for (const id of ids) {
+    const m = moves[id];
+    if (!m) throw new Error(`tune: 없는 기술 ${id}`);
+    out[id] = tuneMove(m, t);
+  }
+  return out;
+}
+
+function tuneMove(m: MoveDef, t: Tuning): MoveDef {
+  const firstHit = Math.min(...m.hits.map((h) => h.frames[0]));
+  // 첫 판정이 2프레임보다 빨라지지 않게
+  const d = Math.max(t.startup ?? 0, 2 - firstHit);
+  const shift = (f: number) => (f > 0 ? f + d : f);
+  const keys: Keyframe[] = [];
+  for (const k of m.anim.keys) {
+    const f = Math.max(keys.length ? keys[keys.length - 1].f + 1 : 0, shift(k.f));
+    keys.push({ ...k, f });
+  }
+  return {
+    ...m,
+    total: m.total + d,
+    anim: { ...m.anim, keys },
+    hits: m.hits.map((h) => {
+      const reachEnd = (h.box.x + h.box.w) * (t.reach ?? 1);
+      return {
+        ...h,
+        frames: [h.frames[0] + d, h.frames[1] + d] as [number, number],
+        box: { ...h.box, w: Math.max(10, Math.round(reachEnd - h.box.x)) },
+        damage: Math.max(1, Math.round(h.damage * (t.damage ?? 1))),
+      };
+    }),
+    cancelWindow: m.cancelWindow ? [m.cancelWindow[0] + d, m.cancelWindow[1] + d] : undefined,
+    velocity: m.velocity?.map((v) => ({ ...v, from: shift(v.from), to: shift(v.to) })),
+    invuln: m.invuln ? [shift(m.invuln[0]), shift(m.invuln[1])] : undefined,
+    armor: m.armor ? [shift(m.armor[0]), shift(m.armor[1])] : undefined,
+  };
 }

@@ -5,13 +5,12 @@ import { CHARACTERS } from './characters';
 import type { CharacterDef } from './fighter/types';
 import { Match, type MatchMode } from './game/match';
 import { endInputFrame, initKeyboard, keyPressed, menu, pollMenu, readPlayerInput } from './input/devices';
-import { FONT_KR, FONT_TITLE } from './render/hud';
 import { Renderer } from './render/renderer';
-import { drawStage } from './render/stage';
 import { drawGuide } from './render/guideHud';
-import { ASSET, image, preloadAssets } from './render/assets';
+import { preloadAssets } from './render/assets';
 import { loadSprites } from './render/sprites';
 import { SelectScreen } from './screens/select';
+import { TitleScreen } from './screens/title';
 import { TrainingGuide } from './training/guide';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -29,7 +28,7 @@ if (params.has('gallery')) {
 }
 
 type Screen =
-  | { kind: 'title' }
+  | { kind: 'title'; title: TitleScreen }
   | { kind: 'select'; select: SelectScreen }
   | { kind: 'match'; match: Match; renderer: Renderer; guide: TrainingGuide | null };
 
@@ -39,14 +38,12 @@ function startGame(): void {
   window.addEventListener('keydown', unlockAudio);
   window.addEventListener('pointerdown', unlockAudio);
 
-  let screen: Screen = { kind: 'title' };
-  let menuIndex = 0;
+  let screen: Screen = { kind: 'title', title: new TitleScreen() };
   let showBoxes = false;
   let lastChars: [CharacterDef, CharacterDef] | undefined;
-  const MENU: { mode: MatchMode; label: string }[] = [
-    { mode: 'versus', label: '2P 대전' },
-    { mode: 'training', label: '트레이닝 (혼자 연습)' },
-  ];
+  const toTitle = () => {
+    screen = { kind: 'title', title: new TitleScreen(true) };
+  };
 
   const toSelect = (mode: MatchMode) => {
     screen = { kind: 'select', select: new SelectScreen(mode, lastChars) };
@@ -71,25 +68,20 @@ function startGame(): void {
 
     switch (screen.kind) {
       case 'title': {
-        const m0 = menu(0);
-        const m1 = menu(1);
-        if (m0.up || m1.up) menuIndex = (menuIndex + MENU.length - 1) % MENU.length;
-        if (m0.down || m1.down) menuIndex = (menuIndex + 1) % MENU.length;
-        if (keyPressed('Digit1')) toSelect('versus');
-        else if (keyPressed('Digit2')) toSelect('training');
-        else if (keyPressed('Enter') || keyPressed('Space') || m0.confirm || m1.confirm) toSelect(MENU[menuIndex].mode);
+        const mode = screen.title.update();
+        if (mode) toSelect(mode);
         break;
       }
       case 'select': {
         const r = screen.select.update();
-        if (r === 'back') screen = { kind: 'title' };
+        if (r === 'back') toTitle();
         else if (r) toMatch(screen.select.mode, r);
         break;
       }
       case 'match': {
         const { match, renderer, guide } = screen;
         if (keyPressed('Escape')) {
-          screen = { kind: 'title' };
+          toTitle();
           break;
         }
         if (match.mode === 'training') {
@@ -123,48 +115,6 @@ function startGame(): void {
     endInputFrame();
   };
 
-  const drawTitle = () => {
-    drawStage(g);
-    g.fillStyle = 'rgba(0,0,0,0.78)';
-    g.fillRect(0, 0, SCREEN_W, SCREEN_H);
-    g.textAlign = 'center';
-    const logo = image(ASSET.logo);
-    if (logo) {
-      const w = 640;
-      g.drawImage(logo, (SCREEN_W - w) / 2, 22, w, (w * logo.height) / logo.width);
-    } else {
-      g.font = `900 72px ${FONT_TITLE}`;
-      g.lineWidth = 10;
-      g.lineJoin = 'round';
-      g.strokeStyle = '#000';
-      g.strokeText('DANCE BATTLE', SCREEN_W / 2, 120);
-      g.fillStyle = '#ffd23f';
-      g.fillText('DANCE BATTLE', SCREEN_W / 2, 120);
-    }
-
-    MENU.forEach((item, i) => {
-      const sel = i === menuIndex;
-      g.font = `bold ${sel ? 28 : 24}px ${FONT_KR}`;
-      g.fillStyle = sel ? '#fff' : '#889';
-      g.fillText(`${sel ? '▶ ' : ''}${i + 1}. ${item.label}`, SCREEN_W / 2, 200 + i * 42);
-    });
-
-    g.font = `15px ${FONT_KR}`;
-    g.fillStyle = '#dde';
-    const lines = [
-      'P1  이동 WASD   ·   약P F  강P G  약K V  강K B',
-      'P2  이동 방향키  ·   약P K  강P L  약K ,  강K .',
-      '게임패드: X 약P · Y 강P · A 약K · B 강K',
-      '',
-      '가드: 뒤로 (서서 가드) / 뒤아래 (앉아 가드)',
-      '초필살기: 그루브 게이지 MAX에서 ↓↘→↓↘→ + P 또는 강P+강K',
-      '캐릭터별 기술표는 캐릭터 선택 화면에서 볼 수 있습니다',
-      '',
-      'F1 판정 박스 보기   ·   ESC 메뉴',
-    ];
-    lines.forEach((l, i) => g.fillText(l, SCREEN_W / 2, 310 + i * 22));
-  };
-
   let acc = 0;
   let last = performance.now();
   const frame = (now: number) => {
@@ -178,7 +128,7 @@ function startGame(): void {
       screen.renderer.draw(screen.match);
       if (screen.guide) drawGuide(g, screen.guide, screen.match);
     } else if (screen.kind === 'select') screen.select.draw(g);
-    else drawTitle();
+    else screen.title.draw(g);
     requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);
