@@ -1,598 +1,598 @@
 {
   "frames": {
     "idle_0": {
-      "p1": "idle_0.png"
+      "p1": "idle_0.webp"
     },
     "idle_4": {
-      "p1": "idle_4.png"
+      "p1": "idle_4.webp"
     },
     "idle_8": {
-      "p1": "idle_8.png"
+      "p1": "idle_8.webp"
     },
     "idle_12": {
-      "p1": "idle_12.png"
+      "p1": "idle_12.webp"
     },
     "idle_16": {
-      "p1": "idle_16.png"
+      "p1": "idle_16.webp"
     },
     "idle_20": {
-      "p1": "idle_20.png"
+      "p1": "idle_20.webp"
     },
     "idle_24": {
-      "p1": "idle_24.png"
+      "p1": "idle_24.webp"
     },
     "idle_28": {
-      "p1": "idle_28.png"
+      "p1": "idle_28.webp"
     },
     "idle_32": {
-      "p1": "idle_32.png"
+      "p1": "idle_32.webp"
     },
     "idle_36": {
-      "p1": "idle_36.png"
+      "p1": "idle_36.webp"
     },
     "walkF_0": {
-      "p1": "walkF_0.png"
+      "p1": "walkF_0.webp"
     },
     "walkF_4": {
-      "p1": "walkF_4.png"
+      "p1": "walkF_4.webp"
     },
     "walkF_8": {
-      "p1": "walkF_8.png"
+      "p1": "walkF_8.webp"
     },
     "walkF_12": {
-      "p1": "walkF_12.png"
+      "p1": "walkF_12.webp"
     },
     "walkF_16": {
-      "p1": "walkF_16.png"
+      "p1": "walkF_16.webp"
     },
     "walkF_20": {
-      "p1": "walkF_20.png"
+      "p1": "walkF_20.webp"
     },
     "walkF_24": {
-      "p1": "walkF_24.png"
+      "p1": "walkF_24.webp"
     },
     "walkF_28": {
-      "p1": "walkF_28.png"
+      "p1": "walkF_28.webp"
     },
     "walkB_0": {
-      "p1": "walkB_0.png"
+      "p1": "walkB_0.webp"
     },
     "walkB_4": {
-      "p1": "walkB_4.png"
+      "p1": "walkB_4.webp"
     },
     "walkB_8": {
-      "p1": "walkB_8.png"
+      "p1": "walkB_8.webp"
     },
     "walkB_12": {
-      "p1": "walkB_12.png"
+      "p1": "walkB_12.webp"
     },
     "walkB_16": {
-      "p1": "walkB_16.png"
+      "p1": "walkB_16.webp"
     },
     "walkB_20": {
-      "p1": "walkB_20.png"
+      "p1": "walkB_20.webp"
     },
     "walkB_24": {
-      "p1": "walkB_24.png"
+      "p1": "walkB_24.webp"
     },
     "walkB_28": {
-      "p1": "walkB_28.png"
+      "p1": "walkB_28.webp"
     },
     "crouch_0": {
-      "p1": "crouch_0.png"
+      "p1": "crouch_0.webp"
     },
     "crouch_4": {
-      "p1": "crouch_4.png"
+      "p1": "crouch_4.webp"
     },
     "crouch_8": {
-      "p1": "crouch_8.png"
+      "p1": "crouch_8.webp"
     },
     "crouch_12": {
-      "p1": "crouch_12.png"
+      "p1": "crouch_12.webp"
     },
     "crouch_16": {
-      "p1": "crouch_16.png"
+      "p1": "crouch_16.webp"
     },
     "crouch_20": {
-      "p1": "crouch_20.png"
+      "p1": "crouch_20.webp"
     },
     "crouch_24": {
-      "p1": "crouch_24.png"
+      "p1": "crouch_24.webp"
     },
     "crouch_28": {
-      "p1": "crouch_28.png"
+      "p1": "crouch_28.webp"
     },
     "crouch_32": {
-      "p1": "crouch_32.png"
+      "p1": "crouch_32.webp"
     },
     "crouch_36": {
-      "p1": "crouch_36.png"
+      "p1": "crouch_36.webp"
     },
     "prejump_0": {
-      "p1": "prejump_0.png"
+      "p1": "prejump_0.webp"
     },
     "prejump_3": {
-      "p1": "prejump_3.png"
+      "p1": "prejump_3.webp"
     },
     "jump_0": {
-      "p1": "jump_0.png"
+      "p1": "jump_0.webp"
     },
     "jump_9": {
-      "p1": "jump_9.png"
+      "p1": "jump_9.webp"
     },
     "jump_18": {
-      "p1": "jump_18.png"
+      "p1": "jump_18.webp"
     },
     "jump_26": {
-      "p1": "jump_26.png"
+      "p1": "jump_26.webp"
     },
     "jump_34": {
-      "p1": "jump_34.png"
+      "p1": "jump_34.webp"
     },
     "land_0": {
-      "p1": "land_0.png"
+      "p1": "land_0.webp"
     },
     "land_4": {
-      "p1": "land_4.png"
+      "p1": "land_4.webp"
     },
     "hitStand_0": {
-      "p1": "hitStand_0.png"
+      "p1": "hitStand_0.webp"
     },
     "hitStand_3": {
-      "p1": "hitStand_3.png"
+      "p1": "hitStand_3.webp"
     },
     "hitStand_10": {
-      "p1": "hitStand_10.png"
+      "p1": "hitStand_10.webp"
     },
     "hitStand_16": {
-      "p1": "hitStand_16.png"
+      "p1": "hitStand_16.webp"
     },
     "hitCrouch_0": {
-      "p1": "hitCrouch_0.png"
+      "p1": "hitCrouch_0.webp"
     },
     "hitCrouch_3": {
-      "p1": "hitCrouch_3.png"
+      "p1": "hitCrouch_3.webp"
     },
     "hitCrouch_10": {
-      "p1": "hitCrouch_10.png"
+      "p1": "hitCrouch_10.webp"
     },
     "hitCrouch_16": {
-      "p1": "hitCrouch_16.png"
+      "p1": "hitCrouch_16.webp"
     },
     "blockStand_0": {
-      "p1": "blockStand_0.png"
+      "p1": "blockStand_0.webp"
     },
     "blockCrouch_0": {
-      "p1": "blockCrouch_0.png"
+      "p1": "blockCrouch_0.webp"
     },
     "airHit_0": {
-      "p1": "airHit_0.png"
+      "p1": "airHit_0.webp"
     },
     "airHit_12": {
-      "p1": "airHit_12.png"
+      "p1": "airHit_12.webp"
     },
     "airHit_24": {
-      "p1": "airHit_24.png"
+      "p1": "airHit_24.webp"
     },
     "knockdown_0": {
-      "p1": "knockdown_0.png"
+      "p1": "knockdown_0.webp"
     },
     "knockdown_4": {
-      "p1": "knockdown_4.png"
+      "p1": "knockdown_4.webp"
     },
     "knockdown_8": {
-      "p1": "knockdown_8.png"
+      "p1": "knockdown_8.webp"
     },
     "getup_0": {
-      "p1": "getup_0.png"
+      "p1": "getup_0.webp"
     },
     "getup_4": {
-      "p1": "getup_4.png"
+      "p1": "getup_4.webp"
     },
     "getup_8": {
-      "p1": "getup_8.png"
+      "p1": "getup_8.webp"
     },
     "getup_12": {
-      "p1": "getup_12.png"
+      "p1": "getup_12.webp"
     },
     "getup_16": {
-      "p1": "getup_16.png"
+      "p1": "getup_16.webp"
     },
     "getup_21": {
-      "p1": "getup_21.png"
+      "p1": "getup_21.webp"
     },
     "getup_26": {
-      "p1": "getup_26.png"
+      "p1": "getup_26.webp"
     },
     "win_0": {
-      "p1": "win_0.png"
+      "p1": "win_0.webp"
     },
     "win_5": {
-      "p1": "win_5.png"
+      "p1": "win_5.webp"
     },
     "win_10": {
-      "p1": "win_10.png"
+      "p1": "win_10.webp"
     },
     "win_16": {
-      "p1": "win_16.png"
+      "p1": "win_16.webp"
     },
     "win_22": {
-      "p1": "win_22.png"
+      "p1": "win_22.webp"
     },
     "jumpLock_0": {
-      "p1": "jumpLock_0.png"
+      "p1": "jumpLock_0.webp"
     },
     "jumpLock_4": {
-      "p1": "jumpLock_4.png"
+      "p1": "jumpLock_4.webp"
     },
     "jumpLock_7": {
-      "p1": "jumpLock_7.png"
+      "p1": "jumpLock_7.webp"
     },
     "jumpLock_10": {
-      "p1": "jumpLock_10.png"
+      "p1": "jumpLock_10.webp"
     },
     "jumpLock_14": {
-      "p1": "jumpLock_14.png"
+      "p1": "jumpLock_14.webp"
     },
     "jumpLock_18": {
-      "p1": "jumpLock_18.png"
+      "p1": "jumpLock_18.webp"
     },
     "jumpLock_22": {
-      "p1": "jumpLock_22.png"
+      "p1": "jumpLock_22.webp"
     },
     "jumpLock_26": {
-      "p1": "jumpLock_26.png"
+      "p1": "jumpLock_26.webp"
     },
     "jumpLock_36": {
-      "p1": "jumpLock_36.png"
+      "p1": "jumpLock_36.webp"
     },
     "wristTwirl_0": {
-      "p1": "wristTwirl_0.png"
+      "p1": "wristTwirl_0.webp"
     },
     "wristTwirl_4": {
-      "p1": "wristTwirl_4.png"
+      "p1": "wristTwirl_4.webp"
     },
     "wristTwirl_8": {
-      "p1": "wristTwirl_8.png"
+      "p1": "wristTwirl_8.webp"
     },
     "wristTwirl_12": {
-      "p1": "wristTwirl_12.png"
+      "p1": "wristTwirl_12.webp"
     },
     "wristTwirl_16": {
-      "p1": "wristTwirl_16.png"
+      "p1": "wristTwirl_16.webp"
     },
     "wristTwirl_20": {
-      "p1": "wristTwirl_20.png"
+      "p1": "wristTwirl_20.webp"
     },
     "wristTwirl_24": {
-      "p1": "wristTwirl_24.png"
+      "p1": "wristTwirl_24.webp"
     },
     "wristTwirl_27": {
-      "p1": "wristTwirl_27.png"
+      "p1": "wristTwirl_27.webp"
     },
     "wristTwirl_30": {
-      "p1": "wristTwirl_30.png"
+      "p1": "wristTwirl_30.webp"
     },
     "wristTwirl_34": {
-      "p1": "wristTwirl_34.png"
+      "p1": "wristTwirl_34.webp"
     },
     "lockAndPoint_0": {
-      "p1": "lockAndPoint_0.png"
+      "p1": "lockAndPoint_0.webp"
     },
     "lockAndPoint_4": {
-      "p1": "lockAndPoint_4.png"
+      "p1": "lockAndPoint_4.webp"
     },
     "lockAndPoint_9": {
-      "p1": "lockAndPoint_9.png"
+      "p1": "lockAndPoint_9.webp"
     },
     "lockAndPoint_14": {
-      "p1": "lockAndPoint_14.png"
+      "p1": "lockAndPoint_14.webp"
     },
     "lockAndPoint_19": {
-      "p1": "lockAndPoint_19.png"
+      "p1": "lockAndPoint_19.webp"
     },
     "lockAndPoint_24": {
-      "p1": "lockAndPoint_24.png"
+      "p1": "lockAndPoint_24.webp"
     },
     "lockAndPoint_29": {
-      "p1": "lockAndPoint_29.png"
+      "p1": "lockAndPoint_29.webp"
     },
     "lockAndPoint_34": {
-      "p1": "lockAndPoint_34.png"
+      "p1": "lockAndPoint_34.webp"
     },
     "lockAndPoint_47": {
-      "p1": "lockAndPoint_47.png"
+      "p1": "lockAndPoint_47.webp"
     },
     "lockAndPoint_60": {
-      "p1": "lockAndPoint_60.png"
+      "p1": "lockAndPoint_60.webp"
     },
     "lockAndPoint_70": {
-      "p1": "lockAndPoint_70.png"
+      "p1": "lockAndPoint_70.webp"
     },
     "sLP_0": {
-      "p1": "sLP_0.png"
+      "p1": "sLP_0.webp"
     },
     "sLP_3": {
-      "p1": "sLP_3.png"
+      "p1": "sLP_3.webp"
     },
     "sLP_6": {
-      "p1": "sLP_6.png"
+      "p1": "sLP_6.webp"
     },
     "sLP_10": {
-      "p1": "sLP_10.png"
+      "p1": "sLP_10.webp"
     },
     "sHP_0": {
-      "p1": "sHP_0.png"
+      "p1": "sHP_0.webp"
     },
     "sHP_3": {
-      "p1": "sHP_3.png"
+      "p1": "sHP_3.webp"
     },
     "sHP_8": {
-      "p1": "sHP_8.png"
+      "p1": "sHP_8.webp"
     },
     "sHP_11": {
-      "p1": "sHP_11.png"
+      "p1": "sHP_11.webp"
     },
     "sHP_19": {
-      "p1": "sHP_19.png"
+      "p1": "sHP_19.webp"
     },
     "sLK_0": {
-      "p1": "sLK_0.png"
+      "p1": "sLK_0.webp"
     },
     "sLK_3": {
-      "p1": "sLK_3.png"
+      "p1": "sLK_3.webp"
     },
     "sLK_5": {
-      "p1": "sLK_5.png"
+      "p1": "sLK_5.webp"
     },
     "sLK_8": {
-      "p1": "sLK_8.png"
+      "p1": "sLK_8.webp"
     },
     "sLK_13": {
-      "p1": "sLK_13.png"
+      "p1": "sLK_13.webp"
     },
     "sHK_0": {
-      "p1": "sHK_0.png"
+      "p1": "sHK_0.webp"
     },
     "sHK_4": {
-      "p1": "sHK_4.png"
+      "p1": "sHK_4.webp"
     },
     "sHK_9": {
-      "p1": "sHK_9.png"
+      "p1": "sHK_9.webp"
     },
     "sHK_12": {
-      "p1": "sHK_12.png"
+      "p1": "sHK_12.webp"
     },
     "sHK_21": {
-      "p1": "sHK_21.png"
+      "p1": "sHK_21.webp"
     },
     "cLP_0": {
-      "p1": "cLP_0.png"
+      "p1": "cLP_0.webp"
     },
     "cLP_2": {
-      "p1": "cLP_2.png"
+      "p1": "cLP_2.webp"
     },
     "cLP_4": {
-      "p1": "cLP_4.png"
+      "p1": "cLP_4.webp"
     },
     "cLP_8": {
-      "p1": "cLP_8.png"
+      "p1": "cLP_8.webp"
     },
     "cHP_0": {
-      "p1": "cHP_0.png"
+      "p1": "cHP_0.webp"
     },
     "cHP_3": {
-      "p1": "cHP_3.png"
+      "p1": "cHP_3.webp"
     },
     "cHP_7": {
-      "p1": "cHP_7.png"
+      "p1": "cHP_7.webp"
     },
     "cHP_11": {
-      "p1": "cHP_11.png"
+      "p1": "cHP_11.webp"
     },
     "cHP_20": {
-      "p1": "cHP_20.png"
+      "p1": "cHP_20.webp"
     },
     "cLK_0": {
-      "p1": "cLK_0.png"
+      "p1": "cLK_0.webp"
     },
     "cLK_3": {
-      "p1": "cLK_3.png"
+      "p1": "cLK_3.webp"
     },
     "cLK_7": {
-      "p1": "cLK_7.png"
+      "p1": "cLK_7.webp"
     },
     "cLK_11": {
-      "p1": "cLK_11.png"
+      "p1": "cLK_11.webp"
     },
     "cHK_0": {
-      "p1": "cHK_0.png"
+      "p1": "cHK_0.webp"
     },
     "cHK_4": {
-      "p1": "cHK_4.png"
+      "p1": "cHK_4.webp"
     },
     "cHK_7": {
-      "p1": "cHK_7.png"
+      "p1": "cHK_7.webp"
     },
     "cHK_10": {
-      "p1": "cHK_10.png"
+      "p1": "cHK_10.webp"
     },
     "cHK_13": {
-      "p1": "cHK_13.png"
+      "p1": "cHK_13.webp"
     },
     "cHK_24": {
-      "p1": "cHK_24.png"
+      "p1": "cHK_24.webp"
     },
     "jL_0": {
-      "p1": "jL_0.png"
+      "p1": "jL_0.webp"
     },
     "jL_3": {
-      "p1": "jL_3.png"
+      "p1": "jL_3.webp"
     },
     "jL_7": {
-      "p1": "jL_7.png"
+      "p1": "jL_7.webp"
     },
     "jL_11": {
-      "p1": "jL_11.png"
+      "p1": "jL_11.webp"
     },
     "jL_16": {
-      "p1": "jL_16.png"
+      "p1": "jL_16.webp"
     },
     "jL_21": {
-      "p1": "jL_21.png"
+      "p1": "jL_21.webp"
     },
     "jH_0": {
-      "p1": "jH_0.png"
+      "p1": "jH_0.webp"
     },
     "jH_5": {
-      "p1": "jH_5.png"
+      "p1": "jH_5.webp"
     },
     "jH_9": {
-      "p1": "jH_9.png"
+      "p1": "jH_9.webp"
     },
     "jH_13": {
-      "p1": "jH_13.png"
+      "p1": "jH_13.webp"
     },
     "jH_18": {
-      "p1": "jH_18.png"
+      "p1": "jH_18.webp"
     },
     "jH_23": {
-      "p1": "jH_23.png"
+      "p1": "jH_23.webp"
     },
     "dash_0": {
-      "p1": "dash_0.png"
+      "p1": "dash_0.webp"
     },
     "dash_4": {
-      "p1": "dash_4.png"
+      "p1": "dash_4.webp"
     },
     "dash_9": {
-      "p1": "dash_9.png"
+      "p1": "dash_9.webp"
     },
     "dash_14": {
-      "p1": "dash_14.png"
+      "p1": "dash_14.webp"
     },
     "backdash_0": {
-      "p1": "backdash_0.png"
+      "p1": "backdash_0.webp"
     },
     "backdash_3": {
-      "p1": "backdash_3.png"
+      "p1": "backdash_3.webp"
     },
     "backdash_6": {
-      "p1": "backdash_6.png"
+      "p1": "backdash_6.webp"
     },
     "backdash_12": {
-      "p1": "backdash_12.png"
+      "p1": "backdash_12.webp"
     },
     "backdash_18": {
-      "p1": "backdash_18.png"
+      "p1": "backdash_18.webp"
     },
     "capThrow_0": {
-      "p1": "capThrow_0.png"
+      "p1": "capThrow_0.webp"
     },
     "capThrow_3": {
-      "p1": "capThrow_3.png"
+      "p1": "capThrow_3.webp"
     },
     "capThrow_6": {
-      "p1": "capThrow_6.png"
+      "p1": "capThrow_6.webp"
     },
     "capThrow_11": {
-      "p1": "capThrow_11.png"
+      "p1": "capThrow_11.webp"
     },
     "capThrow_17": {
-      "p1": "capThrow_17.png"
+      "p1": "capThrow_17.webp"
     },
     "capThrow_22": {
-      "p1": "capThrow_22.png"
+      "p1": "capThrow_22.webp"
     },
     "capThrow_30": {
-      "p1": "capThrow_30.png"
+      "p1": "capThrow_30.webp"
     },
     "longPoint_0": {
-      "p1": "longPoint_0.png"
+      "p1": "longPoint_0.webp"
     },
     "longPoint_3": {
-      "p1": "longPoint_3.png"
+      "p1": "longPoint_3.webp"
     },
     "longPoint_6": {
-      "p1": "longPoint_6.png"
+      "p1": "longPoint_6.webp"
     },
     "longPoint_9": {
-      "p1": "longPoint_9.png"
+      "p1": "longPoint_9.webp"
     },
     "longPoint_16": {
-      "p1": "longPoint_16.png"
+      "p1": "longPoint_16.webp"
     },
     "throw_0": {
-      "p1": "throw_0.png"
+      "p1": "throw_0.webp"
     },
     "throw_4": {
-      "p1": "throw_4.png"
+      "p1": "throw_4.webp"
     },
     "throw_8": {
-      "p1": "throw_8.png"
+      "p1": "throw_8.webp"
     },
     "throw_11": {
-      "p1": "throw_11.png"
+      "p1": "throw_11.webp"
     },
     "throw_14": {
-      "p1": "throw_14.png"
+      "p1": "throw_14.webp"
     },
     "throw_22": {
-      "p1": "throw_22.png"
+      "p1": "throw_22.webp"
     },
     "sLP_1": {
-      "p1": "sLP_1.png"
+      "p1": "sLP_1.webp"
     },
     "scoobot_0": {
-      "p1": "scoobot_0.png"
+      "p1": "scoobot_0.webp"
     },
     "scoobot_5": {
-      "p1": "scoobot_5.png"
+      "p1": "scoobot_5.webp"
     },
     "scoobot_8": {
-      "p1": "scoobot_8.png"
+      "p1": "scoobot_8.webp"
     },
     "scoobot_12": {
-      "p1": "scoobot_12.png"
+      "p1": "scoobot_12.webp"
     },
     "scoobot_15": {
-      "p1": "scoobot_15.png"
+      "p1": "scoobot_15.webp"
     },
     "scoobot_19": {
-      "p1": "scoobot_19.png"
+      "p1": "scoobot_19.webp"
     },
     "scoobot_22": {
-      "p1": "scoobot_22.png"
+      "p1": "scoobot_22.webp"
     },
     "scoobot_26": {
-      "p1": "scoobot_26.png"
+      "p1": "scoobot_26.webp"
     },
     "scoobot_30": {
-      "p1": "scoobot_30.png"
+      "p1": "scoobot_30.webp"
     },
     "scoobot_38": {
-      "p1": "scoobot_38.png"
+      "p1": "scoobot_38.webp"
     },
     "scoobyHop_0": {
-      "p1": "scoobyHop_0.png"
+      "p1": "scoobyHop_0.webp"
     },
     "scoobyHop_4": {
-      "p1": "scoobyHop_4.png"
+      "p1": "scoobyHop_4.webp"
     },
     "scoobyHop_9": {
-      "p1": "scoobyHop_9.png"
+      "p1": "scoobyHop_9.webp"
     },
     "scoobyHop_13": {
-      "p1": "scoobyHop_13.png"
+      "p1": "scoobyHop_13.webp"
     },
     "scoobyHop_18": {
-      "p1": "scoobyHop_18.png"
+      "p1": "scoobyHop_18.webp"
     },
     "scoobyHop_22": {
-      "p1": "scoobyHop_22.png"
+      "p1": "scoobyHop_22.webp"
     },
     "scoobyHop_31": {
-      "p1": "scoobyHop_31.png"
+      "p1": "scoobyHop_31.webp"
     }
   }
 }
