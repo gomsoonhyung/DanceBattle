@@ -4,6 +4,7 @@ public/sprites/<캐릭터>/ 의 스프라이트를 규격대로 검사한다.
 
   python3 scripts/check_sprites.py krump
   python3 scripts/check_sprites.py krump --ref sprites-ref/krump   (참고 그림 폴더를 직접 지정)
+  python3 scripts/check_sprites.py krump --dir sprites-work/krump  (옮기기 전 작업 폴더 검사)
   (기본: sprites-ref/<캐릭터> → docs/design/reference/<캐릭터> 순서로 찾음)
 
 검사 항목 (❌ = 게임에서 문제가 됨, ⚠️ = 확인 필요)
@@ -37,6 +38,8 @@ def lower_cloth_color(img):
     box = bbox(img)
     if not box:
         return None
+    if box[2] - box[0] > (box[3] - box[1]) * 1.2:
+        return None  # 누운 자세는 아래쪽에 머리카락·상의가 섞여서 바지 색을 잴 수 없다
     top = box[1] + (box[3] - box[1]) * 0.55
     px = img.load()
     rs = gs = bs = n = 0
@@ -89,9 +92,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("char")
     ap.add_argument("--ref", help="참고 그림 폴더 (기본: docs/design/reference/<캐릭터> 또는 sprites-ref/<캐릭터>)")
+    ap.add_argument("--dir", help="검사할 폴더 (기본: public/sprites/<캐릭터>, 예: sprites-work/<캐릭터>)")
     args = ap.parse_args()
 
-    base = f"public/sprites/{args.char}"
+    base = args.dir or f"public/sprites/{args.char}"
     # 참고 그림은 여러 폴더에서 찾는다 (내보낸 최신 참고 그림 sprites-ref 가 우선)
     ref_dirs = [args.ref] if args.ref else [f"sprites-ref/{args.char}", f"docs/design/reference/{args.char}"]
     ref_dirs = [d for d in ref_dirs if os.path.isdir(d)]
@@ -175,7 +179,9 @@ def main():
         mt = tone(med)
         for key, c in sorted(colors.items()):
             dist = sum((a - b) ** 2 for a, b in zip(tone(c), mt)) ** 0.5
-            if dist > 0.12:
+            rgb = sum((a - b) ** 2 for a, b in zip(c, med)) ** 0.5
+            # 아주 어두운 색은 RGB 몇 단계 차이에도 비율이 크게 흔들리므로, 실제 색 차이도 함께 본다
+            if dist > 0.12 and rgb > 12:
                 errors.append(
                     f"{key}: 아래쪽 옷 색이 다른 프레임과 다릅니다 (rgb{tuple(round(v) for v in c)} vs 대표 rgb{tuple(round(v) for v in med)}). 설정 그림의 색을 확인하세요"
                 )

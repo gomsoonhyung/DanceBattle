@@ -1,0 +1,11 @@
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { BASE_URL, launch } from '../browser.mjs';
+const { browser, page } = await launch();
+await page.goto(`${BASE_URL}/?gallery=export`);
+await page.waitForFunction(() => window.__sprites);
+const ids = ['waacker', 'krump', 'hiphopper', 'hiphopgirl', 'locker', 'househead', 'popper', 'bboy'];
+const out = {};
+for (const id of ids) out[id] = await page.evaluate((c) => window.__sprites.list(c), id);
+mkdirSync('sprites-work/batch', { recursive: true });
+writeFileSync('sprites-work/batch/anims.json', JSON.stringify(out, null, 1));
+await browser.close();

@@ -47,6 +47,58 @@ python3 scripts/fit_sprite.py 생성그림.png public/sprites/krump/idle_0.png -
 python3 scripts/check_sprites.py krump
 ```
 
+### 2-2. sprite-gen(Codex 스킬)으로 한 동작을 한 줄로 만들기
+
+한 동작의 프레임을 **한 번에 한 줄로** 생성해서, 프레임마다 모델이 달라지는 문제를 줄이는 방법입니다. 전용 CLI만 씁니다 (`/Users/cloud/.codex/skills/sprite-gen/.venv/bin/sprite-gen`, 아래에서는 `$SG`).
+
+1. 표시 프레임 번호를 확인합니다: `node scripts/export-sprites.mjs hiphopper sLP` → `sLP_0, 4, 7, 11` (4장)
+2. 요청 파일을 씁니다. **프레임 수 = 표시 프레임 수 + 1**: 첫 칸에는 채택된 대기 그림을 그대로 그리게 해서 크기 기준으로 씁니다. 동작 설명에 "오른쪽을 본다, 발 위치 고정, 의상 그대로"를 적습니다. 예시: `sprites-work/sg-pilot/request-sLP.json`
+3. 순서대로 실행합니다 (결과는 `sprites-work/`에만):
+
+```bash
+$SG workflow --kind sprite --base-image <절대경로>/idle_0.png --motion-method gpt-rows --confirmed-access codex
+$SG prepare --out-dir <실행 폴더> --character-id hiphopper --base-image <절대경로>/idle_0.png --request <요청 파일>
+$SG gen-set --run-dir <실행 폴더> --provider codex --model gpt-5.6-sol
+$SG extract --run-dir <실행 폴더>
+$SG compose-atlas --run-dir <실행 폴더>
+$SG compose-gif --run-dir <실행 폴더> --out-dir <실행 폴더>/previews
+$SG inspect --run-dir <실행 폴더>
+```
+
+4. 게임 규격으로 옮기고 검사합니다:
+
+```bash
+python3 scripts/import_sprite_gen.py <실행 폴더> sLP hiphopper --frames 0,4,7,11   # → sprites-work/sg/hiphopper/
+python3 scripts/check_sprites.py hiphopper --dir sprites-work/sg/hiphopper
+```
+
+5. 검사를 통과하면 `public/sprites/<id>/`로 복사하고 `manifest.json`에 적습니다.
+
+- 한 줄은 **4~6장**이 안정적입니다 (대기 칸 포함 최대 6~7장). 긴 동작은 여러 줄로 나눕니다.
+- 위치는 `import_sprite_gen.py`가 같은 이름의 참고 그림(`sprites-ref/`)에 맞춥니다. 참고 그림이 자기 대기 자세에서 움직인 만큼만 옮기므로 점프·공중 동작도 따로 처리할 필요가 없습니다.
+- 모델은 `--model gpt-5.6-sol`을 씁니다 (`~/.codex/config.toml`의 기본 모델은 ChatGPT 계정에서 거절될 수 있음).
+
+### 2-3. 캐릭터 전체를 한 번에 만들기
+
+`scripts/spritegen/`의 도구로 `public/sprites/<id>/`에 **아직 없는 동작**을 모두 만듭니다. 동작 설명은 기술 데이터(타격 프레임, 판정 위치, 설명)와 참고 그림의 모양(땅/공중, 키·폭 비율)으로 자동으로 씁니다.
+
+```bash
+node scripts/spritegen/list.mjs                      # 표시 프레임 목록 → sprites-work/batch/anims.json (개발 서버 필요)
+node scripts/spritegen/moves.mjs                     # 기술 데이터 → sprites-work/batch/moves.json
+node scripts/export-sprites.mjs <id>                 # 참고 그림
+python3 scripts/spritegen/build.py <id>              # 요청 파일 (특정 동작만 다시: build.py <id> <동작...> --redo --run <id>-redo)
+zsh scripts/spritegen/run.sh <id> [실행 이름]         # sprite-gen 6단계
+python3 scripts/spritegen/import_all.py <id> [실행 이름]   # → sprites-work/sg/<id>/
+python3 scripts/check_sprites.py <id> --dir sprites-work/sg/<id>
+python3 scripts/contact_sheet.py <id> --all --dir sprites-work/sg/<id>   # 꼭 눈으로 확인
+python3 scripts/spritegen/publish.py <id>            # public/sprites/<id>/ 로 옮기고 manifest 에 추가
+```
+
+- `import_all.py`는 실행 이름 폴더(`sprites-work/sg/<실행 이름>/`)에 씁니다. `publish.py <id> <실행 이름>`으로 그 폴더만 옮기세요.
+- 기술의 발생을 바꾸면(`tune` 등) 키 포즈 번호가 바뀝니다. 바꾸기 전 `anims.json`을 복사해 두고, 바꾼 뒤 `list.mjs` → `rename_shifted.py <복사본>`으로 있던 그림 이름을 옮깁니다.
+- 참고 그림 시트를 볼 때: 동작 방향(대공기는 위로, 점프 공격은 아래로)이 맞는지, 모델·옷이 대기 그림과 같은지 확인합니다.
+- 누운 자세·거꾸로 선 자세(헤드스핀)는 바지 색 검사가 머리카락을 재서 ❌가 날 수 있습니다. 시트로 확인하세요.
+
 ### 3. 게임에 넣기
 
 1. 그린 그림을 `public/sprites/krump/sHP_11.png`처럼 **참고 그림과 같은 이름**으로 저장합니다.

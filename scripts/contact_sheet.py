@@ -5,6 +5,7 @@
 
   python3 scripts/contact_sheet.py locker walkF walkB crouch      → shots/sheet_locker.png
   python3 scripts/contact_sheet.py krump --all                     → 모든 동작
+  python3 scripts/contact_sheet.py krump --all --dir sprites-work/krump  → 옮기기 전 작업 폴더 (shots/sheet_krump_work.png)
 
 필요: Python 3 + Pillow
 """
@@ -28,10 +29,13 @@ def main():
     ap.add_argument("char")
     ap.add_argument("anims", nargs="*")
     ap.add_argument("--all", action="store_true", help="manifest의 모든 동작")
+    ap.add_argument("--dir", help="그림 폴더 (기본: public/sprites/<캐릭터>, 예: sprites-work/<캐릭터>). 대기 그림은 public 것을 쓴다")
     args = ap.parse_args()
 
-    base = f"public/sprites/{args.char}"
+    pub = f"public/sprites/{args.char}"
+    base = args.dir or pub
     frames = json.load(open(f"{base}/manifest.json"))["frames"]
+    pub_frames = json.load(open(f"{pub}/manifest.json"))["frames"]
     by_anim = {}
     for k in frames:
         by_anim.setdefault(k.rsplit("_", 1)[0], []).append(k)
@@ -39,7 +43,7 @@ def main():
     rows = [(a, sorted(by_anim.get(a, []), key=lambda k: int(k.rsplit("_", 1)[1]))) for a in anims]
     rows = [(a, ks) for a, ks in rows if ks]
 
-    idle = Image.open(f"{base}/{frames['idle_0']['p1']}").convert("RGBA") if "idle_0" in frames else None
+    idle = Image.open(f"{pub}/{pub_frames['idle_0']['p1']}").convert("RGBA") if "idle_0" in pub_frames else None
     cols = 1 + max(len(ks) for _, ks in rows)
     sy = CELL / (CROP[3] - CROP[1])  # 줄이는 배율
     out = Image.new("RGBA", (cols * CELL, len(rows) * (CELL + 18)), (34, 30, 48, 255))
@@ -65,7 +69,7 @@ def main():
         d.text((cols * CELL - 60, y0 + 3), anim, fill=(255, 255, 255))
 
     os.makedirs("shots", exist_ok=True)
-    path = f"shots/sheet_{args.char}.png"
+    path = f"shots/sheet_{args.char}{'_work' if args.dir else ''}.png"
     out.save(path)
     print(f"✅ {path}  (초록 선 = 대기 그림의 머리 꼭대기, 빨간 선 = 발밑)")
 

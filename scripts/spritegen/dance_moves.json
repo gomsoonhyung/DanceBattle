@@ -1,0 +1,40 @@
+{
+  "krump": {
+    "sLK": "Krump FRONT STOMP: lift the front knee high, then drive the foot hard down onto the floor just in front (stomping on the opponent's foot), body hunched forward aggressively.",
+    "jH": "Krump STOMP in the air: knees pulled up high, then both feet drive straight down together to stomp, arms flared out.",
+    "chestPop": "Krump TEARING: hunched over, both hands claw and grab the chest while tension builds, then both arms rip outward and apart as if tearing the chest open; chest thrust out, head back, fierce face.",
+    "jumpStomp": "Krump JUMP STOMP: crouch, leap up high with both knees pulled up to the chest, then LAND by slamming BOTH FEET flat into the floor: knees deeply bent, body hunched low and forward, both arms flared down and out to the sides, fierce face. The landing frames are a heavy two-foot stomp, NOT a punch."
+  },
+  "waacker": {
+    "sHK": "Waacking TWIRL KICK: spin once with both arms extended straight out (a twirl), then extend the front leg high in a long elegant line.",
+    "poseWave": "Waacking WHACK into a POSE: the arm whips fast like a whip crack, then freezes in a dramatic old-Hollywood pose: one hand behind the head, the other arm extended straight forward, chin up, confident expression.",
+    "twirl": "Waacking TWIRL: spinning turns with both arms extended straight out like a T, finishing in a pose with one hand behind the head."
+  },
+  "hiphopper": {
+    "idle": "Hip-hop DOWN BOUNCE groove: on every beat the knees and chest drop heavily, then come back up; shoulders loose, a big relaxed bounce.",
+    "walkF": "Walking forward with a heavy hip-hop down bounce on every step, shoulders loose.",
+    "walkB": "Walking backward with a heavy hip-hop down bounce on every step, shoulders loose.",
+    "crissCross": "KRIS KROSS jump: two hops forward; in the air the legs open, and each landing crosses the legs (one foot crossed in front of the other) with a heavy bounce.",
+    "dougie": "The DOUGIE: lean the upper body back, then sweep one hand up over the head as if brushing the hair back, cool expression."
+  },
+  "locker": {
+    "sLP": "Locking POINT: the hand starts at the OPPOSITE shoulder, then shoots out straight to point forward with one finger and holds, big smile.",
+    "scoobot": "Locking SCOOBOT: in a muscle-man up-lock (both arms raised above the shoulders, elbows bent), turn around while doing alternating Scoo-B-Doo kicks, ending in a lock (bent forward, arms forming a circle downward).",
+    "scoobyHop": "Locking SCOOBY HOP: from a muscle-man up-lock pose (arms raised above the shoulders), hop up and kick forward in the air, then land."
+  },
+  "househead": {
+    "walkF": "Walking forward with continuous house JACKING: the torso ripples forward and back on every beat while the feet shuffle.",
+    "walkB": "Walking backward with continuous house JACKING: the torso ripples forward and back on every beat while the feet shuffle.",
+    "jH": "House DIVE in the air: body stretched horizontally, diving forward with both arms reaching forward and the legs trailing behind (lofting dolphin dive).",
+    "looseLegs": "House LOOSE LEGS: hopping lightly on one foot while the other leg swings loose and floppy, then stamping that foot down onto the floor just in front (stepping on the opponent's feet); alternate legs.",
+    "shuffle": "House SHUFFLE: quick shuffle steps sliding the feet out and back, then a hop that brings the heel chopping down from above."
+  },
+  "popper": {
+    "walkB": "Popping BACKSLIDE (moonwalk): one foot flat sliding backward along the floor while the other foot stays in front with its heel raised on the toes, alternating; upper body calm and still.",
+    "backdash": "Popping BACKSLIDE (moonwalk) sliding backward quickly: one foot flat sliding back, the other on its toes, alternating.",
+    "popShot": "Popping HIT: the arm pops with a sharp muscle contraction as it extends forward, the whole arm locked and vibrating at the end of the pop."
+  },
+  "bboy": {
+    "footworkRush": "B-boy FOOTWORK on the floor: hands planted, body low to the ground, six-step and CC footwork with the legs circling around, finishing with a kickout (both legs kicked straight out)."
+  }
+}
