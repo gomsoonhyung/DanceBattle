@@ -84,6 +84,7 @@ balance: 체스트 팝 데미지 120 → 100
   - `src/game/combat.ts` (판정), `src/game/match.ts` (대전 진행)
   - `src/characters/index.ts` (캐릭터 목록)
 - 오래 걸리는 작업은 중간중간 `git pull origin main` 으로 최신 내용을 받아 두세요.
+- 여러 사람·에이전트가 동시에 작업하면 **작업 폴더를 나누세요** (git worktree): [docs/WORKTREE.md](docs/WORKTREE.md)
 
 ## 4. 코드 규칙
 

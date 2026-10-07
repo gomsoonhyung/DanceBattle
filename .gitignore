@@ -5,3 +5,4 @@ shots
 sprites-ref
 sprites-work
 __pycache__
+.worktree.env

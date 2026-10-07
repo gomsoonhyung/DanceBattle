@@ -85,6 +85,8 @@ npm run dev        # 브라우저에서 http://localhost:5173
 | [docs/design/DESIGN_BRIEF.md](docs/design/DESIGN_BRIEF.md) | 디자인 작업 지시서: 캐릭터 설정, 시범 작업, 무대·UI 에셋 규격, 검수 기준 |
 | [docs/SPRITES.md](docs/SPRITES.md)                         | 스프라이트(그림) 만들기: 참고 그림 내보내기, 규격, 게임에 넣는 법        |
 | [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)               | 저장소 관리자용 GitHub 설정                                              |
+| [AGENTS.md](AGENTS.md)                                     | AI 에이전트 공통 구성 (역할·규칙·작업 보고)                              |
+| [docs/WORKTREE.md](docs/WORKTREE.md)                       | git worktree로 여러 에이전트가 동시에 작업하기                           |
 
 자주 쓰는 명령:
 

@@ -1,6 +1,7 @@
 # CLAUDE.md
 
 AI 코딩 도구(Claude Code 등)로 이 저장소를 작업할 때의 안내입니다. 사람용 규칙은 CONTRIBUTING.md와 같습니다.
+모든 에이전트 공통 구성(역할·작업 폴더·보고)은 `AGENTS.md`, 동시에 작업할 때는 `docs/WORKTREE.md`를 따른다.
 
 - 문서: `CONTRIBUTING.md`(작업 흐름), `docs/ARCHITECTURE.md`(구조), `docs/CHARACTER_GUIDE.md`(캐릭터·기술 데이터)
 - 작업을 마치면 `npm run check`(타입 + 포맷 + 결정론 + 테스트)를 통과시킨다. 포맷은 `npm run format`.
