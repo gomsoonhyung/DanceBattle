@@ -169,6 +169,8 @@ export interface Anim {
   loop?: number; // 반복 주기 (프레임). 없으면 마지막 키에서 멈춤
   /** false면 지면 스냅을 하지 않고 pose.y를 그대로 쓴다 (공중 동작) */
   snap?: boolean;
+  /** true면 중간 그림을 끼우지 않고 키프레임 그림을 다음 키까지 그대로 보여 준다 (시간이 정해진 연구 그림용) */
+  hold?: boolean;
 }
 
 /** 애니메이션의 특정 프레임을 관절 위치로 계산 (지면 스냅 포함). */
@@ -197,6 +199,11 @@ export function displayFrame(anim: Anim, frame: number): number {
   }
   const keys = anim.keys;
   if (frame <= keys[0].f) return keys[0].f;
+  if (anim.hold) {
+    let f = keys[0].f;
+    for (const k of keys) if (k.f <= frame) f = k.f;
+    return f;
+  }
   for (let i = 0; i < keys.length - 1; i++) {
     const a = keys[i].f;
     const b = keys[i + 1].f;

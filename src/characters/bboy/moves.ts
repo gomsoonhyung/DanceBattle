@@ -56,7 +56,7 @@ const DIVE = pose(CROUCH_HAND, { torso: 80, head: -40, aF: [80, 0], aB: [70, 10]
 
 const sLP: MoveDef = {
   id: 'sLP',
-  name: '탑락 잽',
+  name: '크로스 스텝',
   kind: 'normal',
   total: 14,
   anim: {
@@ -114,7 +114,7 @@ const sHP: MoveDef = {
 
 const sLK: MoveDef = {
   id: 'sLK',
-  name: '탑락 킥',
+  name: '탑록 킥 스텝',
   kind: 'normal',
   total: 19,
   anim: {
@@ -219,7 +219,7 @@ const cHP: MoveDef = {
 
 const cLK: MoveDef = {
   id: 'cLK',
-  name: '식스스텝 탭',
+  name: '한쪽 CC',
   kind: 'normal',
   total: 17,
   anim: {
@@ -339,7 +339,7 @@ const windmillHit = (from: number, to: number, last = false) => ({
 const windmill: MoveDef = {
   id: 'windmill',
   name: '윈드밀',
-  desc: '어깨로 바닥을 짚고 다리를 돌리며 전진하는 하단 4연타',
+  desc: '고다운으로 내려가 어깨·윗등으로 구르며 V자 다리를 돌린다. 전진하는 하단 4연타',
   kind: 'special',
   total: 48,
   anim: {
@@ -358,8 +358,8 @@ const windmill: MoveDef = {
 
 const headspin: MoveDef = {
   id: 'headspin',
-  name: '헤드스핀',
-  desc: '대공기. 머리로 서서 회전하며 다리로 올려친다. 발동 직후 무적',
+  name: '투싸 (2000)',
+  desc: '대공기. 두 손을 겹쳐 짚고 물구나무로 돌며 모은 다리로 올려친다. 발동 직후 무적',
   kind: 'special',
   total: 50,
   invuln: [1, 9],
@@ -413,8 +413,8 @@ const headspin: MoveDef = {
 
 const swipe: MoveDef = {
   id: 'swipe',
-  name: '스와이프 킥',
-  desc: '뛰어들며 위에서 내려차는 중단. 서서 막아야 한다',
+  name: '스와이프',
+  desc: '손을 짚고 몸을 반 바퀴 돌려 다리를 위에서 넘겨 내리찍는 중단. 서서 막아야 한다',
   kind: 'special',
   total: 42,
   anim: {
@@ -483,8 +483,8 @@ const swipe: MoveDef = {
 
 const freeze: MoveDef = {
   id: 'freeze',
-  name: '프리즈',
-  desc: '체어 프리즈 자세로 멈춘다. 이때 맞으면 플립 킥으로 자동 반격',
+  name: '베이비 프리즈',
+  desc: '손과 머리 옆면으로 받친 베이비 프리즈로 멈춘다. 이때 맞으면 자동 반격',
   kind: 'special',
   total: 38,
   counter: { from: 4, to: 24, into: 'freezeKick' },
@@ -550,7 +550,7 @@ const superHits = [10, 16, 22, 28, 34, 40].map((f) => ({
 const powerCombo: MoveDef = {
   id: 'powerCombo',
   name: '파워무브 콤보',
-  desc: '윈드밀 연타에서 헤드스핀으로 이어지는 파워무브 연속기',
+  desc: '플레어로 돌다가 에어트랙으로 떠오르는 파워무브 연속기',
   kind: 'super',
   total: 100,
   meterCost: 100,

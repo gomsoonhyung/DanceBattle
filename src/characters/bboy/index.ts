@@ -4,6 +4,7 @@ import { baseAnims } from '../common';
 import { BBOY_MOVES } from './moves';
 import { BBOY_COMMAND } from './command';
 import * as A from './poses';
+import { withStudyAnims, withStudyMoves } from './studies';
 
 export const BBOY: CharacterDef = {
   id: 'bboy',
@@ -41,7 +42,7 @@ export const BBOY: CharacterDef = {
     speed: 3,
     range: 3,
   },
-  anims: {
+  anims: withStudyAnims({
     ...dashAnims(),
     idle: A.idle,
     walkF: A.walkF,
@@ -58,8 +59,13 @@ export const BBOY: CharacterDef = {
     knockdown: A.knockdown,
     getup: A.getup,
     win: A.win,
-  },
-  moves: { ...BBOY_MOVES, ...moveTable(BBOY_COMMAND), throw: grab({ id: 'throw', name: '스핀 스로', base: A.STAND }) },
+  }),
+  // 동작 그림은 Codex 모션 연구 시간표를 쓴다 (studies.ts)
+  moves: withStudyMoves({
+    ...BBOY_MOVES,
+    ...moveTable(BBOY_COMMAND),
+    throw: grab({ id: 'throw', name: '스핀 스로', base: A.STAND }),
+  }),
   normals: {
     stand: { LP: 'sLP', HP: 'sHP', LK: 'sLK', HK: 'sHK' },
     crouch: { LP: 'cLP', HP: 'cHP', LK: 'cLK', HK: 'cHK' },

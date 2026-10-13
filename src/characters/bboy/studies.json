@@ -1,0 +1,577 @@
+{
+  "idle": {
+    "loop": 48,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "indianStep_00.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "indianStep_01.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "indianStep_02.webp"
+      },
+      {
+        "f": 24,
+        "kind": "stand",
+        "src": "indianStep_03.webp"
+      },
+      {
+        "f": 32,
+        "kind": "stand",
+        "src": "indianStep_04.webp"
+      },
+      {
+        "f": 40,
+        "kind": "stand",
+        "src": "indianStep_05.webp"
+      }
+    ]
+  },
+  "walkF": {
+    "loop": 48,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "shuffleTop_00.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "shuffleTop_01.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "shuffleTop_02.webp"
+      },
+      {
+        "f": 24,
+        "kind": "stand",
+        "src": "shuffleTop_03.webp"
+      },
+      {
+        "f": 32,
+        "kind": "stand",
+        "src": "shuffleTop_04.webp"
+      },
+      {
+        "f": 40,
+        "kind": "stand",
+        "src": "shuffleTop_01.webp"
+      }
+    ]
+  },
+  "walkB": {
+    "loop": 48,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "kickSide_00.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "kickSide_01.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "kickSide_02.webp"
+      },
+      {
+        "f": 24,
+        "kind": "stand",
+        "src": "kickSide_03.webp"
+      },
+      {
+        "f": 32,
+        "kind": "stand",
+        "src": "kickSide_04.webp"
+      },
+      {
+        "f": 40,
+        "kind": "stand",
+        "src": "kickSide_05.webp"
+      }
+    ]
+  },
+  "sLP": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "crossStep_00.webp"
+      },
+      {
+        "f": 3,
+        "kind": "stand",
+        "src": "crossStep_01.webp"
+      },
+      {
+        "f": 5,
+        "kind": "stand",
+        "src": "crossStep_02.webp"
+      },
+      {
+        "f": 9,
+        "kind": "stand",
+        "src": "crossStep_03.webp"
+      },
+      {
+        "f": 12,
+        "kind": "stand",
+        "src": "crossStep_04.webp"
+      }
+    ]
+  },
+  "sLK": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "toprock_0.webp"
+      },
+      {
+        "f": 3,
+        "kind": "stand",
+        "src": "toprock_5.webp"
+      },
+      {
+        "f": 7,
+        "kind": "stand",
+        "src": "toprock_9.webp"
+      },
+      {
+        "f": 11,
+        "kind": "stand",
+        "src": "toprock_12.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "indianStep_00.webp"
+      }
+    ]
+  },
+  "cLK": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "low",
+        "src": "cc_0.webp"
+      },
+      {
+        "f": 3,
+        "kind": "low",
+        "src": "cc_5.webp"
+      },
+      {
+        "f": 6,
+        "kind": "low",
+        "src": "cc_9.webp"
+      },
+      {
+        "f": 9,
+        "kind": "low",
+        "src": "cc_9.webp"
+      },
+      {
+        "f": 12,
+        "kind": "low",
+        "src": "cc_17.webp"
+      },
+      {
+        "f": 15,
+        "kind": "low",
+        "src": "cc_23.webp"
+      }
+    ]
+  },
+  "sixStepSweep": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "crossStep_00.webp"
+      },
+      {
+        "f": 3,
+        "kind": "stand",
+        "src": "crossStep_01.webp"
+      },
+      {
+        "f": 6,
+        "kind": "low",
+        "src": "goDown_00.webp"
+      },
+      {
+        "f": 9,
+        "kind": "low",
+        "src": "goDown_01.webp"
+      },
+      {
+        "f": 12,
+        "kind": "low",
+        "src": "cc_0.webp"
+      },
+      {
+        "f": 15,
+        "kind": "low",
+        "src": "ccPlant_01.webp"
+      },
+      {
+        "f": 18,
+        "kind": "low",
+        "src": "ccPlant_02.webp"
+      },
+      {
+        "f": 20,
+        "kind": "low",
+        "src": "cc_5.webp"
+      },
+      {
+        "f": 22,
+        "kind": "low",
+        "src": "cc_9.webp"
+      },
+      {
+        "f": 26,
+        "kind": "low",
+        "src": "cc_17.webp"
+      },
+      {
+        "f": 31,
+        "kind": "low",
+        "src": "cc_23.webp"
+      }
+    ]
+  },
+  "windmill": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "low",
+        "src": "goDown_00.webp"
+      },
+      {
+        "f": 3,
+        "kind": "low",
+        "src": "goDown_01.webp"
+      },
+      {
+        "f": 6,
+        "kind": "power",
+        "src": "windmillStudy_00.webp"
+      },
+      {
+        "f": 9,
+        "kind": "power",
+        "src": "windmillStudy_01.webp"
+      },
+      {
+        "f": 13,
+        "kind": "power",
+        "src": "windmillStudy_02.webp"
+      },
+      {
+        "f": 16,
+        "kind": "power",
+        "src": "windmillStudy_03.webp"
+      },
+      {
+        "f": 20,
+        "kind": "power",
+        "src": "windmillLink_00.webp"
+      },
+      {
+        "f": 23,
+        "kind": "power",
+        "src": "windmillLink_01.webp"
+      },
+      {
+        "f": 27,
+        "kind": "power",
+        "src": "windmillLink_02.webp"
+      },
+      {
+        "f": 30,
+        "kind": "power",
+        "src": "windmillLink_03.webp"
+      },
+      {
+        "f": 34,
+        "kind": "power",
+        "src": "windmillStudy_02.webp"
+      },
+      {
+        "f": 38,
+        "kind": "power",
+        "src": "windmillStudy_03.webp"
+      },
+      {
+        "f": 42,
+        "kind": "power",
+        "src": "windmillStudy_04.webp"
+      }
+    ]
+  },
+  "headspin": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "power",
+        "src": "thousandA_00.webp"
+      },
+      {
+        "f": 3,
+        "kind": "power",
+        "src": "thousandA_01.webp"
+      },
+      {
+        "f": 6,
+        "kind": "power",
+        "src": "thousandC_00.webp"
+      },
+      {
+        "f": 11,
+        "kind": "power",
+        "src": "thousandC_01.webp"
+      },
+      {
+        "f": 16,
+        "kind": "power",
+        "src": "thousandC_02.webp"
+      },
+      {
+        "f": 21,
+        "kind": "power",
+        "src": "thousandC_03.webp"
+      },
+      {
+        "f": 26,
+        "kind": "power",
+        "src": "thousandC_04.webp"
+      },
+      {
+        "f": 32,
+        "kind": "power",
+        "src": "thousandB_03.webp"
+      },
+      {
+        "f": 38,
+        "kind": "power",
+        "src": "thousandB_04.webp"
+      },
+      {
+        "f": 44,
+        "kind": "stand",
+        "src": "powerExit_02.webp"
+      }
+    ]
+  },
+  "freeze": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "power",
+        "src": "babyFreeze_00.webp"
+      },
+      {
+        "f": 2,
+        "kind": "power",
+        "src": "babyFreeze_01.webp"
+      },
+      {
+        "f": 4,
+        "kind": "power",
+        "src": "babyFreeze_02.webp"
+      },
+      {
+        "f": 6,
+        "kind": "power",
+        "src": "babyFreeze_03.webp"
+      },
+      {
+        "f": 28,
+        "kind": "power",
+        "src": "babyFreeze_04.webp"
+      },
+      {
+        "f": 32,
+        "kind": "power",
+        "src": "babyFreeze_01.webp"
+      },
+      {
+        "f": 35,
+        "kind": "power",
+        "src": "babyFreeze_00.webp"
+      }
+    ]
+  },
+  "swipe": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "low",
+        "src": "powerExit_04.webp"
+      },
+      {
+        "f": 4,
+        "kind": "power",
+        "src": "swipeStudy_00.webp"
+      },
+      {
+        "f": 9,
+        "kind": "power",
+        "src": "swipeStudy_01.webp"
+      },
+      {
+        "f": 14,
+        "kind": "power",
+        "src": "swipeStudy_02.webp"
+      },
+      {
+        "f": 18,
+        "kind": "power",
+        "src": "swipeStudy_03.webp"
+      },
+      {
+        "f": 22,
+        "kind": "power",
+        "src": "swipeStudy_04.webp"
+      },
+      {
+        "f": 27,
+        "kind": "power",
+        "src": "swipeReturn_00.webp"
+      },
+      {
+        "f": 32,
+        "kind": "power",
+        "src": "swipeReturn_04.webp"
+      },
+      {
+        "f": 36,
+        "kind": "low",
+        "src": "powerExit_00.webp"
+      },
+      {
+        "f": 39,
+        "kind": "stand",
+        "src": "powerExit_01.webp"
+      }
+    ]
+  },
+  "powerCombo": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "power",
+        "src": "flareA_00.webp"
+      },
+      {
+        "f": 5,
+        "kind": "power",
+        "src": "flareA_01.webp"
+      },
+      {
+        "f": 10,
+        "kind": "power",
+        "src": "flareA_02.webp"
+      },
+      {
+        "f": 15,
+        "kind": "power",
+        "src": "flareA_03.webp"
+      },
+      {
+        "f": 20,
+        "kind": "power",
+        "src": "flareA_04.webp"
+      },
+      {
+        "f": 25,
+        "kind": "power",
+        "src": "flareB_00.webp"
+      },
+      {
+        "f": 30,
+        "kind": "power",
+        "src": "flareB_01.webp"
+      },
+      {
+        "f": 35,
+        "kind": "power",
+        "src": "flareB_02.webp"
+      },
+      {
+        "f": 40,
+        "kind": "power",
+        "src": "airtrackA_02.webp"
+      },
+      {
+        "f": 45,
+        "kind": "power",
+        "src": "airtrackA_03.webp"
+      },
+      {
+        "f": 50,
+        "kind": "power",
+        "src": "airtrackB_00.webp"
+      },
+      {
+        "f": 54,
+        "kind": "power",
+        "src": "airtrackB_01.webp"
+      },
+      {
+        "f": 60,
+        "kind": "power",
+        "src": "airtrackB_02.webp"
+      },
+      {
+        "f": 66,
+        "kind": "power",
+        "src": "airtrackB_03.webp"
+      },
+      {
+        "f": 72,
+        "kind": "power",
+        "src": "airtrackB_04.webp"
+      },
+      {
+        "f": 78,
+        "kind": "low",
+        "src": "powerExit_00.webp"
+      },
+      {
+        "f": 86,
+        "kind": "stand",
+        "src": "powerExit_02.webp"
+      },
+      {
+        "f": 94,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  }
+}
