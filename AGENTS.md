@@ -16,6 +16,7 @@ Codex는 이 파일을, Claude Code는 `CLAUDE.md`를 먼저 읽습니다. 두 �
 | [docs/CHARACTER_GUIDE.md](docs/CHARACTER_GUIDE.md) | 캐릭터·기술 데이터 만드는 법                                                                          |
 | [docs/SPRITES.md](docs/SPRITES.md)                 | 그림(스프라이트) 규격과 sprite-gen 일괄 생성                                                          |
 | [docs/WORKTREE.md](docs/WORKTREE.md)               | 여러 에이전트가 동시에 작업하는 법                                                                    |
+| [docs/DEPLOY.md](docs/DEPLOY.md)                   | 개발 브랜치 develop · 시험 배포 release (배포 폴더 ~/GameProject-deploy 는 고치지 않는다)             |
 | [docs/design/](docs/design/)                       | 기획서: GAME_DESIGN, DANCE_REFERENCE(장르 동작 기준), CHARACTER_PLAYBOOK, INPUT_REFERENCE, FRAME_DATA |
 
 ## 2. 시작하기 전에 (필수)

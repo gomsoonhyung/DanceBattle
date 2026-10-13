@@ -152,7 +152,8 @@ export class TitleScreen {
   /** 8명이 한 줄로 서서 대기 춤을 춘다 (교체 그림이 없으면 건너뜀) */
   private drawLineup(g: CanvasRenderingContext2D): void {
     const floor = SCREEN_H - 18;
-    const scale = 0.62;
+    // 공개한 캐릭터가 적으면(시험 배포판) 크게 보여 준다
+    const scale = ROSTER.length <= 3 ? 1 : 0.62;
     const step = SCREEN_W / ROSTER.length;
     ROSTER.forEach((c, i) => {
       // 한 명씩 시간차를 두고 무대로 들어온다
