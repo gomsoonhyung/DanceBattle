@@ -509,3 +509,40 @@ describe('파워무브 연속 회전 (버튼을 누르고 있기)', () => {
     expect(spin(true).spins).toBe(3);
   });
 });
+
+describe('비보이 스와입스 · 에어트랙', () => {
+  const QCB_K = [I({ down: true }), I({ down: true, left: true }), I({ left: true, buttons: BTN.LK })];
+  const DP_K = [I({ right: true }), I({ down: true }), I({ down: true, right: true, buttons: BTN.LK })];
+  const use = (cmd: RawInput[], hold: boolean, p2: RawInput) => {
+    const m = fightingMatch();
+    closeIn(m, 90);
+    seq(m, cmd, p2);
+    const [p1, d] = m.fighters;
+    let hits = 0;
+    let blocks = 0;
+    let spins = 1;
+    for (let i = 0; i < 300; i++) {
+      m.update(I({ buttons: hold ? BTN.LK : 0 }), p2);
+      hits += m.events.filter((e) => e.type === 'hit').length;
+      blocks += m.events.filter((e) => e.type === 'block').length;
+      spins = Math.max(spins, p1.repeatCount + 1);
+    }
+    return { hits, blocks, spins, hp: d.health };
+  };
+  const crouchGuard = I({ down: true, right: true });
+  const standGuard = I({ right: true });
+
+  it('스와입스는 K를 누르고 있으면 3주기, 중단이라 앉아 막으면 맞는다', () => {
+    expect(use(QCB_K, false, I()).spins).toBe(1);
+    expect(use(QCB_K, true, I()).spins).toBe(3);
+    expect(use(QCB_K, false, crouchGuard).hits).toBeGreaterThan(0);
+    expect(use(QCB_K, false, standGuard).hits).toBe(0);
+  });
+
+  it('에어트랙은 623K, K를 누르고 있으면 3바퀴 돌며 더 많이 맞힌다', () => {
+    const tap = use(DP_K, false, I());
+    const hold = use(DP_K, true, I());
+    expect(hold.spins).toBe(3);
+    expect(hold.hits).toBeGreaterThan(tap.hits);
+  });
+});

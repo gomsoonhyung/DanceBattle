@@ -51,10 +51,16 @@ PLAN = {
     # 214P 베이비 프리즈: 반격 4~24 동안 정지 자세
     "freeze": {"keys": [[0, "babyFreeze_0"], [2, "babyFreeze_6"], [4, "babyFreeze_12"], [6, "babyFreeze_20"],
                         [28, "babyFreeze_38"], [32, "babyFreeze_44"], [35, "babyFreeze_50"]]},
-    # 214K 스와이프: 판정 17~22 = 다리가 위에서 넘어오는 순간 (중단)
-    "swipe": {"keys": [[0, "powerExit_4"], [4, "swipeStudy_0"], [9, "swipeStudy_6"], [14, "swipeStudy_12"],
-                       [18, "swipeStudy_18"], [22, "swipeStudy_24"], [27, "swipeReturn_0"], [32, "swipeReturn_4"],
-                       [36, "powerExit_0"], [39, "powerExit_1"]]},
+    # 214K 스와입스: 판정 22 / 46 (다리가 위에서 넘어오는 두 순간, 중단). 한 주기 = 그림 14~61
+    "swipe": {"keys": [[0, "idle_0.webp"], [2, "goDown_01.webp"], [6, "powerExit_04.webp"], [10, "swipeStudy_00.webp"],
+                       [14, "swipeStudy_01.webp"], [17, "swipeReturn_00.webp"], [21, "swipeStudy_02.webp"], [28, "swipeStudy_03.webp"],
+                       [32, "swipeStudy_04.webp"], [35, "swipeLeft_00.webp"], [38, "swipeFlight_00.webp"], [42, "swipeFlight_01.webp"],
+                       [45, "swipeLeft_01.webp"], [52, "swipeLeft_02.webp"], [56, "swipeReturn_04.webp"], [59, "swipeStudy_00.webp"],
+                       [62, "powerExit_04.webp"], [66, "powerExit_01.webp"], [72, "powerExit_02.webp"]]},
+    # 623K 에어트랙: 판정 22 / 38 / 54, 마무리 69 (한 바퀴 = 그림 20~67)
+    "airtrack": {"keys": [[0, "idle_0.webp"], [3, "airtrackA_00.webp"], [10, "airtrackA_01.webp"], [20, "airtrackA_02.webp"],
+                          [28, "airtrackA_03.webp"], [36, "airtrackB_00.webp"], [44, "airtrackB_01.webp"], [52, "airtrackB_02.webp"],
+                          [60, "airtrackB_03.webp"], [68, "airtrackB_04.webp"], [76, "powerExit_00.webp"], [82, "powerExit_02.webp"]]},
     # 초필 플레어 → 에어트랙: 판정 10~42 다단, 54~60 마무리
     "powerCombo": {"keys": [[0, "flareStudy_4"], [5, "flareStudy_16"], [10, "flareStudy_36"], [15, "flareStudy_48"],
                             [20, "flareStudy_60"], [25, "flareStudy_72"], [30, "flareStudy_84"], [35, "flareStudy_96"],

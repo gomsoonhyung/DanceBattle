@@ -366,6 +366,33 @@
     "footworkRush_43": {
       "p1": "footworkRush_43.webp"
     },
+    "idle_0": {
+      "p1": "idle_0.webp"
+    },
+    "idle_4": {
+      "p1": "idle_4.webp"
+    },
+    "idle_8": {
+      "p1": "idle_8.webp"
+    },
+    "idle_12": {
+      "p1": "idle_12.webp"
+    },
+    "idle_16": {
+      "p1": "idle_16.webp"
+    },
+    "idle_20": {
+      "p1": "idle_20.webp"
+    },
+    "idle_24": {
+      "p1": "idle_24.webp"
+    },
+    "idle_28": {
+      "p1": "idle_28.webp"
+    },
+    "idle_32": {
+      "p1": "idle_32.webp"
+    },
     "walkF_0": {
       "p1": "walkF_0.webp"
     },
@@ -612,32 +639,95 @@
     "swipe_0": {
       "p1": "swipe_0.webp"
     },
-    "swipe_4": {
-      "p1": "swipe_4.webp"
+    "swipe_2": {
+      "p1": "swipe_2.webp"
     },
-    "swipe_9": {
-      "p1": "swipe_9.webp"
+    "swipe_6": {
+      "p1": "swipe_6.webp"
+    },
+    "swipe_10": {
+      "p1": "swipe_10.webp"
     },
     "swipe_14": {
       "p1": "swipe_14.webp"
     },
-    "swipe_18": {
-      "p1": "swipe_18.webp"
+    "swipe_17": {
+      "p1": "swipe_17.webp"
     },
-    "swipe_22": {
-      "p1": "swipe_22.webp"
+    "swipe_21": {
+      "p1": "swipe_21.webp"
     },
-    "swipe_27": {
-      "p1": "swipe_27.webp"
+    "swipe_28": {
+      "p1": "swipe_28.webp"
     },
     "swipe_32": {
       "p1": "swipe_32.webp"
     },
-    "swipe_36": {
-      "p1": "swipe_36.webp"
+    "swipe_35": {
+      "p1": "swipe_35.webp"
     },
-    "swipe_39": {
-      "p1": "swipe_39.webp"
+    "swipe_38": {
+      "p1": "swipe_38.webp"
+    },
+    "swipe_42": {
+      "p1": "swipe_42.webp"
+    },
+    "swipe_45": {
+      "p1": "swipe_45.webp"
+    },
+    "swipe_52": {
+      "p1": "swipe_52.webp"
+    },
+    "swipe_56": {
+      "p1": "swipe_56.webp"
+    },
+    "swipe_59": {
+      "p1": "swipe_59.webp"
+    },
+    "swipe_62": {
+      "p1": "swipe_62.webp"
+    },
+    "swipe_66": {
+      "p1": "swipe_66.webp"
+    },
+    "swipe_72": {
+      "p1": "swipe_72.webp"
+    },
+    "airtrack_0": {
+      "p1": "airtrack_0.webp"
+    },
+    "airtrack_3": {
+      "p1": "airtrack_3.webp"
+    },
+    "airtrack_10": {
+      "p1": "airtrack_10.webp"
+    },
+    "airtrack_20": {
+      "p1": "airtrack_20.webp"
+    },
+    "airtrack_28": {
+      "p1": "airtrack_28.webp"
+    },
+    "airtrack_36": {
+      "p1": "airtrack_36.webp"
+    },
+    "airtrack_44": {
+      "p1": "airtrack_44.webp"
+    },
+    "airtrack_52": {
+      "p1": "airtrack_52.webp"
+    },
+    "airtrack_60": {
+      "p1": "airtrack_60.webp"
+    },
+    "airtrack_68": {
+      "p1": "airtrack_68.webp"
+    },
+    "airtrack_76": {
+      "p1": "airtrack_76.webp"
+    },
+    "airtrack_82": {
+      "p1": "airtrack_82.webp"
     },
     "powerCombo_0": {
       "p1": "powerCombo_0.webp"
@@ -692,33 +782,6 @@
     },
     "powerCombo_94": {
       "p1": "powerCombo_94.webp"
-    },
-    "idle_0": {
-      "p1": "idle_0.webp"
-    },
-    "idle_4": {
-      "p1": "idle_4.webp"
-    },
-    "idle_8": {
-      "p1": "idle_8.webp"
-    },
-    "idle_12": {
-      "p1": "idle_12.webp"
-    },
-    "idle_16": {
-      "p1": "idle_16.webp"
-    },
-    "idle_20": {
-      "p1": "idle_20.webp"
-    },
-    "idle_24": {
-      "p1": "idle_24.webp"
-    },
-    "idle_28": {
-      "p1": "idle_28.webp"
-    },
-    "idle_32": {
-      "p1": "idle_32.webp"
     }
   }
 }

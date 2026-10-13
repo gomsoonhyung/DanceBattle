@@ -77,6 +77,7 @@ export const BBOY: CharacterDef = {
   // 우선순위 순서 (앞쪽이 먼저 검사됨)
   specials: [
     { motion: 'dp', button: 'P', move: 'headspin' },
+    { motion: 'dp', button: 'K', move: 'airtrack' },
     { motion: 'qcf', button: 'P', move: 'windmill' },
     { motion: 'qcf', button: 'K', move: 'footworkRush' },
     { motion: 'qcb', button: 'P', move: 'freeze' },

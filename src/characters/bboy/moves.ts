@@ -426,12 +426,17 @@ const headspin: MoveDef = {
   repeat: { from: 7, to: 32, max: 3, hold: 'P' },
 };
 
+/**
+ * 스와입스: 손을 짚고 몸을 반 바퀴씩 돌리며(오른쪽 → 왼쪽 → 오른쪽) 다리를 위에서 넘겨 내리찍는다.
+ * 한 주기에 다리가 두 번 넘어오고 둘 다 중단. K를 누르고 있으면 최대 3주기
+ * 그림 시간표: Codex power-sequences.json 의 swipes (진입은 게임용으로 줄임)
+ */
 const swipe: MoveDef = {
   id: 'swipe',
-  name: '스와이프',
-  desc: '손을 짚고 몸을 반 바퀴 돌려 다리를 위에서 넘겨 내리찍는 중단. 서서 막아야 한다',
+  name: '스와입스',
+  desc: '손을 짚고 반 바퀴씩 돌며 다리를 위에서 넘겨 내리찍는 중단 2연타. K를 누르고 있으면 최대 3바퀴. 서서 막아야 한다',
   kind: 'special',
-  total: 42,
+  total: 78,
   anim: {
     keys: [
       { f: 0, p: STAND },
@@ -479,21 +484,36 @@ const swipe: MoveDef = {
       { f: 42, p: STAND },
     ],
   },
-  velocity: [{ from: 8, to: 20, vx: 4.5 }],
+  velocity: [{ from: 14, to: 62, vx: 1.5 }],
+  hurtbox: { x: -30, y: 0, w: 70, h: 110 },
   hits: [
     {
-      frames: [17, 22],
-      box: { x: 10, y: 40, w: 95, h: 140 },
-      damage: 80,
-      hitstun: 22,
-      blockstun: 12,
+      frames: [22, 27],
+      box: { x: -10, y: 30, w: 120, h: 140 },
+      damage: 45,
+      hitstun: 32,
+      blockstun: 16,
       level: 'overhead',
-      push: 8,
-      chip: 6,
-      hitstop: 12,
+      push: 2,
+      chip: 5,
+      hitstop: 9,
+      heavy: true,
+    },
+    {
+      frames: [46, 51],
+      box: { x: -10, y: 30, w: 120, h: 140 },
+      damage: 40,
+      hitstun: 32,
+      blockstun: 16,
+      level: 'overhead',
+      push: 2,
+      chip: 5,
+      hitstop: 9,
       heavy: true,
     },
   ],
+  // 한 주기 = 15~62 프레임
+  repeat: { from: 15, to: 62, max: 3, hold: 'K' },
 };
 
 const freeze: MoveDef = {
@@ -659,10 +679,77 @@ const footworkRush: MoveDef = {
   ],
 };
 
+/**
+ * 에어트랙: 다리를 높은 V자로 벌리고 손을 공중에서 교대로 짚으며 돌아 전진한다. 높이 뜬 다리가 친다.
+ * K를 누르고 있으면 최대 3바퀴, 마지막에 다리를 내리며 띄워 다운
+ * 그림 시간표: Codex power-sequences.json 의 airtrack (진입은 게임용으로 줄임)
+ */
+const airtrack: MoveDef = {
+  id: 'airtrack',
+  name: '에어트랙',
+  desc: '다리를 높은 V자로 벌리고 손을 공중에서 바꿔 짚으며 돌아 전진하는 연타. K를 누르고 있으면 최대 3바퀴',
+  kind: 'special',
+  total: 90,
+  anim: { keys: [{ f: 0, p: STAND }] },
+  velocity: [{ from: 10, to: 68, vx: 2.5 }],
+  hurtbox: { x: -30, y: 30, w: 60, h: 150 },
+  hits: [
+    {
+      frames: [22, 25],
+      box: { x: -40, y: 70, w: 150, h: 130 },
+      damage: 25,
+      hitstun: 26,
+      blockstun: 12,
+      level: 'mid',
+      push: 1,
+      chip: 4,
+      hitstop: 6,
+    },
+    {
+      frames: [38, 41],
+      box: { x: -40, y: 70, w: 150, h: 130 },
+      damage: 25,
+      hitstun: 26,
+      blockstun: 12,
+      level: 'mid',
+      push: 1,
+      chip: 4,
+      hitstop: 6,
+    },
+    {
+      frames: [54, 57],
+      box: { x: -40, y: 70, w: 150, h: 130 },
+      damage: 25,
+      hitstun: 26,
+      blockstun: 12,
+      level: 'mid',
+      push: 1,
+      chip: 4,
+      hitstop: 6,
+    },
+    {
+      frames: [69, 72],
+      box: { x: -10, y: 30, w: 120, h: 140 },
+      damage: 45,
+      hitstun: 24,
+      blockstun: 14,
+      level: 'mid',
+      launch: { vx: 3.5, vy: 10 },
+      knockdown: true,
+      chip: 6,
+      hitstop: 12,
+      heavy: true,
+    },
+  ],
+  // 한 바퀴 = 21~68 프레임 (오른손 → 양손 → 왼손 밀기 → 공중 → 오른손 받기)
+  repeat: { from: 21, to: 68, max: 3, hold: 'K' },
+};
+
 export const BBOY_MOVES: Record<string, MoveDef> = Object.fromEntries(
   [
     sLP,
     footworkRush,
+    airtrack,
     sHP,
     sLK,
     sHK,
