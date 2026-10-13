@@ -1,6 +1,7 @@
 import { displayFrame, evalAnim } from '../anim/pose';
 import { sfx } from '../audio/sfx';
-import { CHARACTERS, commandList } from '../characters';
+import { commandList } from '../characters';
+import { ROSTER } from './roster';
 import { GROUND_SCREEN_Y, SCREEN_H, SCREEN_W } from '../core/constants';
 import type { CharacterDef } from '../fighter/types';
 import type { MatchMode } from '../game/match';
@@ -34,10 +35,10 @@ export class SelectScreen {
     readonly mode: MatchMode,
     initial?: [CharacterDef, CharacterDef],
   ) {
-    const idx = (c: CharacterDef) => Math.max(0, CHARACTERS.indexOf(c));
-    this.cursor = initial ? [idx(initial[0]), idx(initial[1])] : [0, 1 % CHARACTERS.length];
+    const idx = (c: CharacterDef) => Math.max(0, ROSTER.indexOf(c));
+    this.cursor = initial ? [idx(initial[0]), idx(initial[1])] : [0, 1 % ROSTER.length];
     // 미리보기용: 대기·승리 그림만 불러 둔다 (전체 그림은 대전을 시작할 때)
-    void loadSprites(CHARACTERS, ['idle', 'win']);
+    void loadSprites(ROSTER, ['idle', 'win']);
   }
 
   update(): SelectResult {
@@ -52,7 +53,7 @@ export class SelectScreen {
         this.unready(1);
       }
       if (this.ready[0] && this.ready[1] && ++this.readyTimer >= READY_DELAY) {
-        return [CHARACTERS[this.cursor[0]], CHARACTERS[this.cursor[1]]];
+        return [ROSTER[this.cursor[0]], ROSTER[this.cursor[1]]];
       }
       return null;
     }
@@ -82,7 +83,7 @@ export class SelectScreen {
       if (m.cancel) this.unready(slot);
       return;
     }
-    const n = CHARACTERS.length;
+    const n = ROSTER.length;
     if (m.left) this.cursor[slot] = (this.cursor[slot] + n - 1) % n;
     if (m.right) this.cursor[slot] = (this.cursor[slot] + 1) % n;
     if (m.confirm || confirmKey) {
@@ -103,9 +104,9 @@ export class SelectScreen {
     g.fillStyle = '#ffd23f';
     g.fillText('CHARACTER SELECT', SCREEN_W / 2, 52);
 
-    const total = CHARACTERS.length * CARD_W + (CHARACTERS.length - 1) * CARD_GAP;
+    const total = ROSTER.length * CARD_W + (ROSTER.length - 1) * CARD_GAP;
     const left = (SCREEN_W - total) / 2;
-    CHARACTERS.forEach((c, i) => this.drawCard(g, c, i, left + i * (CARD_W + CARD_GAP)));
+    ROSTER.forEach((c, i) => this.drawCard(g, c, i, left + i * (CARD_W + CARD_GAP)));
 
     for (const slot of [0, 1] as const) this.drawPanel(g, slot);
 
@@ -188,7 +189,7 @@ export class SelectScreen {
   }
 
   private drawPanel(g: CanvasRenderingContext2D, slot: 0 | 1): void {
-    const c = CHARACTERS[this.cursor[slot]];
+    const c = ROSTER[this.cursor[slot]];
     const px = slot === 0 ? 20 : SCREEN_W / 2 + 10;
     const pw = SCREEN_W / 2 - 30;
     const top = 270;

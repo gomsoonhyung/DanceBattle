@@ -1,7 +1,7 @@
 import { unlockAudio } from './audio/sfx';
 import { FRAME_MS, RENDER_SCALE, SCREEN_H, SCREEN_W } from './core/constants';
 import { renderGallery } from './debug/gallery';
-import { CHARACTERS } from './characters';
+import { ROSTER } from './screens/roster';
 import type { CharacterDef } from './fighter/types';
 import { Match, type MatchMode } from './game/match';
 import { endInputFrame, initKeyboard, keyPressed, menu, pollMenu, readPlayerInput } from './input/devices';
@@ -34,7 +34,7 @@ type Screen =
 
 function startGame(): void {
   initKeyboard();
-  preloadAssets(CHARACTERS.map((c) => c.id));
+  preloadAssets(ROSTER.map((c) => c.id));
   window.addEventListener('keydown', unlockAudio);
   window.addEventListener('pointerdown', unlockAudio);
 

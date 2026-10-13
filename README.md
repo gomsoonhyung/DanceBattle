@@ -87,6 +87,7 @@ npm run dev        # 브라우저에서 http://localhost:5173
 | [docs/GITHUB_SETUP.md](docs/GITHUB_SETUP.md)               | 저장소 관리자용 GitHub 설정                                              |
 | [AGENTS.md](AGENTS.md)                                     | AI 에이전트 공통 구성 (역할·규칙·작업 보고)                              |
 | [docs/WORKTREE.md](docs/WORKTREE.md)                       | git worktree로 여러 에이전트가 동시에 작업하기                           |
+| [docs/DEPLOY.md](docs/DEPLOY.md)                           | 개발(develop, 5173)과 시험 배포(release, 4173) 나누기                    |
 
 자주 쓰는 명령:
 

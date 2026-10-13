@@ -1,5 +1,5 @@
 import { displayFrame } from '../anim/pose';
-import { CHARACTERS } from '../characters';
+import { ROSTER } from './roster';
 import { SCREEN_H, SCREEN_W } from '../core/constants';
 import type { MatchMode } from '../game/match';
 import { keyPressed, menu } from '../input/devices';
@@ -30,7 +30,7 @@ export class TitleScreen {
   private pageFrame = 0;
 
   constructor(skipPress = false) {
-    void loadSprites(CHARACTERS, ['idle']);
+    void loadSprites(ROSTER, ['idle']);
     if (skipPress) this.page = 'menu';
   }
 
@@ -153,8 +153,8 @@ export class TitleScreen {
   private drawLineup(g: CanvasRenderingContext2D): void {
     const floor = SCREEN_H - 18;
     const scale = 0.62;
-    const step = SCREEN_W / CHARACTERS.length;
-    CHARACTERS.forEach((c, i) => {
+    const step = SCREEN_W / ROSTER.length;
+    ROSTER.forEach((c, i) => {
       // 한 명씩 시간차를 두고 무대로 들어온다
       const enter = Math.min(1, Math.max(0, (this.frame - 10 - i * 4) / 16));
       if (enter <= 0) return;
