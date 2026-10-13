@@ -23,10 +23,8 @@ SRC = sys.argv[1]
 DST = "public/sprites/bboy"
 OUT = "src/characters/bboy/studies.json"
 
-# 반복 동작(대기·걷기)은 loop 길이를 준다. 4프레임마다 그림 이름이 필요하다 (LOOP_STEP)
+# 대기는 예전 그림(옆모습)을 쓴다 (2026-10-13 사용자 결정). 반복 동작(걷기)은 loop 길이를 준다. 4프레임마다 그림 이름이 필요하다 (LOOP_STEP)
 PLAN = {
-    "idle": {"loop": 48, "keys": [[0, "indianStep_00.webp"], [8, "indianStep_01.webp"], [16, "indianStep_02.webp"],
-                                  [24, "indianStep_03.webp"], [32, "indianStep_04.webp"], [40, "indianStep_05.webp"]]},
     "walkF": {"loop": 48, "keys": [[0, "shuffleTop_00.webp"], [8, "shuffleTop_01.webp"], [16, "shuffleTop_02.webp"],
                                    [24, "shuffleTop_03.webp"], [32, "shuffleTop_04.webp"], [40, "shuffleTop_01.webp"]]},
     "walkB": {"loop": 48, "keys": [[0, "kickSide_00.webp"], [8, "kickSide_01.webp"], [16, "kickSide_02.webp"],
@@ -34,7 +32,7 @@ PLAN = {
     # LP 탑록 크로스 스텝: 판정 5~7 = 열린 팔 강조
     "sLP": {"keys": [[0, "crossStep_4"], [3, "crossStep_8"], [5, "crossStep_12"], [9, "crossStep_19"], [12, "crossStep_24"]]},
     # LK 탑록 킥 스텝: 판정 7~9 = 낮은 킥
-    "sLK": {"keys": [[0, "toprock_0"], [3, "toprock_5"], [7, "toprock_9"], [11, "toprock_12"], [16, "indianStep_00.webp"]]},
+    "sLK": {"keys": [[0, "toprock_0"], [3, "toprock_5"], [7, "toprock_9"], [11, "toprock_12"], [16, "idle_0.webp"]]},
     # 2LK 한쪽 CC: 판정 6~8 = 다리 내보내기
     "cLK": {"keys": [[0, "cc_0"], [3, "cc_5"], [6, "cc_9"], [9, "cc_13"], [12, "cc_17"], [15, "cc_23"]]},
     # 3HK 고다운 → CC: 판정 22~25

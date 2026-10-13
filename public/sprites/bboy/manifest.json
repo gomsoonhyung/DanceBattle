@@ -366,42 +366,6 @@
     "footworkRush_43": {
       "p1": "footworkRush_43.webp"
     },
-    "idle_0": {
-      "p1": "idle_0.webp"
-    },
-    "idle_4": {
-      "p1": "idle_4.webp"
-    },
-    "idle_8": {
-      "p1": "idle_8.webp"
-    },
-    "idle_12": {
-      "p1": "idle_12.webp"
-    },
-    "idle_16": {
-      "p1": "idle_16.webp"
-    },
-    "idle_20": {
-      "p1": "idle_20.webp"
-    },
-    "idle_24": {
-      "p1": "idle_24.webp"
-    },
-    "idle_28": {
-      "p1": "idle_28.webp"
-    },
-    "idle_32": {
-      "p1": "idle_32.webp"
-    },
-    "idle_36": {
-      "p1": "idle_36.webp"
-    },
-    "idle_40": {
-      "p1": "idle_40.webp"
-    },
-    "idle_44": {
-      "p1": "idle_44.webp"
-    },
     "walkF_0": {
       "p1": "walkF_0.webp"
     },
@@ -728,6 +692,33 @@
     },
     "powerCombo_94": {
       "p1": "powerCombo_94.webp"
+    },
+    "idle_0": {
+      "p1": "idle_0.webp"
+    },
+    "idle_4": {
+      "p1": "idle_4.webp"
+    },
+    "idle_8": {
+      "p1": "idle_8.webp"
+    },
+    "idle_12": {
+      "p1": "idle_12.webp"
+    },
+    "idle_16": {
+      "p1": "idle_16.webp"
+    },
+    "idle_20": {
+      "p1": "idle_20.webp"
+    },
+    "idle_24": {
+      "p1": "idle_24.webp"
+    },
+    "idle_28": {
+      "p1": "idle_28.webp"
+    },
+    "idle_32": {
+      "p1": "idle_32.webp"
     }
   }
 }

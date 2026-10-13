@@ -1,39 +1,4 @@
 {
-  "idle": {
-    "loop": 48,
-    "keys": [
-      {
-        "f": 0,
-        "kind": "stand",
-        "src": "indianStep_00.webp"
-      },
-      {
-        "f": 8,
-        "kind": "stand",
-        "src": "indianStep_01.webp"
-      },
-      {
-        "f": 16,
-        "kind": "stand",
-        "src": "indianStep_02.webp"
-      },
-      {
-        "f": 24,
-        "kind": "stand",
-        "src": "indianStep_03.webp"
-      },
-      {
-        "f": 32,
-        "kind": "stand",
-        "src": "indianStep_04.webp"
-      },
-      {
-        "f": 40,
-        "kind": "stand",
-        "src": "indianStep_05.webp"
-      }
-    ]
-  },
   "walkF": {
     "loop": 48,
     "keys": [
@@ -160,7 +125,7 @@
       {
         "f": 16,
         "kind": "stand",
-        "src": "indianStep_00.webp"
+        "src": "idle_0.webp"
       }
     ]
   },
