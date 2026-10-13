@@ -465,3 +465,47 @@ describe('연습 모드 유불리 프레임', () => {
     expect(onHit!.value).toBeGreaterThan(onBlock!.value);
   });
 });
+
+describe('파워무브 연속 회전 (버튼을 누르고 있기)', () => {
+  /** 윈드밀(236P)을 쓰고, hold 이면 P를 계속 누른 채로. 맞은 횟수와 기술 길이를 돌려준다 */
+  const spin = (hold: boolean, frames = 200) => {
+    const m = new Match('training', [BBOY, BBOY]);
+    closeIn(m, 90);
+    const p1 = m.fighters[0];
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LP })]);
+    let hits = 0;
+    let len = 0;
+    for (let i = 0; i < frames; i++) {
+      m.update(I({ buttons: hold ? BTN.LP : 0 }), I());
+      hits += m.events.filter((e) => e.type === 'hit').length;
+      if (p1.move?.id === 'windmill') len++;
+    }
+    return { hits, len, spins: p1.repeatCount + 1 };
+  };
+
+  it('누르고 있으면 더 돌고 더 많이 맞힌다', () => {
+    const tap = spin(false);
+    const hold = spin(true);
+    expect(hold.hits).toBeGreaterThan(tap.hits);
+    expect(hold.len).toBeGreaterThan(tap.len);
+  });
+
+  it('최대 3바퀴까지만 돈다', () => {
+    const m = new Match('training', [BBOY, BBOY]);
+    closeIn(m, 90);
+    const p1 = m.fighters[0];
+    seq(m, [...QCF.slice(0, 2), I({ right: true, buttons: BTN.LP })]);
+    let maxCount = 0;
+    for (let i = 0; i < 300; i++) {
+      m.update(I({ buttons: BTN.LP }), I());
+      maxCount = Math.max(maxCount, p1.repeatCount);
+    }
+    expect(maxCount).toBe(2);
+    expect(p1.state).not.toBe('move');
+  });
+
+  it('살짝 누르면 한 바퀴만 돈다', () => {
+    expect(spin(false).spins).toBe(1);
+    expect(spin(true).spins).toBe(3);
+  });
+});

@@ -92,6 +92,8 @@ export class Fighter {
   pendingProjectile: ProjectileDef | null = null;
   /** 슈퍼아머로 버틸 수 있는 남은 횟수 */
   private armorHits = 0;
+  /** 파워무브를 추가로 돈 횟수 (repeat) */
+  repeatCount = 0;
   /** 먼지 연출이 필요한 순간 (대시 출발, 착지, 넘어짐). Match가 읽어서 이벤트를 보낸다 */
   pendingDust = false;
   /** 뒤로 던지기 (4 + 약P+약K) */
@@ -293,6 +295,17 @@ export class Fighter {
   private updateMove(canAct: boolean): void {
     const m = this.move!;
     this.moveFrame++;
+    // 파워무브: 회전 구간 끝에서 버튼을 누르고 있으면 한 바퀴 더 (최대 repeat.max 바퀴)
+    const r = m.repeat;
+    if (r && this.moveFrame === r.to + 1 && this.repeatCount < r.max - 1 && canAct) {
+      if (this.input.held & (r.hold === 'P' ? PUNCHES : KICKS)) {
+        this.repeatCount++;
+        this.moveFrame = r.from;
+        m.hits.forEach((h, i) => {
+          if (h.frames[1] >= r.from && h.frames[0] <= r.to) this.hitIds.delete(i);
+        });
+      }
+    }
     if (m.projectile && this.moveFrame === m.projectile.frame) this.pendingProjectile = m.projectile;
     if (m.meterGain && this.moveFrame === m.meterGain.frame) {
       this.addMeter(m.meterGain.amount);
@@ -353,6 +366,7 @@ export class Fighter {
     this.stateFrame = 0;
     this.input.consume();
     this.armorHits = m.armor ? 1 : 0;
+    this.repeatCount = 0;
     if (m.meterCost) this.meter -= m.meterCost;
     if (m.superFreeze) this.pendingSuperFreeze = m.superFreeze;
     if (!m.air) this.vx = 0;

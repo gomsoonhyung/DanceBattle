@@ -326,7 +326,7 @@ const windmillHit = (from: number, to: number, last = false) => ({
   frames: [from, to] as [number, number],
   // 도는 다리가 앞뒤를 모두 쓴다 (뒤로 넘어온 상대도 맞는다)
   box: { x: -75, y: 0, w: last ? 175 : 170, h: last ? 80 : 70 },
-  damage: last ? 50 : 30,
+  damage: last ? 40 : 25,
   hitstun: 20,
   blockstun: last ? 14 : 12,
   level: 'low' as const,
@@ -339,7 +339,7 @@ const windmillHit = (from: number, to: number, last = false) => ({
 const windmill: MoveDef = {
   id: 'windmill',
   name: '윈드밀',
-  desc: '고다운으로 내려가 어깨·윗등으로 구르며 V자 다리를 돌린다. 전진하는 하단 4연타',
+  desc: '고다운으로 내려가 어깨·윗등으로 구르며 V자 다리를 돌리는 하단 연타. P를 누르고 있으면 최대 3바퀴',
   kind: 'special',
   total: 48,
   anim: {
@@ -353,13 +353,15 @@ const windmill: MoveDef = {
   },
   velocity: [{ from: 5, to: 38, vx: 3.5 }],
   hurtbox: { x: -40, y: 0, w: 80, h: 110 },
-  hits: [windmillHit(9, 11), windmillHit(16, 18), windmillHit(23, 25), windmillHit(30, 33, true)],
+  // 회전 한 바퀴 = 7~34 프레임 (손 지지 → 어깨 → 윗등 → 반대 어깨 → 연결). 마무리 킥아웃 38~41에 다운
+  hits: [windmillHit(9, 11), windmillHit(16, 18), windmillHit(23, 25), windmillHit(30, 32), windmillHit(38, 41, true)],
+  repeat: { from: 7, to: 34, max: 3, hold: 'P' },
 };
 
 const headspin: MoveDef = {
   id: 'headspin',
   name: '투싸 (2000)',
-  desc: '대공기. 두 손을 겹쳐 짚고 물구나무로 돌며 모은 다리로 올려친다. 발동 직후 무적',
+  desc: '대공기. 두 손을 겹쳐 짚고 물구나무로 돌며 모은 다리로 올려친다. 발동 직후 무적. P를 누르고 있으면 최대 3바퀴',
   kind: 'special',
   total: 50,
   invuln: [1, 9],
@@ -373,42 +375,55 @@ const headspin: MoveDef = {
       { f: 50, p: CROUCH },
     ],
   },
+  // 회전 중 타격은 띄우지 않는다 (누르고 있으면 다음 바퀴도 맞도록). 마지막 다리 내리기(33~36)에 띄워서 다운
   hits: [
     {
       frames: [6, 11],
       box: { x: -35, y: 85, w: 115, h: 130 },
-      damage: 60,
+      damage: 30,
       hitstun: 24,
       blockstun: 14,
       level: 'mid',
-      launch: { vx: 1, vy: 11 },
-      chip: 6,
+      push: 1,
+      chip: 5,
       heavy: true,
     },
     {
       frames: [16, 19],
       box: { x: -35, y: 85, w: 115, h: 130 },
-      damage: 30,
+      damage: 25,
       hitstun: 24,
       blockstun: 12,
       level: 'mid',
-      launch: { vx: 1, vy: 8 },
+      push: 1,
       chip: 4,
     },
     {
       frames: [24, 28],
       box: { x: -35, y: 85, w: 115, h: 130 },
-      damage: 40,
+      damage: 25,
       hitstun: 24,
       blockstun: 12,
       level: 'mid',
+      push: 1,
+      chip: 4,
+    },
+    {
+      frames: [33, 36],
+      box: { x: -20, y: 40, w: 115, h: 150 },
+      damage: 50,
+      hitstun: 24,
+      blockstun: 14,
+      level: 'mid',
       launch: { vx: 3.5, vy: 11 },
       knockdown: true,
-      chip: 4,
+      chip: 6,
       heavy: true,
     },
   ],
   hurtbox: { x: -30, y: 0, w: 60, h: 90 },
+  // 물구나무 회전 한 바퀴 = 7~32 프레임 (앞 → 옆 → 등 → 다음 주기)
+  repeat: { from: 7, to: 32, max: 3, hold: 'P' },
 };
 
 const swipe: MoveDef = {

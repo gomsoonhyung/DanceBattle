@@ -72,6 +72,11 @@ export interface MoveDef {
   meterGain?: { frame: number; amount: number };
   /** 잔상 연출 (팝핑 애니메이션 대시 등) */
   trail?: boolean;
+  /**
+   * 파워무브 연속 회전: to 프레임까지 왔을 때 hold 버튼을 누르고 있으면 from 프레임으로 돌아가 한 바퀴 더 돈다.
+   * max = 최대 바퀴 수 (처음 한 바퀴 포함). 다시 도는 구간의 타격은 또 맞는다
+   */
+  repeat?: { from: number; to: number; max: number; hold: 'P' | 'K' };
   /** 판정이 나와 있는 동안 판정 위치에 그리는 궤적 (휩·전기). 보이는 만큼 맞는다 */
   hitFx?: 'whip' | 'electric';
   /** 연습 모드 가이드에 나오는 한 줄 설명 */
