@@ -1,0 +1,132 @@
+{
+  "sHP": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_00.webp"
+      },
+      {
+        "f": 3,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_01.webp"
+      },
+      {
+        "f": 6,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_02.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_03.webp"
+      },
+      {
+        "f": 14,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_04.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_05.webp"
+      },
+      {
+        "f": 19,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_06.webp"
+      },
+      {
+        "f": 21,
+        "kind": "stand",
+        "src": "cabbagePatchStudy_07.webp"
+      },
+      {
+        "f": 24,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  },
+  "runningManRush": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "runningManStudy_00.webp"
+      },
+      {
+        "f": 6,
+        "kind": "stand",
+        "src": "runningManStudy_01.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "runningManStudy_02.webp"
+      },
+      {
+        "f": 22,
+        "kind": "stand",
+        "src": "runningManStudy_03.webp"
+      },
+      {
+        "f": 27,
+        "kind": "stand",
+        "src": "runningManStudy_04.webp"
+      },
+      {
+        "f": 32,
+        "kind": "stand",
+        "src": "runningManStudy_05.webp"
+      },
+      {
+        "f": 35,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  },
+  "rogerRabbit": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "rogerRabbitStudy_00.webp"
+      },
+      {
+        "f": 5,
+        "kind": "stand",
+        "src": "rogerRabbitStudy_01.webp"
+      },
+      {
+        "f": 10,
+        "kind": "stand",
+        "src": "rogerRabbitStudy_02.webp"
+      },
+      {
+        "f": 15,
+        "kind": "stand",
+        "src": "rogerRabbitStudy_03.webp"
+      },
+      {
+        "f": 17,
+        "kind": "stand",
+        "src": "rogerRabbitStudy_04.webp"
+      },
+      {
+        "f": 23,
+        "kind": "stand",
+        "src": "rogerRabbitStudy_05.webp"
+      },
+      {
+        "f": 37,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  }
+}

@@ -1,11 +1,13 @@
 import type { CharacterDef } from '../../fighter/types';
+import { withStudies, type StudyData } from '../studies';
+import studies from './studies.json';
 import { moveTable, grab, tune } from '../builders';
 import { NORMAL_IDS } from '../common';
 import { WAACKING_MOVES } from './moves';
 import { WAACKING_COMMAND } from './command';
 import * as A from './poses';
 
-export const WAACKER: CharacterDef = {
+const BASE: CharacterDef = {
   id: 'waacker',
   name: 'WAACKER',
   maxHealth: 900,
@@ -74,3 +76,6 @@ export const WAACKER: CharacterDef = {
   jumpV: 16,
   jumpVX: 4.3,
 };
+
+// 동작 그림은 Codex 모션 연구 시간표를 쓰는 기술이 있다 (scripts/spritegen/study_plans.json)
+export const WAACKER = withStudies(BASE, studies as StudyData, { stand: A.STAND, low: A.CROUCH });

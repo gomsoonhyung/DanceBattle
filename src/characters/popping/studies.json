@@ -1,0 +1,87 @@
+{
+  "walkB": {
+    "loop": 48,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "backslideStudy_00.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "backslideStudy_01.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "backslideStudy_02.webp"
+      },
+      {
+        "f": 24,
+        "kind": "stand",
+        "src": "backslideStudy_03.webp"
+      },
+      {
+        "f": 32,
+        "kind": "stand",
+        "src": "backslideStudy_04.webp"
+      },
+      {
+        "f": 40,
+        "kind": "stand",
+        "src": "backslideStudy_05.webp"
+      }
+    ]
+  },
+  "wave": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "armWaveStudy_00.webp"
+      },
+      {
+        "f": 2,
+        "kind": "stand",
+        "src": "armWaveStudy_01.webp"
+      },
+      {
+        "f": 4,
+        "kind": "stand",
+        "src": "armWaveStudy_02.webp"
+      },
+      {
+        "f": 6,
+        "kind": "stand",
+        "src": "armWaveStudy_03.webp"
+      },
+      {
+        "f": 7,
+        "kind": "stand",
+        "src": "armWaveStudy_04.webp"
+      },
+      {
+        "f": 9,
+        "kind": "stand",
+        "src": "armWaveStudy_05.webp"
+      },
+      {
+        "f": 11,
+        "kind": "stand",
+        "src": "armWaveStudy_06.webp"
+      },
+      {
+        "f": 13,
+        "kind": "stand",
+        "src": "armWaveStudy_07.webp"
+      },
+      {
+        "f": 39,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  }
+}

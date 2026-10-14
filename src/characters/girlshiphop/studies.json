@@ -1,0 +1,77 @@
+{
+  "walkF": {
+    "loop": 48,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "grooveWalkStudy_00.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "grooveWalkStudy_01.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "grooveWalkStudy_02.webp"
+      },
+      {
+        "f": 24,
+        "kind": "stand",
+        "src": "grooveWalkStudy_03.webp"
+      },
+      {
+        "f": 32,
+        "kind": "stand",
+        "src": "grooveWalkStudy_04.webp"
+      },
+      {
+        "f": 40,
+        "kind": "stand",
+        "src": "grooveWalkStudy_05.webp"
+      }
+    ]
+  },
+  "cHP": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "bodyRollStudy_00.webp"
+      },
+      {
+        "f": 6,
+        "kind": "stand",
+        "src": "bodyRollStudy_01.webp"
+      },
+      {
+        "f": 13,
+        "kind": "stand",
+        "src": "bodyRollStudy_02.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "bodyRollStudy_03.webp"
+      },
+      {
+        "f": 20,
+        "kind": "stand",
+        "src": "bodyRollStudy_04.webp"
+      },
+      {
+        "f": 23,
+        "kind": "stand",
+        "src": "bodyRollStudy_05.webp"
+      },
+      {
+        "f": 26,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  }
+}

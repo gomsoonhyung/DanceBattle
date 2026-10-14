@@ -1,11 +1,13 @@
 import type { CharacterDef } from '../../fighter/types';
+import { withStudies, type StudyData } from '../studies';
+import studies from './studies.json';
 import { moveTable, grab, tune } from '../builders';
 import { NORMAL_IDS } from '../common';
 import { POPPING_MOVES } from './moves';
 import { POPPING_COMMAND } from './command';
 import * as A from './poses';
 
-export const POPPER: CharacterDef = {
+const BASE: CharacterDef = {
   id: 'popper',
   name: 'POPPER',
   maxHealth: 1000,
@@ -81,3 +83,6 @@ export const POPPER: CharacterDef = {
   jumpVX: 4.0,
   dash: { frames: 16, speed: 8.5, invuln: 12, trail: true },
 };
+
+// 동작 그림은 Codex 모션 연구 시간표를 쓰는 기술이 있다 (scripts/spritegen/study_plans.json)
+export const POPPER = withStudies(BASE, studies as StudyData, { stand: A.STAND, low: A.CROUCH });

@@ -240,21 +240,6 @@
     "sLP_11": {
       "p1": "sLP_11.webp"
     },
-    "sHP_0": {
-      "p1": "sHP_0.webp"
-    },
-    "sHP_4": {
-      "p1": "sHP_4.webp"
-    },
-    "sHP_8": {
-      "p1": "sHP_8.webp"
-    },
-    "sHP_12": {
-      "p1": "sHP_12.webp"
-    },
-    "sHP_20": {
-      "p1": "sHP_20.webp"
-    },
     "sLK_0": {
       "p1": "sLK_0.webp"
     },
@@ -372,39 +357,6 @@
     "jH_23": {
       "p1": "jH_23.webp"
     },
-    "highWhip_0": {
-      "p1": "highWhip_0.webp"
-    },
-    "highWhip_4": {
-      "p1": "highWhip_4.webp"
-    },
-    "highWhip_8": {
-      "p1": "highWhip_8.webp"
-    },
-    "highWhip_12": {
-      "p1": "highWhip_12.webp"
-    },
-    "highWhip_24": {
-      "p1": "highWhip_24.webp"
-    },
-    "strikeAPose_0": {
-      "p1": "strikeAPose_0.webp"
-    },
-    "strikeAPose_4": {
-      "p1": "strikeAPose_4.webp"
-    },
-    "strikeAPose_8": {
-      "p1": "strikeAPose_8.webp"
-    },
-    "strikeAPose_20": {
-      "p1": "strikeAPose_20.webp"
-    },
-    "strikeAPose_32": {
-      "p1": "strikeAPose_32.webp"
-    },
-    "strikeAPose_36": {
-      "p1": "strikeAPose_36.webp"
-    },
     "divaFinale_0": {
       "p1": "divaFinale_0.webp"
     },
@@ -473,21 +425,6 @@
     },
     "backdash_18": {
       "p1": "backdash_18.webp"
-    },
-    "longWhip_0": {
-      "p1": "longWhip_0.webp"
-    },
-    "longWhip_4": {
-      "p1": "longWhip_4.webp"
-    },
-    "longWhip_7": {
-      "p1": "longWhip_7.webp"
-    },
-    "longWhip_10": {
-      "p1": "longWhip_10.webp"
-    },
-    "longWhip_17": {
-      "p1": "longWhip_17.webp"
     },
     "throw_0": {
       "p1": "throw_0.webp"
@@ -563,6 +500,90 @@
     },
     "twirl_40": {
       "p1": "twirl_40.webp"
+    },
+    "sHP_0": {
+      "p1": "sHP_0.webp"
+    },
+    "sHP_3": {
+      "p1": "sHP_3.webp"
+    },
+    "sHP_6": {
+      "p1": "sHP_6.webp"
+    },
+    "sHP_8": {
+      "p1": "sHP_8.webp"
+    },
+    "sHP_14": {
+      "p1": "sHP_14.webp"
+    },
+    "sHP_21": {
+      "p1": "sHP_21.webp"
+    },
+    "sHP_24": {
+      "p1": "sHP_24.webp"
+    },
+    "longWhip_0": {
+      "p1": "longWhip_0.webp"
+    },
+    "longWhip_7": {
+      "p1": "longWhip_7.webp"
+    },
+    "longWhip_12": {
+      "p1": "longWhip_12.webp"
+    },
+    "longWhip_14": {
+      "p1": "longWhip_14.webp"
+    },
+    "longWhip_16": {
+      "p1": "longWhip_16.webp"
+    },
+    "longWhip_18": {
+      "p1": "longWhip_18.webp"
+    },
+    "longWhip_21": {
+      "p1": "longWhip_21.webp"
+    },
+    "highWhip_0": {
+      "p1": "highWhip_0.webp"
+    },
+    "highWhip_2": {
+      "p1": "highWhip_2.webp"
+    },
+    "highWhip_4": {
+      "p1": "highWhip_4.webp"
+    },
+    "highWhip_14": {
+      "p1": "highWhip_14.webp"
+    },
+    "highWhip_22": {
+      "p1": "highWhip_22.webp"
+    },
+    "highWhip_30": {
+      "p1": "highWhip_30.webp"
+    },
+    "highWhip_33": {
+      "p1": "highWhip_33.webp"
+    },
+    "strikeAPose_0": {
+      "p1": "strikeAPose_0.webp"
+    },
+    "strikeAPose_3": {
+      "p1": "strikeAPose_3.webp"
+    },
+    "strikeAPose_6": {
+      "p1": "strikeAPose_6.webp"
+    },
+    "strikeAPose_9": {
+      "p1": "strikeAPose_9.webp"
+    },
+    "strikeAPose_11": {
+      "p1": "strikeAPose_11.webp"
+    },
+    "strikeAPose_20": {
+      "p1": "strikeAPose_20.webp"
+    },
+    "strikeAPose_37": {
+      "p1": "strikeAPose_37.webp"
     }
   }
 }

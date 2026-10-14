@@ -1,0 +1,69 @@
+{
+  "krump": {
+    "sLP": {
+      "study": "krumpJabStudy",
+      "accent": "2 · 앞 방향 잽"
+    },
+    "sHP": {
+      "study": "armSwingStudy",
+      "accent": "1 · 대각선으로 던지기"
+    },
+    "sLK": {
+      "study": "stompStudy",
+      "accent": "1 · 오른발 바닥 찍기"
+    }
+  },
+  "waacker": {
+    "sHP": {
+      "study": "doubleWaackStudy",
+      "accent": "1 · 양팔 끊기"
+    },
+    "longWhip": {
+      "study": "waackLinesStudy",
+      "accent": "옆 선"
+    },
+    "highWhip": {
+      "study": "overheadStudy",
+      "accent": "머리 위"
+    },
+    "strikeAPose": {
+      "study": "waackRollStudy",
+      "accent": "목 뒤로 감기"
+    }
+  },
+  "hiphopper": {
+    "sHP": {
+      "study": "cabbagePatchStudy",
+      "accent": "가슴 앞 통과"
+    },
+    "runningManRush": {
+      "study": "runningManStudy",
+      "accent": "1 · 오른발 디디며"
+    },
+    "rogerRabbit": {
+      "study": "rogerRabbitStudy",
+      "accent": "다음 앤 · 뒤 차기"
+    }
+  },
+  "hiphopgirl": {
+    "walkF": {
+      "study": "grooveWalkStudy",
+      "loop": 48
+    },
+    "cHP": {
+      "study": "bodyRollStudy",
+      "accent": "가슴 앞으로"
+    }
+  },
+  "popper": {
+    "walkB": {
+      "study": "backslideStudy",
+      "loop": 48
+    },
+    "wave": {
+      "study": "armWaveStudy",
+      "accent": "왼 손끝·해제"
+    }
+  },
+  "_note": "정면을 보는 연구 그림(팝핑 튜팅·프레즈노, 걸스힙합 힙 롤, 하우스 전부, 힙합 바트 심슨)과 위로 올라가지 않는 크럼프 체스트 팝(대공)은 공격으로 읽히지 않아 넣지 않았다 (2026-10-15)"
+}

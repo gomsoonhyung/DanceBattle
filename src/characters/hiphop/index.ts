@@ -1,10 +1,12 @@
 import type { CharacterDef } from '../../fighter/types';
+import { withStudies, type StudyData } from '../studies';
+import studies from './studies.json';
 import { moveTable, grab } from '../builders';
 import { HIPHOP_MOVES } from './moves';
 import { HIPHOP_COMMAND } from './command';
 import * as A from './poses';
 
-export const HIPHOPPER: CharacterDef = {
+const BASE: CharacterDef = {
   id: 'hiphopper',
   name: 'HIPHOPPER',
   maxHealth: 1000,
@@ -66,3 +68,6 @@ export const HIPHOPPER: CharacterDef = {
   jumpV: 16,
   jumpVX: 4.2,
 };
+
+// 동작 그림은 Codex 모션 연구 시간표를 쓰는 기술이 있다 (scripts/spritegen/study_plans.json)
+export const HIPHOPPER = withStudies(BASE, studies as StudyData, { stand: A.STAND, low: A.CROUCH });

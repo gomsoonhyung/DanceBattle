@@ -60,33 +60,6 @@
     "walkF_32": {
       "p1": "walkF_32.webp"
     },
-    "walkB_0": {
-      "p1": "walkB_0.webp"
-    },
-    "walkB_4": {
-      "p1": "walkB_4.webp"
-    },
-    "walkB_8": {
-      "p1": "walkB_8.webp"
-    },
-    "walkB_12": {
-      "p1": "walkB_12.webp"
-    },
-    "walkB_16": {
-      "p1": "walkB_16.webp"
-    },
-    "walkB_20": {
-      "p1": "walkB_20.webp"
-    },
-    "walkB_24": {
-      "p1": "walkB_24.webp"
-    },
-    "walkB_28": {
-      "p1": "walkB_28.webp"
-    },
-    "walkB_32": {
-      "p1": "walkB_32.webp"
-    },
     "crouch_0": {
       "p1": "crouch_0.webp"
     },
@@ -293,30 +266,6 @@
     },
     "jL_21": {
       "p1": "jL_21.webp"
-    },
-    "wave_0": {
-      "p1": "wave_0.webp"
-    },
-    "wave_4": {
-      "p1": "wave_4.webp"
-    },
-    "wave_7": {
-      "p1": "wave_7.webp"
-    },
-    "wave_10": {
-      "p1": "wave_10.webp"
-    },
-    "wave_13": {
-      "p1": "wave_13.webp"
-    },
-    "wave_19": {
-      "p1": "wave_19.webp"
-    },
-    "wave_24": {
-      "p1": "wave_24.webp"
-    },
-    "wave_33": {
-      "p1": "wave_33.webp"
     },
     "robot_0": {
       "p1": "robot_0.webp"
@@ -590,6 +539,69 @@
     },
     "popShot_23": {
       "p1": "popShot_23.webp"
+    },
+    "walkB_0": {
+      "p1": "walkB_0.webp"
+    },
+    "walkB_4": {
+      "p1": "walkB_4.webp"
+    },
+    "walkB_8": {
+      "p1": "walkB_8.webp"
+    },
+    "walkB_12": {
+      "p1": "walkB_12.webp"
+    },
+    "walkB_16": {
+      "p1": "walkB_16.webp"
+    },
+    "walkB_20": {
+      "p1": "walkB_20.webp"
+    },
+    "walkB_24": {
+      "p1": "walkB_24.webp"
+    },
+    "walkB_28": {
+      "p1": "walkB_28.webp"
+    },
+    "walkB_32": {
+      "p1": "walkB_32.webp"
+    },
+    "walkB_36": {
+      "p1": "walkB_36.webp"
+    },
+    "walkB_40": {
+      "p1": "walkB_40.webp"
+    },
+    "walkB_44": {
+      "p1": "walkB_44.webp"
+    },
+    "wave_0": {
+      "p1": "wave_0.webp"
+    },
+    "wave_2": {
+      "p1": "wave_2.webp"
+    },
+    "wave_4": {
+      "p1": "wave_4.webp"
+    },
+    "wave_6": {
+      "p1": "wave_6.webp"
+    },
+    "wave_7": {
+      "p1": "wave_7.webp"
+    },
+    "wave_9": {
+      "p1": "wave_9.webp"
+    },
+    "wave_11": {
+      "p1": "wave_11.webp"
+    },
+    "wave_13": {
+      "p1": "wave_13.webp"
+    },
+    "wave_39": {
+      "p1": "wave_39.webp"
     }
   }
 }

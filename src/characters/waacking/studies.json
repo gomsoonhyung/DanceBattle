@@ -1,0 +1,162 @@
+{
+  "sHP": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "doubleWaackStudy_00.webp"
+      },
+      {
+        "f": 3,
+        "kind": "stand",
+        "src": "doubleWaackStudy_01.webp"
+      },
+      {
+        "f": 6,
+        "kind": "stand",
+        "src": "doubleWaackStudy_02.webp"
+      },
+      {
+        "f": 8,
+        "kind": "stand",
+        "src": "doubleWaackStudy_03.webp"
+      },
+      {
+        "f": 14,
+        "kind": "stand",
+        "src": "doubleWaackStudy_04.webp"
+      },
+      {
+        "f": 21,
+        "kind": "stand",
+        "src": "doubleWaackStudy_05.webp"
+      },
+      {
+        "f": 24,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  },
+  "longWhip": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "waackLinesStudy_00.webp"
+      },
+      {
+        "f": 7,
+        "kind": "stand",
+        "src": "waackLinesStudy_01.webp"
+      },
+      {
+        "f": 12,
+        "kind": "stand",
+        "src": "waackLinesStudy_02.webp"
+      },
+      {
+        "f": 14,
+        "kind": "stand",
+        "src": "waackLinesStudy_03.webp"
+      },
+      {
+        "f": 16,
+        "kind": "stand",
+        "src": "waackLinesStudy_04.webp"
+      },
+      {
+        "f": 18,
+        "kind": "stand",
+        "src": "waackLinesStudy_05.webp"
+      },
+      {
+        "f": 21,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  },
+  "highWhip": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "overheadStudy_00.webp"
+      },
+      {
+        "f": 2,
+        "kind": "stand",
+        "src": "overheadStudy_01.webp"
+      },
+      {
+        "f": 4,
+        "kind": "stand",
+        "src": "overheadStudy_02.webp"
+      },
+      {
+        "f": 14,
+        "kind": "stand",
+        "src": "overheadStudy_03.webp"
+      },
+      {
+        "f": 22,
+        "kind": "stand",
+        "src": "overheadStudy_04.webp"
+      },
+      {
+        "f": 30,
+        "kind": "stand",
+        "src": "overheadStudy_05.webp"
+      },
+      {
+        "f": 33,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  },
+  "strikeAPose": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "waackRollStudy_00.webp"
+      },
+      {
+        "f": 3,
+        "kind": "stand",
+        "src": "waackRollStudy_01.webp"
+      },
+      {
+        "f": 6,
+        "kind": "stand",
+        "src": "waackRollStudy_02.webp"
+      },
+      {
+        "f": 9,
+        "kind": "stand",
+        "src": "waackRollStudy_03.webp"
+      },
+      {
+        "f": 11,
+        "kind": "stand",
+        "src": "waackRollStudy_04.webp"
+      },
+      {
+        "f": 20,
+        "kind": "stand",
+        "src": "waackRollStudy_05.webp"
+      },
+      {
+        "f": 37,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "sLP": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "krumpJabStudy_00.webp"
+      },
+      {
+        "f": 2,
+        "kind": "stand",
+        "src": "krumpJabStudy_01.webp"
+      },
+      {
+        "f": 3,
+        "kind": "stand",
+        "src": "krumpJabStudy_02.webp"
+      },
+      {
+        "f": 5,
+        "kind": "stand",
+        "src": "krumpJabStudy_03.webp"
+      },
+      {
+        "f": 10,
+        "kind": "stand",
+        "src": "krumpJabStudy_04.webp"
+      },
+      {
+        "f": 11,
+        "kind": "stand",
+        "src": "krumpJabStudy_05.webp"
+      },
+      {
+        "f": 14,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  },
+  "sHP": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "armSwingStudy_00.webp"
+      },
+      {
+        "f": 4,
+        "kind": "stand",
+        "src": "armSwingStudy_01.webp"
+      },
+      {
+        "f": 9,
+        "kind": "stand",
+        "src": "armSwingStudy_02.webp"
+      },
+      {
+        "f": 11,
+        "kind": "stand",
+        "src": "armSwingStudy_03.webp"
+      },
+      {
+        "f": 17,
+        "kind": "stand",
+        "src": "armSwingStudy_04.webp"
+      },
+      {
+        "f": 27,
+        "kind": "stand",
+        "src": "armSwingStudy_05.webp"
+      },
+      {
+        "f": 30,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  },
+  "sLK": {
+    "loop": null,
+    "keys": [
+      {
+        "f": 0,
+        "kind": "stand",
+        "src": "stompStudy_00.webp"
+      },
+      {
+        "f": 5,
+        "kind": "stand",
+        "src": "stompStudy_01.webp"
+      },
+      {
+        "f": 7,
+        "kind": "stand",
+        "src": "stompStudy_02.webp"
+      },
+      {
+        "f": 12,
+        "kind": "stand",
+        "src": "stompStudy_03.webp"
+      },
+      {
+        "f": 14,
+        "kind": "stand",
+        "src": "stompStudy_04.webp"
+      },
+      {
+        "f": 15,
+        "kind": "stand",
+        "src": "stompStudy_05.webp"
+      },
+      {
+        "f": 18,
+        "kind": "stand",
+        "src": "idle_0.webp"
+      }
+    ]
+  }
+}

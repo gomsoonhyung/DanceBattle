@@ -76,7 +76,7 @@ const cLP = strike({
 
 const cHP = strike({
   id: 'cHP',
-  name: '힙 업',
+  name: '바디 롤 업',
   base: CROUCH,
   hit: pose(STAND, { x: 10, torso: -15, head: -10, aF: [170, -10], aB: [-25, 95] }),
   end: CROUCH,

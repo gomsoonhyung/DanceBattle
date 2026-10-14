@@ -23,7 +23,7 @@ const sLP = strike({
 
 const sHP = strike({
   id: 'sHP',
-  name: '오버헤드 왁',
+  name: '더블 왁',
   base: STAND,
   windup: pose(STAND, { torso: -8, aF: [172, -40], aB: [165, -40] }),
   hit: pose(STAND, { torso: 20, aF: [95, 0], aB: [80, 10] }),

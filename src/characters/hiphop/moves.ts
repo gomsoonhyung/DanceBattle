@@ -21,7 +21,7 @@ const sLP = strike({
 
 const sHP = strike({
   id: 'sHP',
-  name: '할렘 훅',
+  name: '캐비지 패치',
   base: STAND,
   windup: pose(STAND, { torso: -10, aF: [-40, 60] }),
   hit: pose(DOWN, { torso: 30, aF: [90, 40], aB: [-10, 70] }),

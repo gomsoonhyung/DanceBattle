@@ -1,11 +1,13 @@
 import type { CharacterDef } from '../../fighter/types';
+import { withStudies, type StudyData } from '../studies';
+import studies from './studies.json';
 import { moveTable, grab, tune } from '../builders';
 import { NORMAL_IDS } from '../common';
 import { HOUSE_MOVES } from './moves';
 import { HOUSE_COMMAND } from './command';
 import * as A from './poses';
 
-export const HOUSE_HEAD: CharacterDef = {
+const BASE: CharacterDef = {
   id: 'househead',
   name: 'HOUSE HEAD',
   maxHealth: 950,
@@ -75,3 +77,6 @@ export const HOUSE_HEAD: CharacterDef = {
   jumpVX: 4.4,
   dash: { frames: 12, speed: 9.5 },
 };
+
+// 동작 그림은 Codex 모션 연구 시간표를 쓰는 기술이 있다 (scripts/spritegen/study_plans.json)
+export const HOUSE_HEAD = withStudies(BASE, studies as StudyData, { stand: A.STAND, low: A.CROUCH });

@@ -384,51 +384,6 @@
     "killOff_77": {
       "p1": "killOff_77.webp"
     },
-    "sLP_0": {
-      "p1": "sLP_0.webp"
-    },
-    "sLP_5": {
-      "p1": "sLP_5.webp"
-    },
-    "sLP_8": {
-      "p1": "sLP_8.webp"
-    },
-    "sLP_13": {
-      "p1": "sLP_13.webp"
-    },
-    "sHP_0": {
-      "p1": "sHP_0.webp"
-    },
-    "sHP_4": {
-      "p1": "sHP_4.webp"
-    },
-    "sHP_8": {
-      "p1": "sHP_8.webp"
-    },
-    "sHP_12": {
-      "p1": "sHP_12.webp"
-    },
-    "sHP_16": {
-      "p1": "sHP_16.webp"
-    },
-    "sHP_25": {
-      "p1": "sHP_25.webp"
-    },
-    "sLK_0": {
-      "p1": "sLK_0.webp"
-    },
-    "sLK_5": {
-      "p1": "sLK_5.webp"
-    },
-    "sLK_8": {
-      "p1": "sLK_8.webp"
-    },
-    "sLK_11": {
-      "p1": "sLK_11.webp"
-    },
-    "sLK_16": {
-      "p1": "sLK_16.webp"
-    },
     "sHK_0": {
       "p1": "sHK_0.webp"
     },
@@ -647,6 +602,69 @@
     },
     "jumpStomp_36": {
       "p1": "jumpStomp_36.webp"
+    },
+    "sLP_0": {
+      "p1": "sLP_0.webp"
+    },
+    "sLP_2": {
+      "p1": "sLP_2.webp"
+    },
+    "sLP_3": {
+      "p1": "sLP_3.webp"
+    },
+    "sLP_5": {
+      "p1": "sLP_5.webp"
+    },
+    "sLP_10": {
+      "p1": "sLP_10.webp"
+    },
+    "sLP_11": {
+      "p1": "sLP_11.webp"
+    },
+    "sLP_14": {
+      "p1": "sLP_14.webp"
+    },
+    "sHP_0": {
+      "p1": "sHP_0.webp"
+    },
+    "sHP_4": {
+      "p1": "sHP_4.webp"
+    },
+    "sHP_9": {
+      "p1": "sHP_9.webp"
+    },
+    "sHP_11": {
+      "p1": "sHP_11.webp"
+    },
+    "sHP_17": {
+      "p1": "sHP_17.webp"
+    },
+    "sHP_27": {
+      "p1": "sHP_27.webp"
+    },
+    "sHP_30": {
+      "p1": "sHP_30.webp"
+    },
+    "sLK_0": {
+      "p1": "sLK_0.webp"
+    },
+    "sLK_5": {
+      "p1": "sLK_5.webp"
+    },
+    "sLK_7": {
+      "p1": "sLK_7.webp"
+    },
+    "sLK_12": {
+      "p1": "sLK_12.webp"
+    },
+    "sLK_14": {
+      "p1": "sLK_14.webp"
+    },
+    "sLK_15": {
+      "p1": "sLK_15.webp"
+    },
+    "sLK_18": {
+      "p1": "sLK_18.webp"
     }
   }
 }

@@ -1,11 +1,13 @@
 import type { CharacterDef } from '../../fighter/types';
+import { withStudies, type StudyData } from '../studies';
+import studies from './studies.json';
 import { moveTable, grab, tune } from '../builders';
 import { NORMAL_IDS } from '../common';
 import { GIRLS_HIPHOP_MOVES } from './moves';
 import { GIRLS_HIPHOP_COMMAND } from './command';
 import * as A from './poses';
 
-export const HIPHOP_GIRL: CharacterDef = {
+const BASE: CharacterDef = {
   id: 'hiphopgirl',
   name: 'HIPHOP GIRL',
   maxHealth: 950,
@@ -75,3 +77,6 @@ export const HIPHOP_GIRL: CharacterDef = {
   jumpVX: 4.5,
   dash: { frames: 14, speed: 8 },
 };
+
+// 동작 그림은 Codex 모션 연구 시간표를 쓰는 기술이 있다 (scripts/spritegen/study_plans.json)
+export const HIPHOP_GIRL = withStudies(BASE, studies as StudyData, { stand: A.STAND, low: A.CROUCH });
