@@ -8,6 +8,7 @@ import { InputBuffer } from '../input/inputBuffer';
 import type { CharacterDef } from '../fighter/types';
 import { BTN, EMPTY_INPUT, type RawInput } from '../input/types';
 import { Match } from './match';
+import { CpuPlayer } from '../ai/cpu';
 
 const MAX_HEALTH = BBOY.maxHealth;
 
@@ -544,5 +545,59 @@ describe('비보이 스와입스 · 에어트랙', () => {
     const hold = use(DP_K, true, I());
     expect(hold.spins).toBe(3);
     expect(hold.hits).toBeGreaterThan(tap.hits);
+  });
+});
+
+describe('CPU 상대', () => {
+  /** CPU 둘이 한 판 붙는다. 결과(승자·남은 체력)를 돌려준다 */
+  const cpuMatch = (
+    level: 'easy' | 'normal' | 'hard',
+    seed: number,
+    chars: [CharacterDef, CharacterDef] = [BBOY, KRUMP],
+  ) => {
+    const m = new Match('cpu', chars);
+    const a = new CpuPlayer(0, level, seed);
+    const b = new CpuPlayer(1, level, seed + 1);
+    const stats = { hits: 0, blocks: 0, specials: 0 };
+    let last = [0, 0];
+    for (let i = 0; i < 60 * 60 * 3 && m.phase !== 'matchEnd'; i++) {
+      m.update(a.next(m), b.next(m));
+      for (const e of m.events) {
+        if (e.type === 'hit') stats.hits++;
+        if (e.type === 'block') stats.blocks++;
+      }
+      m.fighters.forEach((f, j) => {
+        if (f.moveSerial !== last[j] && f.move?.kind !== 'normal') stats.specials++;
+      });
+      last = [m.fighters[0].moveSerial, m.fighters[1].moveSerial];
+    }
+    return { m, stats };
+  };
+
+  it('CPU끼리 붙으면 때리고, 막고, 필살기를 쓰고, 승부가 난다', () => {
+    const { m, stats } = cpuMatch('normal', 7);
+    expect(stats.hits).toBeGreaterThan(10);
+    expect(stats.blocks).toBeGreaterThan(0);
+    expect(stats.specials).toBeGreaterThan(0);
+    expect(m.phase).toBe('matchEnd');
+  });
+
+  it('같은 시드면 같은 결과가 나온다', () => {
+    const r1 = cpuMatch('hard', 3).m;
+    const r2 = cpuMatch('hard', 3).m;
+    expect(r1.fighters.map((f) => f.health)).toEqual(r2.fighters.map((f) => f.health));
+    expect(r1.wins).toEqual(r2.wins);
+  });
+
+  it('어려움이 쉬움을 이긴다', () => {
+    let hardWins = 0;
+    for (const seed of [1, 2, 3, 4]) {
+      const m = new Match('cpu', [BBOY, KRUMP]);
+      const easy = new CpuPlayer(0, 'easy', seed);
+      const hard = new CpuPlayer(1, 'hard', seed + 50);
+      for (let i = 0; i < 60 * 60 * 4 && m.phase !== 'matchEnd'; i++) m.update(easy.next(m), hard.next(m));
+      if (m.matchWinner === 1) hardWins++;
+    }
+    expect(hardWins).toBeGreaterThanOrEqual(3);
   });
 });

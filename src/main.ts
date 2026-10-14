@@ -11,6 +11,7 @@ import { preloadAssets } from './render/assets';
 import { loadSprites } from './render/sprites';
 import { SelectScreen } from './screens/select';
 import { TitleScreen } from './screens/title';
+import { CpuPlayer, type CpuLevel } from './ai/cpu';
 import { TrainingGuide } from './training/guide';
 
 const canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -30,7 +31,7 @@ if (params.has('gallery')) {
 type Screen =
   | { kind: 'title'; title: TitleScreen }
   | { kind: 'select'; select: SelectScreen }
-  | { kind: 'match'; match: Match; renderer: Renderer; guide: TrainingGuide | null };
+  | { kind: 'match'; match: Match; renderer: Renderer; guide: TrainingGuide | null; cpu: CpuPlayer | null };
 
 function startGame(): void {
   initKeyboard();
@@ -41,8 +42,12 @@ function startGame(): void {
   let screen: Screen = { kind: 'title', title: new TitleScreen() };
   let showBoxes = false;
   let lastChars: [CharacterDef, CharacterDef] | undefined;
+  let cpuLevel: CpuLevel = 'normal';
+  let matchCount = 0;
   const toTitle = () => {
-    screen = { kind: 'title', title: new TitleScreen(true) };
+    const title = new TitleScreen(true);
+    title.cpuLevel = cpuLevel;
+    screen = { kind: 'title', title };
   };
 
   const toSelect = (mode: MatchMode) => {
@@ -55,7 +60,9 @@ function startGame(): void {
     const renderer = new Renderer(g);
     renderer.showBoxes = showBoxes;
     const guide = mode === 'training' ? new TrainingGuide(chars[0]) : null;
-    screen = { kind: 'match', match: new Match(mode, chars), renderer, guide };
+    // CPU 대전: P2 컨트롤러를 CPU가 잡는다 (판마다 다른 시드)
+    const cpu = mode === 'cpu' ? new CpuPlayer(1, cpuLevel, 20261015 + matchCount++) : null;
+    screen = { kind: 'match', match: new Match(mode, chars), renderer, guide, cpu };
   };
 
   /** 고정 60fps 로직 1프레임 */
@@ -69,6 +76,7 @@ function startGame(): void {
     switch (screen.kind) {
       case 'title': {
         const mode = screen.title.update();
+        cpuLevel = screen.title.cpuLevel;
         if (mode) toSelect(mode);
         break;
       }
@@ -79,7 +87,7 @@ function startGame(): void {
         break;
       }
       case 'match': {
-        const { match, renderer, guide } = screen;
+        const { match, renderer, guide, cpu } = screen;
         if (keyPressed('Escape')) {
           toTitle();
           break;
@@ -106,7 +114,7 @@ function startGame(): void {
         }
         // 시범 중에는 가이드가 P1 대신 입력한다
         const p1Input = guide?.nextInput() ?? readPlayerInput(0);
-        match.update(p1Input, readPlayerInput(1));
+        match.update(p1Input, cpu ? cpu.next(match) : readPlayerInput(1));
         guide?.observe(match);
         renderer.consume(match.events, match);
         break;

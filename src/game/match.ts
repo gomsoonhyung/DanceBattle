@@ -6,7 +6,8 @@ import { EMPTY_INPUT, type RawInput } from '../input/types';
 import { resolveHits, separate, spawnProjectile, updateProjectiles, type Projectile } from './combat';
 import type { GameEvent } from './events';
 
-export type MatchMode = 'versus' | 'training';
+/** versus = 2P 대전, cpu = CPU 대전 (P2를 CPU가 조작), training = 연습 */
+export type MatchMode = 'versus' | 'cpu' | 'training';
 export type Phase = 'intro' | 'fight' | 'ko' | 'roundEnd' | 'matchEnd';
 
 export type DummyMode = 'stand' | 'crouch' | 'jump' | 'guard';

@@ -116,7 +116,7 @@ export class SelectScreen {
     const hint =
       this.mode === 'versus'
         ? 'P1  A/D 선택 · F 결정 · G 취소      P2  ←/→ 선택 · K 결정 · L 취소      ESC 뒤로'
-        : 'P1이 내 캐릭터 → 연습 상대 순서로 고릅니다   ·   A/D 선택 · F 결정 · G 취소   ·   ESC 뒤로';
+        : `P1이 내 캐릭터 → ${this.mode === 'cpu' ? 'CPU 캐릭터' : '연습 상대'} 순서로 고릅니다   ·   A/D 선택 · F 결정 · G 취소   ·   ESC 뒤로`;
     g.fillText(hint, SCREEN_W / 2, SCREEN_H - 10);
 
     if (this.ready[0] && this.ready[1]) {
@@ -185,7 +185,7 @@ export class SelectScreen {
 
   private slotLabel(slot: 0 | 1): string {
     if (slot === 0) return '1P';
-    return this.mode === 'training' ? 'CPU' : '2P';
+    return this.mode === 'versus' ? '2P' : 'CPU';
   }
 
   private drawPanel(g: CanvasRenderingContext2D, slot: 0 | 1): void {
@@ -222,7 +222,8 @@ export class SelectScreen {
     g.textAlign = 'left';
     g.fillStyle = color;
     g.font = `900 13px ${FONT_TITLE}`;
-    g.fillText(slot === 0 ? 'PLAYER 1' : this.mode === 'training' ? '연습 상대' : 'PLAYER 2', tx, top + 20);
+    const p2Label = this.mode === 'training' ? '연습 상대' : this.mode === 'cpu' ? 'CPU' : 'PLAYER 2';
+    g.fillText(slot === 0 ? 'PLAYER 1' : p2Label, tx, top + 20);
     g.fillStyle = '#fff';
     g.font = `900 26px ${FONT_TITLE}`;
     g.fillText(c.name, tx, top + 48);

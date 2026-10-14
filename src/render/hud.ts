@@ -38,7 +38,8 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
     g.textAlign = left ? 'left' : 'right';
     const pal = fighterPalette(m.fighters[i]);
     g.fillStyle = pal.main;
-    g.fillText(`P${i + 1}  ${m.fighters[i].def.name}`, left ? x : x + barW, top + barH + 20);
+    const who = i === 1 && m.mode === 'cpu' ? 'CPU' : `P${i + 1}`;
+    g.fillText(`${who}  ${m.fighters[i].def.name}`, left ? x : x + barW, top + barH + 20);
 
     // 라운드 승리 표시
     for (let w = 0; w < ROUNDS_TO_WIN; w++) {

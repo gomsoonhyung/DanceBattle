@@ -2,6 +2,7 @@ import { displayFrame } from '../anim/pose';
 import { ROSTER } from './roster';
 import { SCREEN_H, SCREEN_W } from '../core/constants';
 import type { MatchMode } from '../game/match';
+import { CPU_LEVEL_LABEL, type CpuLevel } from '../ai/cpu';
 import { keyPressed, menu } from '../input/devices';
 import { ASSET, image } from '../render/assets';
 import { FONT_KR, FONT_TITLE } from '../render/hud';
@@ -11,6 +12,7 @@ import { drawStage } from '../render/stage';
 type Page = 'press' | 'menu' | 'controls';
 
 const MENU: { id: MatchMode | 'controls'; label: string }[] = [
+  { id: 'cpu', label: 'CPU 대전' },
   { id: 'versus', label: '2P 대전' },
   { id: 'training', label: '트레이닝 (혼자 연습)' },
   { id: 'controls', label: '조작법' },
@@ -28,6 +30,8 @@ export class TitleScreen {
   private index = 0;
   private frame = 0;
   private pageFrame = 0;
+  /** CPU 대전 난이도 (메뉴에서 ←/→로 바꾼다) */
+  cpuLevel: CpuLevel = 'normal';
 
   constructor(skipPress = false) {
     void loadSprites(ROSTER, ['idle']);
@@ -49,6 +53,11 @@ export class TitleScreen {
       case 'menu': {
         if (m.some((x) => x.up)) this.index = (this.index + MENU.length - 1) % MENU.length;
         if (m.some((x) => x.down)) this.index = (this.index + 1) % MENU.length;
+        if (MENU[this.index].id === 'cpu' && (m.some((x) => x.left) || m.some((x) => x.right))) {
+          const levels: CpuLevel[] = ['easy', 'normal', 'hard'];
+          const step = m.some((x) => x.right) ? 1 : 2;
+          this.cpuLevel = levels[(levels.indexOf(this.cpuLevel) + step) % 3];
+        }
         for (let i = 0; i < MENU.length; i++) if (keyPressed(`Digit${i + 1}`)) return this.choose(i);
         if (confirm) return this.choose(this.index);
         if (back) this.go('press');
@@ -198,6 +207,9 @@ export class TitleScreen {
   }
 
   private drawMenu(g: CanvasRenderingContext2D): void {
+    // 뒤의 라인업과 겹쳐도 글자가 읽히도록 어두운 판을 깐다
+    g.fillStyle = 'rgba(8,4,20,0.72)';
+    g.fillRect(SCREEN_W / 2 - 210, 196, 420, MENU.length * 40 + 48);
     g.textAlign = 'center';
     MENU.forEach((item, i) => {
       const sel = i === this.index;
@@ -208,11 +220,12 @@ export class TitleScreen {
       }
       g.font = `bold ${sel ? 26 : 22}px ${FONT_KR}`;
       g.fillStyle = sel ? '#fff' : '#99a';
-      g.fillText(`${sel ? '▶ ' : ''}${item.label}`, SCREEN_W / 2, y);
+      const label = item.id === 'cpu' ? `${item.label}  ◀ ${CPU_LEVEL_LABEL[this.cpuLevel]} ▶` : item.label;
+      g.fillText(`${sel ? '▶ ' : ''}${label}`, SCREEN_W / 2, y);
     });
     g.font = `13px ${FONT_KR}`;
     g.fillStyle = '#aab';
-    g.fillText('↑↓ 고르기 · 약P 결정 · 강P 뒤로', SCREEN_W / 2, 226 + MENU.length * 40);
+    g.fillText('↑↓ 고르기 · ←→ CPU 난이도 · 약P 결정 · 강P 뒤로', SCREEN_W / 2, 226 + MENU.length * 40);
   }
 
   private drawControls(g: CanvasRenderingContext2D): void {
