@@ -14,7 +14,9 @@ export type HitExtra = Partial<Omit<HitDef, 'frames' | 'box' | 'damage'>>;
 /** 데미지로 기본 경직·타격감을 정한다 (강할수록 길게) */
 function hitDefaults(damage: number): Pick<HitDef, 'hitstun' | 'blockstun' | 'hitstop' | 'heavy'> {
   const hitstun = Math.round(12 + damage / 10);
-  return { hitstun, blockstun: hitstun - 5, hitstop: damage >= 70 ? 11 : 8, heavy: damage >= 70 };
+  // 타격 정지는 데미지에 비례 (약 30 → 8, 강 80 → 11, 120 → 13)
+  const hitstop = Math.min(14, 6 + Math.round(damage / 16));
+  return { hitstun, blockstun: hitstun - 5, hitstop, heavy: damage >= 70 };
 }
 
 export function hit(frames: [number, number], box: Rect, damage: number, extra: HitExtra = {}): HitDef {

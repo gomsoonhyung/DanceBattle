@@ -146,6 +146,10 @@ export class Match {
         this.projectiles.push(spawnProjectile(f, f.pendingProjectile));
         f.pendingProjectile = null;
       }
+      if (f.pendingWall) {
+        this.events.push({ type: 'wall', x: f.x, y: f.y + 90, strength: f.pendingWall });
+        f.pendingWall = 0;
+      }
       if (f.pendingDust) {
         f.pendingDust = false;
         this.events.push({ type: 'dust', x: f.x, big: f.state === 'knockdown' });

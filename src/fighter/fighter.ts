@@ -96,6 +96,8 @@ export class Fighter {
   repeatCount = 0;
   /** 먼지 연출이 필요한 순간 (대시 출발, 착지, 넘어짐). Match가 읽어서 이벤트를 보낸다 */
   pendingDust = false;
+  /** 날아가다 벽에 부딪힌 순간 (세기). Match가 읽어서 연출 이벤트를 보낸다 */
+  pendingWall = 0;
   /** 뒤로 던지기 (4 + 약P+약K) */
   grabBack = false;
   private quickRise = false;
@@ -189,6 +191,11 @@ export class Fighter {
         }
         break;
       case 'airHit':
+        // 벽꽝: 빠르게 날아가다 벽에 닿으면 조금 튕겨 나온다 (공중 콤보 제한은 그대로)
+        if (Math.abs(this.vx) > 3 && (this.x + this.vx <= STAGE_LEFT || this.x + this.vx >= STAGE_RIGHT)) {
+          this.pendingWall = Math.abs(this.vx);
+          this.vx = -this.vx * 0.35;
+        }
         if (this.airPhysics()) {
           this.juggle = 0;
           this.vx = 0;

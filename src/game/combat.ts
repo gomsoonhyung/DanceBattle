@@ -7,6 +7,7 @@ import type { GameEvent } from './events';
 type HitProps = Omit<HitDef, 'frames' | 'box'>;
 
 const COUNTER_DAMAGE = 1.2;
+const SUPER_FINISH_STOP = 26;
 const TECH_STUN = 14;
 
 /** 날아가는 중인 장풍 */
@@ -121,9 +122,11 @@ function applyContact(c: Contact, events: GameEvent[]): void {
     def.enterHitstun(hit.hitstun + (counterHit ? (hit.heavy ? 8 : 4) : 0));
     applyPush(att, def, hit.push ?? 6, dir, melee);
   }
-  def.hitstop = hitstop + (counterHit ? 4 : 0);
+  // 초필살기 마무리(다운시키는 마지막 타격)는 길게 멈춰서 연출한다
+  const finish = isSuper && !!(hit.knockdown || hit.launch);
+  def.hitstop = finish ? Math.max(hitstop, SUPER_FINISH_STOP) : hitstop + (counterHit ? 4 : 0);
   if (melee) att.hitstop = def.hitstop;
-  events.push({ type: 'hit', x: c.at.x, y: c.at.y, heavy: !!hit.heavy, attacker: att.index, damage: dmg });
+  events.push({ type: 'hit', x: c.at.x, y: c.at.y, heavy: !!hit.heavy, attacker: att.index, damage: dmg, finish });
   if (counterHit) events.push({ type: 'counterHit', x: c.at.x, y: c.at.y });
 }
 

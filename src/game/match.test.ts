@@ -601,3 +601,36 @@ describe('CPU 상대', () => {
     expect(hardWins).toBeGreaterThanOrEqual(3);
   });
 });
+
+describe('타격감 2단계', () => {
+  it('벽 앞에서 크게 날리면 벽꽝 이벤트가 나고 상대가 벽에서 튕겨 나온다', () => {
+    const m = fightingMatch([KRUMP, BBOY]);
+    const [p1, p2] = m.fighters;
+    p1.x = STAGE_RIGHT - 120;
+    p2.x = STAGE_RIGHT - 40;
+    // 앉아 강K(넘어뜨림)를 맞힌다
+    seq(m, [I({ down: true, buttons: BTN.HK })]);
+    let wall = false;
+    let bounced = false;
+    for (let i = 0; i < 90; i++) {
+      m.update(I(), I());
+      if (m.events.some((e) => e.type === 'wall')) wall = true;
+      if (wall && p2.vx < 0) bounced = true;
+    }
+    expect(wall).toBe(true);
+    expect(bounced).toBe(true);
+  });
+
+  it('초필살기 마무리 타격은 길게 멈춘다', () => {
+    const m = fightingMatch();
+    closeIn(m);
+    m.fighters[0].meter = 100;
+    seq(m, [I({ buttons: BTN.HP | BTN.HK })]);
+    let finishStop = 0;
+    for (let i = 0; i < 400; i++) {
+      m.update(I(), I());
+      if (m.events.some((e) => e.type === 'hit' && e.finish)) finishStop = m.fighters[1].hitstop;
+    }
+    expect(finishStop).toBeGreaterThanOrEqual(20);
+  });
+});

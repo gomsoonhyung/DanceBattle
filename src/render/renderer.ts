@@ -56,6 +56,22 @@ export class Renderer {
             this.fx.punchZoom(e.x, e.y, 0.035);
           }
           sfx.hit(e.heavy, e.damage);
+          if (e.finish) {
+            // 초필살기 마무리: 큰 섬광 + 강한 줌 + 큰 집중선 + 글자
+            this.fx.screenFlash('#ffffff', 0.7);
+            this.fx.punchZoom(e.x, e.y, 0.1);
+            this.fx.burst(e.x, e.y, '#ffffff', 1.8);
+            this.fx.text(e.x, e.y + 60, 'FINISH!', '#ffd23f');
+            this.fx.shake = Math.max(this.fx.shake, 16);
+            sfx.ko();
+          }
+          break;
+        case 'wall':
+          this.fx.spark(e.x, e.y, 'heavy');
+          this.fx.dust(e.x, true);
+          this.fx.shake = Math.max(this.fx.shake, 6 + e.strength);
+          this.fx.punchZoom(e.x, e.y, 0.03);
+          sfx.hit(true, 60);
           break;
         case 'counterHit':
           this.fx.spark(e.x, e.y, 'counter');
