@@ -34,6 +34,25 @@ interface Puff {
   max: number;
 }
 
+/** 강한 타격 순간 퍼지는 방사형 집중선 */
+interface Burst {
+  x: number;
+  y: number;
+  life: number;
+  max: number;
+  rays: { a: number; len: number }[];
+  color: string;
+}
+
+/** 빠르게 움직일 때 뒤에 남는 가로 속도선 */
+interface Streak {
+  x: number;
+  y: number;
+  len: number;
+  dir: number;
+  life: number;
+}
+
 interface FloatText {
   x: number;
   y: number;
@@ -47,7 +66,11 @@ export class Effects {
   private sparks: Spark[] = [];
   private texts: FloatText[] = [];
   private puffs: Puff[] = [];
+  private bursts: Burst[] = [];
+  private streaks: Streak[] = [];
   shake = 0;
+  /** 타격 순간 화면을 살짝 당겨 보는 줌 (0이면 없음) */
+  zoom = { x: 0, y: 0, amount: 0 };
   /** 화면 전체 섬광 (KO 등). 0~1 */
   flash = 0;
   private flashColor = '#fff';
@@ -90,6 +113,35 @@ export class Effects {
     }
   }
 
+  /** 강타·카운터: 타격 지점에서 퍼지는 집중선 */
+  burst(wx: number, wy: number, color: string, strength = 1): void {
+    const n = Math.round(12 + strength * 8);
+    const rays = Array.from({ length: n }, (_, i) => ({
+      a: (i / n) * Math.PI * 2 + Math.random() * 0.25,
+      len: (60 + Math.random() * 60) * strength,
+    }));
+    this.bursts.push({ x: wx, y: GROUND_SCREEN_Y - wy, life: 0, max: 10, rays, color });
+  }
+
+  /** 타격 지점으로 화면을 순간 당긴다 (amount 0.03~0.08) */
+  punchZoom(wx: number, wy: number, amount: number): void {
+    if (amount < this.zoom.amount) return;
+    this.zoom = { x: wx, y: GROUND_SCREEN_Y - wy, amount };
+  }
+
+  /** 빠르게 움직이는 캐릭터 뒤 속도선. dir = 움직이는 방향(+1 오른쪽) */
+  speedLines(wx: number, wy: number, dir: number): void {
+    for (let i = 0; i < 2; i++) {
+      this.streaks.push({
+        x: wx - dir * (20 + Math.random() * 30),
+        y: GROUND_SCREEN_Y - wy - 20 - Math.random() * 150,
+        len: 40 + Math.random() * 60,
+        dir,
+        life: 8,
+      });
+    }
+  }
+
   screenFlash(color: string, amount = 1): void {
     this.flash = Math.max(this.flash, amount);
     this.flashColor = color;
@@ -116,14 +168,52 @@ export class Effects {
       p.r += 0.35;
     }
     this.puffs = this.puffs.filter((p) => p.life < p.max);
+    for (const b of this.bursts) b.life++;
+    this.bursts = this.bursts.filter((b) => b.life < b.max);
+    for (const s of this.streaks) s.life--;
+    this.streaks = this.streaks.filter((s) => s.life > 0);
+    this.zoom.amount *= 0.8;
+    if (this.zoom.amount < 0.002) this.zoom.amount = 0;
     this.flash *= 0.86;
     if (this.flash < 0.02) this.flash = 0;
     this.shake *= 0.85;
     if (this.shake < 0.3) this.shake = 0;
   }
 
+  /** 캐릭터 뒤에 그리는 것 (속도선) */
+  drawBehind(g: CanvasRenderingContext2D): void {
+    g.save();
+    g.lineCap = 'round';
+    for (const s of this.streaks) {
+      g.globalAlpha = (s.life / 8) * 0.45;
+      g.strokeStyle = '#ffffff';
+      g.lineWidth = 2;
+      g.beginPath();
+      g.moveTo(s.x, s.y);
+      g.lineTo(s.x - s.dir * s.len, s.y);
+      g.stroke();
+    }
+    g.restore();
+  }
+
   draw(g: CanvasRenderingContext2D): void {
     g.save();
+    for (const b of this.bursts) {
+      const t = b.life / b.max;
+      g.globalAlpha = 1 - t;
+      g.strokeStyle = b.color;
+      g.lineCap = 'round';
+      for (const r of b.rays) {
+        const r0 = 30 + r.len * t * 0.6;
+        const r1 = r0 + r.len * (1 - t * 0.5);
+        g.lineWidth = 3 * (1 - t) + 1;
+        g.beginPath();
+        g.moveTo(b.x + Math.cos(r.a) * r0, b.y + Math.sin(r.a) * r0);
+        g.lineTo(b.x + Math.cos(r.a) * r1, b.y + Math.sin(r.a) * r1);
+        g.stroke();
+      }
+    }
+    g.globalAlpha = 1;
     for (const p of this.puffs) {
       g.globalAlpha = 0.28 * (1 - p.life / p.max);
       g.fillStyle = '#d9cbb8';

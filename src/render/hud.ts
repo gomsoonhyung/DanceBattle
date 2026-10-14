@@ -7,6 +7,9 @@ export const FONT_TITLE = '"Arial Black", Impact, sans-serif';
 
 /** 체력바 뒤에서 천천히 따라오는 "최근 데미지" 표시용 */
 const trail = [1, 1];
+/** 콤보 숫자 튀기 연출용 (표시 전용) */
+const comboSeen = [0, 0];
+const comboPop = [0, 0];
 
 export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
   const barW = 380;
@@ -70,12 +73,23 @@ export function drawHud(g: CanvasRenderingContext2D, m: Match): void {
       g.textAlign = left ? 'left' : 'right';
       // 트레이닝에서는 왼쪽 위를 기술 가이드가 쓰므로 콤보 표시를 가이드 오른쪽으로 옮긴다
       const cx = left ? (m.mode === 'training' ? 700 : 30) : SCREEN_W - 30;
-      g.font = `900 40px ${FONT_TITLE}`;
+      // 타수가 오를 때마다 크게 튀었다가 줄어든다. 5타·10타부터 색이 바뀐다
+      if (c.hits !== comboSeen[i]) {
+        comboSeen[i] = c.hits;
+        comboPop[i] = 1;
+      }
+      comboPop[i] *= 0.85;
+      const size = 40 * (1 + comboPop[i] * 0.45) * (c.hits >= 10 ? 1.15 : 1);
+      g.save();
+      g.translate(cx, 150);
+      g.rotate((left ? -1 : 1) * comboPop[i] * 0.08);
+      g.font = `900 ${size.toFixed(0)}px ${FONT_TITLE}`;
       g.lineWidth = 6;
       g.strokeStyle = '#000';
-      g.strokeText(`${c.hits} HITS`, cx, 150);
-      g.fillStyle = pal.cap;
-      g.fillText(`${c.hits} HITS`, cx, 150);
+      g.strokeText(`${c.hits} HITS`, 0, 0);
+      g.fillStyle = c.hits >= 10 ? '#ff4d5e' : c.hits >= 5 ? '#ffd23f' : pal.cap;
+      g.fillText(`${c.hits} HITS`, 0, 0);
+      g.restore();
       g.font = `bold 16px ${FONT_TITLE}`;
       g.fillStyle = '#fff';
       g.fillText(`${c.damage} DMG`, cx, 172);

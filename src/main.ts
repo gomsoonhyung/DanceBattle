@@ -108,7 +108,7 @@ function startGame(): void {
         const p1Input = guide?.nextInput() ?? readPlayerInput(0);
         match.update(p1Input, readPlayerInput(1));
         guide?.observe(match);
-        renderer.consume(match.events);
+        renderer.consume(match.events, match);
         break;
       }
     }

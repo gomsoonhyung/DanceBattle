@@ -30,28 +30,49 @@ export class Renderer {
   private frame = 0;
   /** 맞은 순간 하얗게 번쩍이는 남은 프레임 */
   private hitFlash = [0, 0];
+  /** 빠른 동작의 잔상 (실제 스프라이트를 반투명하게) */
+  private ghosts: { img: HTMLImageElement; x: number; y: number; facing: 1 | -1; life: number }[][] = [[], []];
+  private lastX = [0, 0];
+  private lastSerial = [0, 0];
+  private logicFrame = 0;
+  /** 마지막 타격 위치 (K.O. 줌용) */
+  private lastHit = { x: SCREEN_W / 2, y: 120 };
 
   constructor(private readonly g: CanvasRenderingContext2D) {}
 
-  /** 로직 프레임마다 호출: 이벤트 → 이펙트/사운드 */
-  consume(events: GameEvent[]): void {
+  /** 로직 프레임마다 호출: 이벤트 → 이펙트/사운드. m을 주면 잔상·속도선·휘두르는 소리도 */
+  consume(events: GameEvent[], m?: Match): void {
+    this.logicFrame++;
     for (const e of events) {
       switch (e.type) {
         case 'hit':
           this.fx.spark(e.x, e.y, e.heavy ? 'heavy' : 'hit');
           this.hitFlash[1 - e.attacker] = 3;
-          sfx.hit(e.heavy);
+          this.lastHit = { x: e.x, y: e.y };
+          // 흔들림은 데미지에 비례 (약 30 → 약 4, 강 100 → 약 10)
+          this.fx.shake = Math.max(this.fx.shake, 2 + e.damage / 12);
+          if (e.heavy) {
+            this.fx.burst(e.x, e.y, '#fff3a0', 0.9);
+            this.fx.punchZoom(e.x, e.y, 0.035);
+          }
+          sfx.hit(e.heavy, e.damage);
           break;
         case 'counterHit':
           this.fx.spark(e.x, e.y, 'counter');
           this.fx.text(e.x, e.y + 46, 'COUNTER', '#ffe14d');
+          this.fx.burst(e.x, e.y, '#ffe14d', 1.3);
+          this.fx.punchZoom(e.x, e.y, 0.06);
+          this.fx.screenFlash('#ff4d5e', 0.12);
+          this.fx.shake = Math.max(this.fx.shake, 11);
           sfx.counter();
           break;
         case 'throw':
           this.fx.spark(e.x, e.y, 'heavy');
           this.fx.text(e.x, e.y + 50, 'THROW', '#ff8a5c');
+          this.fx.burst(e.x, e.y, '#ff8a5c', 1.1);
+          this.fx.punchZoom(e.x, e.y, 0.05);
           this.fx.shake = Math.max(this.fx.shake, 10);
-          sfx.hit(true);
+          sfx.hit(true, 120);
           break;
         case 'tech':
           this.fx.spark(e.x, e.y, 'block');
@@ -87,6 +108,8 @@ export class Renderer {
           break;
         case 'ko':
           this.fx.shake = 14;
+          this.fx.punchZoom(this.lastHit.x, this.lastHit.y, 0.09);
+          this.fx.burst(this.lastHit.x, this.lastHit.y, '#ffffff', 1.6);
           this.fx.screenFlash('#ffffff', 0.9);
           sfx.ko();
           break;
@@ -95,9 +118,50 @@ export class Renderer {
           break;
       }
     }
+    if (m) this.observe(m);
     this.fx.update();
     for (const i of [0, 1]) if (this.hitFlash[i] > 0) this.hitFlash[i]--;
     if (this.superText && --this.superText.life <= 0) this.superText = null;
+  }
+
+  /**
+   * 로직 1프레임마다: 기술이 나가는 순간 휘두르는 소리, 빠른 동작의 잔상·속도선.
+   * 게임 로직은 바꾸지 않고 읽기만 한다
+   */
+  private observe(m: Match): void {
+    const frozen = m.superFreeze > 0;
+    for (const f of m.fighters) {
+      const i = f.index;
+      // 기술 시작 → 휘두르는 소리 (필살·강공격일수록 크게)
+      if (f.moveSerial !== this.lastSerial[i]) {
+        this.lastSerial[i] = f.moveSerial;
+        const mv = f.move;
+        if (mv && (mv.hits.length || mv.projectile || mv.grab)) {
+          const heavy = mv.hits.some((h) => h.heavy);
+          sfx.whoosh(mv.kind === 'super' ? 1 : mv.kind === 'special' ? 0.7 : heavy ? 0.5 : 0.2);
+        }
+      }
+      const dx = f.x - this.lastX[i];
+      this.lastX[i] = f.x;
+      const list = this.ghosts[i];
+      for (const gh of list) gh.life--;
+      while (list.length && list[0].life <= 0) list.shift();
+      if (frozen || f.hitstop > 0) continue;
+      const mv = f.state === 'move' ? f.move : null;
+      const fast =
+        Math.abs(dx) >= 4 ||
+        f.state === 'dash' ||
+        f.state === 'backdash' ||
+        !!(mv && (mv.kind === 'super' || mv.trail || (mv.repeat && f.repeatCount > 0)));
+      if (!fast || this.logicFrame % 2) continue;
+      const key = f.displayKey();
+      const sprite = spriteFor(f.def.id, key.id, key.frame, f.index);
+      if (sprite) {
+        list.push({ img: sprite.img, x: f.x, y: f.y, facing: f.facing, life: 10 });
+        if (list.length > 5) list.shift();
+      }
+      if (Math.abs(dx) >= 4) this.fx.speedLines(f.x, f.y, Math.sign(dx));
+    }
   }
 
   draw(m: Match): void {
@@ -106,6 +170,13 @@ export class Renderer {
     g.save();
     if (this.fx.shake > 0) {
       g.translate((Math.random() - 0.5) * this.fx.shake, (Math.random() - 0.5) * this.fx.shake);
+    }
+    // 타격 순간 그 지점으로 화면을 살짝 당긴다
+    const z = this.fx.zoom;
+    if (z.amount > 0) {
+      g.translate(z.x, z.y);
+      g.scale(1 + z.amount, 1 + z.amount);
+      g.translate(-z.x, -z.y);
     }
     drawStage(g);
     drawCrowd(g, this.frame++);
@@ -125,31 +196,45 @@ export class Renderer {
       g.fill();
     }
 
+    this.fx.drawBehind(g);
+
     // 공격 중인 캐릭터를 앞에 그린다
     const order = [...m.fighters].sort((a, b) => Number(a.state === 'move') - Number(b.state === 'move'));
     for (const f of order) {
       if (freeze && f.index === m.superOwner) this.drawAura(f);
       const sk = f.skeleton();
-      this.drawTrail(f, sk, freeze);
       // 교체 그림(스프라이트)이 있으면 그 그림을, 없으면 코드로 그린 캐릭터를
       const key = f.displayKey();
       const sprite = spriteFor(f.def.id, key.id, key.frame, f.index);
-      if (sprite)
+      const pal = fighterPalette(f);
+      // 잔상: 지나온 모습을 캐릭터 색 테두리로 반투명하게
+      for (const gh of this.ghosts[f.index]) {
+        g.globalAlpha = (gh.life / 10) * 0.35;
+        drawSprite(g, gh.img, gh.x, gh.y, gh.facing, pal.main);
+      }
+      g.globalAlpha = 1;
+      // 맞아서 경직 중(히트스톱)이면 제자리에서 덜덜 떤다
+      const stunned = f.state === 'hitstun' || f.state === 'blockstun' || f.state === 'airHit';
+      const vib = f.hitstop > 0 && stunned ? (this.frame % 2 ? 1 : -1) * Math.min(4, 1 + f.hitstop * 0.4) : 0;
+      if (sprite) {
         drawSprite(
           g,
           sprite.img,
-          f.x,
+          f.x + vib,
           f.y,
           f.facing,
-          sprite.recolor ? fighterPalette(f).main : null,
+          sprite.recolor ? pal.main : null,
           this.hitFlash[f.index] > 0,
         );
-      else
-        drawDancer(g, sk, f.x, f.y, f.facing, f.def.look, fighterPalette(f), {
+      } else {
+        // 코드 그림일 때만 관절 위치로 만든 잔상·궤적을 쓴다 (스프라이트와는 위치가 맞지 않음)
+        this.drawTrail(f, sk, freeze);
+        drawDancer(g, sk, f.x + vib, f.y, f.facing, f.def.look, pal, {
           tail: this.updateTail(f, sk),
           airborne: f.y > 0,
         });
-      this.trackSmears(f, sk, freeze);
+        this.trackSmears(f, sk, freeze);
+      }
     }
     this.drawSmears();
     for (const f of m.fighters) this.drawHitFx(f);

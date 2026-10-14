@@ -1,6 +1,6 @@
 /** 게임 로직 → 렌더러/사운드로 전달되는 일회성 이벤트 */
 export type GameEvent =
-  | { type: 'hit'; x: number; y: number; heavy: boolean; attacker: 0 | 1 }
+  | { type: 'hit'; x: number; y: number; heavy: boolean; attacker: 0 | 1; damage: number }
   | { type: 'block'; x: number; y: number; heavy: boolean }
   | { type: 'counter'; x: number; y: number }
   | { type: 'counterHit'; x: number; y: number }

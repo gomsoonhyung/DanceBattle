@@ -46,9 +46,16 @@ function tone(freq: number, dur: number, gain: number, type: OscillatorType = 's
 }
 
 export const sfx = {
-  hit(heavy: boolean): void {
-    noise(heavy ? 0.22 : 0.1, heavy ? 1800 : 3000, heavy ? 0.5 : 0.35);
-    tone(heavy ? 120 : 200, heavy ? 0.18 : 0.08, 0.4, 'triangle', 50);
+  /** 타격음: 데미지가 클수록 낮고 길고 크게, 강공격에는 묵직한 저음을 한 겹 더 */
+  hit(heavy: boolean, damage = heavy ? 80 : 30): void {
+    const k = Math.min(1, damage / 120);
+    noise(0.08 + k * 0.18, 3200 - k * 1600, 0.3 + k * 0.25);
+    tone(220 - k * 110, 0.07 + k * 0.14, 0.4, 'triangle', 50);
+    if (heavy) tone(70, 0.25, 0.35, 'sine', 35);
+  },
+  /** 휘두르는 소리: 기술이 나가는 순간. strength 0(약) ~ 1(필살) */
+  whoosh(strength: number): void {
+    noise(0.07 + strength * 0.1, 900 + strength * 1600, 0.06 + strength * 0.08, 'bandpass');
   },
   block(): void {
     noise(0.06, 5000, 0.25, 'highpass');

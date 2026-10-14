@@ -123,7 +123,7 @@ function applyContact(c: Contact, events: GameEvent[]): void {
   }
   def.hitstop = hitstop + (counterHit ? 4 : 0);
   if (melee) att.hitstop = def.hitstop;
-  events.push({ type: 'hit', x: c.at.x, y: c.at.y, heavy: !!hit.heavy, attacker: att.index });
+  events.push({ type: 'hit', x: c.at.x, y: c.at.y, heavy: !!hit.heavy, attacker: att.index, damage: dmg });
   if (counterHit) events.push({ type: 'counterHit', x: c.at.x, y: c.at.y });
 }
 
