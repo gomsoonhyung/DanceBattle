@@ -3,6 +3,11 @@
 let ctx: AudioContext | null = null;
 let noiseBuf: AudioBuffer | null = null;
 
+/** 배경 음악(music.ts)이 같은 오디오를 쓰도록 꺼내 준다. 아직 켜지지 않았으면 null */
+export function audio(): { ctx: AudioContext; noise: AudioBuffer } | null {
+  return ctx && noiseBuf ? { ctx, noise: noiseBuf } : null;
+}
+
 /** 브라우저 정책상 사용자 입력 이후에만 오디오를 켤 수 있다. */
 export function unlockAudio(): void {
   if (!ctx) {

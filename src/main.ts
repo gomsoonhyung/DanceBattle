@@ -1,4 +1,5 @@
 import { unlockAudio } from './audio/sfx';
+import { music, STYLE_FOR } from './audio/music';
 import { FRAME_MS, RENDER_SCALE, SCREEN_H, SCREEN_W } from './core/constants';
 import { renderGallery } from './debug/gallery';
 import { ROSTER } from './screens/roster';
@@ -6,6 +7,7 @@ import type { CharacterDef } from './fighter/types';
 import { Match, type MatchMode } from './game/match';
 import { endInputFrame, initKeyboard, keyPressed, menu, pollMenu, readPlayerInput } from './input/devices';
 import { Renderer } from './render/renderer';
+import { FONT_KR } from './render/hud';
 import { drawGuide } from './render/guideHud';
 import { preloadAssets } from './render/assets';
 import { loadSprites } from './render/sprites';
@@ -43,19 +45,26 @@ function startGame(): void {
   let showBoxes = false;
   let lastChars: [CharacterDef, CharacterDef] | undefined;
   let cpuLevel: CpuLevel = 'normal';
+  /** 음악 켜기/끄기 알림이 남은 프레임 */
+  let musicToast = 0;
+  music.play('title');
   let matchCount = 0;
   const toTitle = () => {
+    music.play('title');
     const title = new TitleScreen(true);
     title.cpuLevel = cpuLevel;
     screen = { kind: 'title', title };
   };
 
   const toSelect = (mode: MatchMode) => {
+    music.play('title');
     screen = { kind: 'select', select: new SelectScreen(mode, lastChars) };
   };
 
   const toMatch = (mode: MatchMode, chars: [CharacterDef, CharacterDef]) => {
     lastChars = chars;
+    // 대전 음악은 P1 캐릭터의 장르
+    music.play(STYLE_FOR[chars[0].id] ?? 'boombap');
     void loadSprites(chars); // 교체 그림이 있으면 불러온다 (불러오는 동안은 코드로 그린 캐릭터)
     const renderer = new Renderer(g);
     renderer.showBoxes = showBoxes;
@@ -68,6 +77,11 @@ function startGame(): void {
   /** 고정 60fps 로직 1프레임 */
   const step = () => {
     pollMenu();
+    if (keyPressed('KeyM')) {
+      music.toggleMute();
+      musicToast = 90;
+    }
+    if (musicToast > 0) musicToast--;
     if (keyPressed('F1')) {
       showBoxes = !showBoxes;
       if (screen.kind === 'match') screen.renderer.showBoxes = showBoxes;
@@ -137,6 +151,15 @@ function startGame(): void {
       if (screen.guide) drawGuide(g, screen.guide, screen.match);
     } else if (screen.kind === 'select') screen.select.draw(g);
     else screen.title.draw(g);
+    if (musicToast > 0) {
+      g.save();
+      g.globalAlpha = Math.min(1, musicToast / 20);
+      g.font = `bold 15px ${FONT_KR}`;
+      g.textAlign = 'right';
+      g.fillStyle = '#fff';
+      g.fillText(music.muted ? '♪ 음악 끔 (M)' : '♪ 음악 켬 (M)', SCREEN_W - 16, SCREEN_H - 50);
+      g.restore();
+    }
     requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);

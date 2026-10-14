@@ -269,7 +269,7 @@ export class TitleScreen {
       '콤보: 약 → 약 → 필살기 / 강공격 → 필살기',
       '초필살기: 게이지 MAX에서 236236P 또는 강P+강K',
       '캐릭터별 기술표: 캐릭터 선택 화면 · 트레이닝',
-      'F1 판정 박스 · ESC 메뉴',
+      'F1 판정 박스 · M 음악 켜기/끄기 · ESC 메뉴',
     ]);
     g.textAlign = 'center';
     g.font = `14px ${FONT_KR}`;
